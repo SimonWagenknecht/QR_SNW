@@ -145,12 +145,7 @@
 
 #else
 #define MODBUS_SIO							0
-#define MODB_SLAVE_MAX					0
-// Modbus-Applikationen	0/1
-#define KWB_KESSEL	0
-#define EASY_SENS		0
-#define WILO   			0
-#define BELIMO			0
+
 #define MODBUS_UNI	0
 #define MODBUS_EXT    0
   #define WILO_MODBUS          0

@@ -437,7 +437,7 @@ const Anlage Projekte[] = {
 	{	
 	 // Typ und Version
 	 //"??-R-????-?????"			//Kennzeichen an fester Position !!	
-		{"KE-R-1s03-JMX81"},		//genau 15 ASCII-Zeichen
+		{"QR-R-3s03-JMX81"},		//genau 15 ASCII-Zeichen
 		VERS_DATUM,	           		//Jahr, Monat, Tag
 		// Kategoriebezeichnung für variable Projekte
 		{"TEST PROJEKT   "},
@@ -483,26 +483,26 @@ const Anlage Projekte[] = {
 
 		// Namen für Prozess Ein- und Ausgänge (Namensvereinbarung in "userdef.h")
 		// Aus den Namen werden Steuercodes generiert
-		TA1,			// Außentemp.						// 				Eingang IN1		Pt1000 / ----- / -------	
-		TVS1,			// HK1 Vorlauf		TH1		// 				Eingang IN2		Pt1000 / ----- / -------	
-		AE_UNI3,	// SOL: Druck Koll. PS1	// Block  Eingang IN3		0...10 Volt
-		AE_UNI4,	// SOL: Druck Puff. PS2	// Block  Eingang IN4		0...10 Volt
-		AE_UNI1,	// StrahlungsSensor			// Block  Eingang IN5		0...10 Volt
-		AE_UNI2,	// ANL: Ext.Anford. UST1// 				Eingang IN6		0...10 Volt
-		TRS1,			// HK1 Rücklauf		TH2		// 				Eingang IN7		Pt1000
-		ZIN8,			// WZ1: Vol.geber Kessel	// 				Eingang IN8		Digital
-		ZIN9,			// WZ2: Vol.geber Solar		// 				Eingang IN9		Digital
-		ZIN10,		// WZ3: Vol.geber Netz 		// 				Eingang IN10	Digital
-		
-		RVENT1,		// HK1:Regelventil		 	// Analog-Ausgang  AA1
-		RVENTSO1,	// HKS:Regelventil 	 		// Analog-Ausgang  AA2
-		
-		PU1EA,	  // Pumpe HK1            			// Digital-Ausgang DA1
-		PUKE1EA,	// Kessel- bzw. Pumpenfreigabe// Digital-Ausgang DA2
-		MVKOL1EA,	// UV Kollektor	0=Kollektorweg, 1=Pufferweg (Puffer entladen)// Digital-Ausgang DA3
-		PUSOL1EA,	// Pumpe Solarkreis			// Digital-Ausgang DA4
-		MVPUF1EA,	// UV Puffer	 	0=entladen,1=laden// Digital-Ausgang DA5
-		PUPUF1EA,	// Pumpe Solar-Puffer		// Digital-Ausgang DA6
+		TA1,			// Außentemp.						TA				// 				Eingang IN1		Pt1000 / ----- / -------	
+		TVS1,			// HKL: Vorlauf					TVH				// 				Eingang IN2		Pt1000 / ----- / -------	
+		AE_UNI3,	// SOL: Druck Koll. 		PS				// Block  Eingang IN3		0...10 Volt
+		AE_UNI5,	// WEI: Hygrometer  		F	  			// Block  Eingang IN4		0...10 Volt
+		AE_UNI1,	// SOS: Strah.Sens. 		ST				// Block  Eingang IN5		0...10 Volt
+		AE_UNI4,	// SOL: Druck Puff  		PP  			// 				Eingang IN6		0...10 Volt
+		AE_UNI6,	// QRG  Druck QRG   		PQ				// 				Eingang IN7		0...10 Volt
+		ZIN8,			// WN1: Vol. Netz									// 				Eingang IN8		Digital
+		ZIN9,			// WSK: Vol. Solar								// 				Eingang IN9		Digital
+		ZIN10,		// WQK: Vol. Netz 								// 				Eingang IN10	Digital
+		                              		      		
+		RVENT1,		// HKL: Regelv.	 				RV H			// Analog-Ausgang  AA1
+		RVENTSO1,	// HKS:Regelventil 			RV SH 		// Analog-Ausgang  AA2
+		                              		      		
+		PU1EA,	  // HKL: PU Ladekreis		PU LK			// Digital-Ausgang DA1
+		MVKOL1EA,	// SOL:	UV Solarkreis		UV SOL		// Digital-Ausgang DA2
+		PUPUF1EA,	// SOL: PU Pufferkreis	PU PK			// Digital-Ausgang DA3
+		PUSOL1EA,	// SOL: PU Solarkreis		PU SOL		// Digital-Ausgang DA4
+		DA_UNI2,	// QRG: PU Quellenkreis PU QU	 		// Digital-Ausgang DA5
+		DA_UNI3,	// WEI: PU Weichenkreis	PU WEI		// Digital-Ausgang DA6
 
 		// Externe Erweiterungen mit R37, R38 , siehe Liste Anl37 oder Anl38
 		{	{R37, 1, 1},				// Gerätekennzeichen, Gerätenummer, Nummer des Belegungsblockes
@@ -545,40 +545,40 @@ const Anl37 R37_Beleg[] = {
 				
 	// 1. Belegungssatz Anwendung für R37_1
 	{	
-		KEAL1,		// Kesselalarm Si-Kette		// Digital-Eingang DE1  
-		SAMAL1,		// externer Sammelalarm		// Digital-Eingang DE2  
-		QUITTS1,	// Quittierungstaste			// Eingang Digital DE3
-		BMPU2,		// HKN: BM Netz-Pumpe			// Digital-Eingang DE4	
-		BMPU1,		// HK1: BM Pumpe					// Digital-Eingang DE5	
-		STWHK2,		// HKN: STW (HK2)					// Digital-Eingang DE6	
+		STWHK3,		// HK2: Sicherheitstemp.w. STW HK			// Digital-Eingang DE1  
+		SAMAL1,		// ANL. Externer Sammela.							// Digital-Eingang DE2  
+		QUITTS1,	// QSM: Quittierungstaste							// Eingang Digital DE3
+		BMPU2,		// NK1: BM Netzkpu				 BM PU NK1	// Digital-Eingang DE4	
+		BMPU1,		// HKL: BM Ladekpu				 BM PU LK		// Digital-Eingang DE5	
+		STWHK2,		// NK1: Sicherheitstemp.w  STW NK1		// Digital-Eingang DE6	
 		
-		RVENTKE1,	// Vorl.-Sollwert Kessel		// Analog-Ausgang  AA1
-		AA_UNI2,	// HK1: Sollwert LadePumpe 	// Analog-Ausgang  AA2
-		AA_UNI1,	// Drehzahl Solar-Pumpe			// Analog-Ausgang  AA3
-		TAA1,			// Außentemp.an Fremdregler	// Analog-Ausgang  AA4
+		RVENTKE1,	// ANL: Sollw.-Anf.										// Analog-Ausgang  AA1
+		RVENT3,		// HK1: Regelv. Heizk.1		 RV HK1 		// Analog-Ausgang  AA2
+		AA_FREI,	// 			FREI													// Analog-Ausgang  AA3
+		AA_UNI4,	// HK2:	Regelv. Heizk.2		 RV HK2			// Analog-Ausgang  AA4
 	
-		SSTM1,		// Sammelstörmeldung				// Digital-Ausgang DA1
-		DA_UNI1,	// ANL: ext.WW-Vorrang			// Digital-Ausgang DA2 
-		PU2EA,	  // Pumpe HKN            		// Digital-Ausgang DA3
+		SSTM1,		// ANL: Sammelstörmeldung							// Digital-Ausgang DA1
+		DA_UNI1,	// ANL: ext.WW-Vorrang								// Digital-Ausgang DA2 
+		PU2EA,	  // HKN: PU Netzkreis			 PU NK1  		// Digital-Ausgang DA3
 	},
 
 	// 2. Belegungssatz Anwendung für R37_2
 	{	
-		ZIN21,		// Vol.geber GasZähler			// Digital-Eingang DE1	(ZIN11)	
-		BMPUPUF1,	// BM Puffer-Pumpe ein			// Digital-Eingang DE2
-		BMPUSOL1,	// BM Solar-Pumpe	 ein			// Digital-Eingang DE3 
-		DE_FREI,		// Digital-Eingang DE4 
-		DE_FREI,		// Digital-Eingang DE5 
-		DE_FREI,		// Digital-Eingang DE6
+		BMPU3,		// HK1: BM Heizk.1				 BM PU HK1	// Digital-Eingang DE1
+		BMPUPUF1,	// SOL: BM Puffer-Pumpe 	 BM PU PK		// Digital-Eingang DE2
+		BMPUSOL1,	// SOL: BM Solar-Pumpe	 	 BM PU SOL	// Digital-Eingang DE3 
+		DE_UNI1,	// QRG: BM PU Quellenk.		 BM PU QRG	// Digital-Eingang DE4 
+		DE_UNI2,	// WEI: BM PU Weichenk.		 BM PU WEI	// Digital-Eingang DE5 
+		BMPU4,		// HK2: BM PU HK2					 BM PU HK2	// Digital-Eingang DE6
 		
-		RVENT2,		// HKN: Regelventil		 	// Analog-Ausgang  AA1
-		AA_UNI3,	// HKN: Sollwert Pumpe 	// Analog-Ausgang  AA2
-		AA_FREI,		// Analog-Ausgang  AA3
-		AA_FREI,		// Analog-Ausgang  AA4
+		RVENT2,		// NK1: Regelv. Netzk.		 RV NK1		 	// Analog-Ausgang  AA1
+		AA_FREI,	// 			FREI 													// Analog-Ausgang  AA2
+		AA_UNI5,	// WEI: Regelv. Weichenk	 RV WEI 		// Analog-Ausgang  AA3
+		AA_UNI6,	// QRG:	Regelv Quellenk		 RV QRG			// Analog-Ausgang  AA4
 	
-		DA_FREI,		// // Digital-Ausgang DA1
-		DA_FREI,		// // Digital-Ausgang DA2
-		DA_FREI,		// // Digital-Ausgang DA3
+		PU3EA,		// HK1: PU HK1				 		 PU HK1			// Digital-Ausgang DA1
+		PU4EA,		// HK2: PU HK2				 		 PU HK2			// Digital-Ausgang DA2
+		MVPUF1EA,	// SOL: Umschaltv Pufferk	 UV PK			// Digital-Ausgang DA3
 	},				
 
 		
@@ -609,21 +609,37 @@ const Anl38 R38_Beleg[] = {
 
 	// 1. Belegungssatz 
 	{	
-		TS1,			// Kollektor Vorlauf				TS1				// Pt1000 Eingang IN1
-//		TS2,			// Vorlauf PWÜ Puffer				TS2				// Pt1000 Eingang IN2
-		TS3,			// Vorlauf PWÜ Solar-HK			TS3				// Pt1000 Eingang IN2
-		TS4,			// Vorlauf PWÜ Puffer				TS4				// Pt1000 Eingang IN3
-		TS5,			// Kollektor Rücklauf				TS5				// Pt1000 Eingang IN4
-		TS6,			// Puffer-Speicher oben			TS6				// Pt1000 Eingang IN5
-		TS7,			// Puffer-Speicher unten		TS7				// Pt1000 Eingang IN6
-		TVKE1,		// Kesselvorl. (Strategief.)TVKES			// Pt1000 Eingang IN7
-		TW2,			// Speicher oben						TH3				// Pt1000 Eingang IN8
-		TW3,			// Speicher mittig					TH4				// Pt1000 Eingang IN9
-		TW4,			// Speicher unten						TH5				// Pt1000 Eingang IN10
-		TVS2,			// HKN Netz-Vorlauf					TN1				// Pt1000 Eingang IN11
-		TRS2,			// HKN Netz-Rücklauf				TN2				// Pt1000 Eingang IN12
-		TP_FREI,		// Pt1000 Eingang IN13
-		TP_FREI,		// Pt1000 Eingang IN14
+		TS1,			// SOL: Kollektor Vorlauf				TS1				// Pt1000 Eingang IN1
+		TS3,			// SOL: Vorlauf PWÜ Solar-HK		TS3				// Pt1000 Eingang IN2
+		TS4,			// SOL: Vorlauf PWÜ Puffer			TS4				// Pt1000 Eingang IN3
+		TP_UNI1,	// SOL: Vl PWÜ Quelle						TS5				// Pt1000 Eingang IN4
+		TS5,			// SOL: Kollektor Rücklauf			TS6				// Pt1000 Eingang IN5
+		TS6,			// SOL: Puffer-Speicher oben		TSPo-P		// Pt1000 Eingang IN6
+		TS7,			// SOL: Puffer-Speicher unten		TSPu-P		// Pt1000 Eingang IN7
+		TW2,			// HKL: Speicher oben NK1				TSPo-L		// Pt1000 Eingang IN8
+		TW3,			// HKL: Speicher mittig					TSPm-L		// Pt1000 Eingang IN9
+		TW4,			// HKL: Speicher unten					TSPu-L		// Pt1000 Eingang IN10
+		TVS2,			// NK1: HKN Netz-Vorlauf				TVNK1			// Pt1000 Eingang IN11
+		TRS2,			// NK1 Netz-Rücklauf						TRNK1			// Pt1000 Eingang IN12
+		TP_UNI2,	// QRG Vl Quellenkreis					TVQU			// Pt1000 Eingang IN13
+		TP_UNI3,	// QRG Rl Quellenkreis					TRQU			// Pt1000 Eingang IN14
+	},
+	// 2. Belegungssatz 
+	{	
+		TVS3,			// HK1: HK1 Vorlauf							TVHK1			// Pt1000 Eingang IN1
+		TRS3,			// HK1  HK1 Rücklauf						TRHK1			// Pt1000 Eingang IN2
+		TVS4,			// HK2: HK2 Vorlauf							TVHK2			// Pt1000 Eingang IN3
+		TRS4,			// HK2  HK2 Rücklauf						TRHK2			// Pt1000 Eingang IN4
+		TRS1,			// HKL: Rücklauf Ladekreis			TRH				// Pt1000 Eingang IN5
+		TP_FREI,																						// Pt1000 Eingang IN6
+		TP_FREI,																						// Pt1000 Eingang IN7
+		TP_FREI,																						// Pt1000 Eingang IN8
+		TP_FREI,																						// Pt1000 Eingang IN9
+		TP_FREI,																						// Pt1000 Eingang IN10
+		TP_FREI,																						// Pt1000 Eingang IN11
+		TP_FREI,																						// Pt1000 Eingang IN12
+		TP_FREI,																						// Pt1000 Eingang IN13
+		TP_FREI,																						// Pt1000 Eingang IN14
 	},
 
 };

@@ -520,8 +520,8 @@
 
 // ---------------- Erweiterungsmodule R38 ----------------------------
 // Einstellung für Parli: sys[]
-#define R38_MODULE	1							// Anzahl der Module R38
-#define R38_MODMAX	1							// wegen Speicherzuweisung mindestens 1
+#define R38_MODULE	2							// Anzahl der Module R38
+#define R38_MODMAX	2							// wegen Speicherzuweisung mindestens 1
 
 // ---------------- Erweiterungsmodule R39 ----------------------------
 // Einstellung für Parli: sys[]
