@@ -972,8 +972,8 @@
 //#define LADZEITDIAG_ADR 	0x7E98		// 2 Byte im Ferro-RAM
 //#define WWVORANZDIAG_ADR 	0x7E9A		// 2 Byte im Ferro-RAM
 //#define WWVORZEITDIAG_ADR 0x7E9C		// 2 Byte im Ferro-RAM
-#define TVPMAXDIAG_ADR		0x7E96		// 8 Byte im Ferro-RAM ( sizeof extrTemp )
-#define TVPMINDIAG_ADR		0x7E9E		// 8 Byte im Ferro-RAM ( sizeof extrTemp )
+//#define TVPMAXDIAG_ADR		0x7E96		// 8 Byte im Ferro-RAM ( sizeof extrTemp )
+//#define TVPMINDIAG_ADR		0x7E9E		// 8 Byte im Ferro-RAM ( sizeof extrTemp )
 // 24.09.2014 für 2.Wärmezähler			ACHTUNG 38 [0x26] Byte feste Länge in xicbus -> BICRD
 #define FLOWMAX2DIAG_ADR	0x7EA6		// 4 Byte im Ferro-RAM	( sechstletzte Page )
 #define LEISTMAX2DIAG_ADR	0x7EAA		// 2 Byte im Ferro-RAM	( sechstletzte Page )

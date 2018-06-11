@@ -47,6 +47,8 @@ const char Hkmod_SoL[16]						= {"SOLAR-EINSPEIS."};	//***AnFre
 
 const char Wwmod[16]								= {"DURCHFLUSS     "};
 const char Solmod[16]								= {"PUFFERSPEICHER "};
+const char Weimod[16]								= {"Weichenkreis   "};
+const char Quemod[16]								= {"Quellenkreis   "};
 const char Sosmod[16]								= {"               "};
 // ***AnFre
 const char Kwmod[16]								= {"VOLUMENZAEHLER "};
@@ -508,7 +510,7 @@ const Anlage Projekte[] = {
 		{	{R37, 1, 1},				// Gerätekennzeichen, Gerätenummer, Nummer des Belegungsblockes
 			{R37, 2, 2},
 			{R38, 1, 1},
-			{  0, 0, 0},
+			{R38, 2, 2},
 		},			
 
 		// NAMUR-Kennzeichnung für Digitale Eingänge R36
@@ -2167,6 +2169,28 @@ const SoStandard  So_Standparam[] = {
 	},
 };
 const char SO_PROFILE = sizeof ( So_Standparam ) / sizeof ( SoStandard );		 	
+
+/*----------------------------------------------------------------------------------*/
+/*				Liste von Standardwerten für Weichenkreis		*/
+/*----------------------------------------------------------------------------------*/
+const WeStandard  We_Standparam[] = {
+	0,		// char	chpa_puwei_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	0,		// char	chpa_puwei_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	0,		// char	chpa_rvwei_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	0,		// int		 ipa_rvwei_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+}; 
+const char WEI_PROFILE = 1;	
+
+/*----------------------------------------------------------------------------------*/
+/*				Liste von Standardwerten für Quellenkreis		*/
+/*----------------------------------------------------------------------------------*/
+const QuStandard  Qu_Standparam[] = {
+	0,		// char	chpa_puqu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	0,		// char	chpa_puqu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	0,		// char	chpa_rvqu_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	0,		// int		 ipa_rvqu_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+}; 
+const char QU_PROFILE = 1;	
 
 /*----------------------------------------------------------------------------------------*/
 /*  							Liste von Standardwerten für Benutzersteuerung mit UNI-Elementen				*/

@@ -106,7 +106,7 @@
 #define COPY_SEND					0				// Anzahl der über Bus zu sendenden Datenelemente              Min=0, Max=COPY_RESERV_SEND,  wenn > 0: Eintrag in CopyCheck.c erforderlich
 
 #define DIAG				1							// Diagnose für Soft-Wärmezähler
-#define ANALOG_AE		4							// Skalierung der 0-10V Eingänge, Grenzwertüberwachung, Anzahl 0..8, immer die ersten n AE_UNI ab AE_UNI1 werden skaliert
+#define ANALOG_AE		6							// Skalierung der 0-10V Eingänge, Grenzwertüberwachung, Anzahl 0..8, immer die ersten n AE_UNI ab AE_UNI1 werden skaliert
 #define WRE100			0							// WRE100 Kommandos für WRELES uund WREINIT werden unterstützt
 #define MBUSANZ     0             // Anzahl MBus-Zähler (maximal 8)
 #define MBUS_MASTER 0             // 1/0
@@ -203,8 +203,8 @@
 #define AE_DRUCK_ANZ	0           // min 0 max.8 Analogeingaenge
 
 // --------------- Heizkreis-Regelungen -----------------------------------
-#define HKANZ				2							// projektierte Anzahl von Heizkreisen
-#define HKMAX				2							// maximale Anzahl (wegen Speicherzuweisung mindestens 1)
+#define HKANZ				4							// projektierte Anzahl von Heizkreisen
+#define HKMAX				4							// maximale Anzahl (wegen Speicherzuweisung mindestens 1)
 
 // Einstellung für Parli: hk1[]
 #define TRLBEG_HK1	1							// Rücklauftemperaturbegrenzung
@@ -520,8 +520,8 @@
 
 // ---------------- Erweiterungsmodule R38 ----------------------------
 // Einstellung für Parli: sys[]
-#define R38_MODULE	1							// Anzahl der Module R38
-#define R38_MODMAX	1							// wegen Speicherzuweisung mindestens 1
+#define R38_MODULE	2							// Anzahl der Module R38
+#define R38_MODMAX	2							// wegen Speicherzuweisung mindestens 1
 
 // ---------------- Erweiterungsmodule R39 ----------------------------
 // Einstellung für Parli: sys[]

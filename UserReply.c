@@ -2889,6 +2889,13 @@ void Typelist_copy(void)
 			memcpy( (void *)&sos[i], (void *)&So_Standparam[profil], SOSLENG );
 	}
 
+	// Standardwerte für Weichenkreis
+			memcpy( (void *)&wes[0], (void *)&We_Standparam[0], WESLENG );
+			
+	// Standardwerte für Weichenkreis
+			memcpy( (void *)&qus[0], (void *)&Qu_Standparam[0], QUSLENG );
+
+
 	// Standardwerte für Benutzersteuerung mit UNI-Elementen
 	#if STEUER_UNI == 1
 		i = 0;

@@ -94,49 +94,49 @@ char zaehlerNummer;
 
 #endif
 
-//--------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------
-// Modbus 
-//--------------------------------------------------------------------------------------------------
-#if MODBUS_UNI > 0
-
-unsigned int ModBusKonvertError;									// Modbus.c  + modbusparli.h
-unsigned int modbusDeviceNr;                      // Modbus.c  + modbusparli.h
-int activeRow[3];                                 // Modbus.c  + modbusparli.h
-unsigned char modbusSlaveAddresses[3];            // Modbus.c  + modbusparli.h  + modbusstandard.h
-unsigned char modbusSioParity[3];                 // Modbus.c  + modbusparli.h  + modbusstandard.h
-unsigned char modbusSioStopBits[3];               // Modbus.c  + modbusparli.h  + modbusstandard.h
-unsigned char modbusConvertBuffer[3][256];        // Modbus.c   
-
-char modb_leng_tx[3];                             // ModBusSio.c
-char modb_rts_prescaler[3];                       // ModBusSio.c
-char modb_rts_timer[3];                           // ModBusSio.c
-char modb_rx_buff_size;                           // ModBusSio.c
-char modb_rx_status;                              // Modbus.c                   
-char modb_tx_count[3];                            // ModBusSio.c
-char modb_rx_count[3];                            // ModBusSio.c              
-char modb_rx_buffer_ready[3];                     // ModBusSio.c              
-char modb_rx_int_state[3];                        // ModBusSio.c              
-char modb_sio_errorflag[3];                       // ModBusSio.c
-unsigned int EoF_timer[3];                        // ModBusSio.c
-char timer_function[3];                           // ModBusSio.c
-char func_code[3];                                // ModBusSio.c  + Modbus.c  
-unsigned char byte_count_or_exception[3];         // ModBusSio.c  + Modbus.c
-unsigned int first_reg[3];                        // ModBusSio.c  + Modbus.c  
-unsigned int cnt_regs[3];                         // ModBusSio.c  + Modbus.c  
-void* reg_address[3];                             // ModBusSio.c  + Modbus.c
-char modb_curr_adr[3];                            // ModBusSio.c  + Modbus.c  
-
-/*--------------- Modbus-Datenpunkte -----------------------------*/
-#if MODBUS_EXT > 0                               // bei Verwendung von READ_MULTIPLE_COILS in der ModbusTabelle
-ULONG ul_dig32[MODBUS_EXT];                      // READ_MULTIPLE_COILS für 32 Bit
-char  uc_dig[MODBUS_EXT*32];                     // Extraktion 32 Bit auf Einzelbytes im Task ModbusExtract
-char  uc_dig8[MODBUS_EXT*4];                     // Extraktion 32 Bit auf 4 * 8 Bit
-#endif
-
-#endif  // MODBUS_UNI
-
-//----------------------------------------------------------------------------------------------------				
+////--------------------------------------------------------------------------------------------------
+////----------------------------------------------------------------------------------------------------
+//// Modbus 
+////--------------------------------------------------------------------------------------------------
+//#if MODBUS_UNI > 0
+//
+//unsigned int ModBusKonvertError;									// Modbus.c  + modbusparli.h
+//unsigned int modbusDeviceNr;                      // Modbus.c  + modbusparli.h
+//int activeRow[3];                                 // Modbus.c  + modbusparli.h
+//unsigned char modbusSlaveAddresses[3];            // Modbus.c  + modbusparli.h  + modbusstandard.h
+//unsigned char modbusSioParity[3];                 // Modbus.c  + modbusparli.h  + modbusstandard.h
+//unsigned char modbusSioStopBits[3];               // Modbus.c  + modbusparli.h  + modbusstandard.h
+//unsigned char modbusConvertBuffer[3][256];        // Modbus.c   
+//
+//char modb_leng_tx[3];                             // ModBusSio.c
+//char modb_rts_prescaler[3];                       // ModBusSio.c
+//char modb_rts_timer[3];                           // ModBusSio.c
+//char modb_rx_buff_size;                           // ModBusSio.c
+//char modb_rx_status;                              // Modbus.c                   
+//char modb_tx_count[3];                            // ModBusSio.c
+//char modb_rx_count[3];                            // ModBusSio.c              
+//char modb_rx_buffer_ready[3];                     // ModBusSio.c              
+//char modb_rx_int_state[3];                        // ModBusSio.c              
+//char modb_sio_errorflag[3];                       // ModBusSio.c
+//unsigned int EoF_timer[3];                        // ModBusSio.c
+//char timer_function[3];                           // ModBusSio.c
+//char func_code[3];                                // ModBusSio.c  + Modbus.c  
+//unsigned char byte_count_or_exception[3];         // ModBusSio.c  + Modbus.c
+//unsigned int first_reg[3];                        // ModBusSio.c  + Modbus.c  
+//unsigned int cnt_regs[3];                         // ModBusSio.c  + Modbus.c  
+//void* reg_address[3];                             // ModBusSio.c  + Modbus.c
+//char modb_curr_adr[3];                            // ModBusSio.c  + Modbus.c  
+//
+///*--------------- Modbus-Datenpunkte -----------------------------*/
+//#if MODBUS_EXT > 0                               // bei Verwendung von READ_MULTIPLE_COILS in der ModbusTabelle
+//ULONG ul_dig32[MODBUS_EXT];                      // READ_MULTIPLE_COILS für 32 Bit
+//char  uc_dig[MODBUS_EXT*32];                     // Extraktion 32 Bit auf Einzelbytes im Task ModbusExtract
+//char  uc_dig8[MODBUS_EXT*4];                     // Extraktion 32 Bit auf 4 * 8 Bit
+//#endif
+//
+//#endif  // MODBUS_UNI
+//
+////----------------------------------------------------------------------------------------------------				
 
 //--------------------------------------------------------------------------------------------------
 // Benutzung der Funktion Test-RS485

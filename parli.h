@@ -408,6 +408,10 @@ const Pgrup ke1[] = {
 #if SOANZ > 0
 	#include "parli_Solar.h"
 #endif
+/*------------------------------ Quellenregeneration ----------------------------------------*/
+	#include "parli_quellenregeneration.h"
+
+
 // ***AnFre	Ende
 //*------------------------------ Genibus ----------------------------------------*/
 #if GENI == 1
@@ -1207,6 +1211,8 @@ const Parli Pgruppe[] = {
  {"SOS:", so2, sizeof(so2) / PGLENG, P&so_vis[SO1]},
 #endif
 
+ {"WEI:", wei, sizeof(wei) / PGLENG, P&so_vis[SO1]},
+ {"QRG:", que, sizeof(que) / PGLENG, P&so_vis[SO1]},
 
 #if ZE8WM == 1
  {"WHZ:", ze5, sizeof(ze5) / PGLENG, P&ze_vis[5]},	// ***AnFre Kessel//SiWa ehemalig WZ1

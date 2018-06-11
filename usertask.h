@@ -357,7 +357,7 @@
 #if WILO_MODBUS == 1
 #define	U27_STAT		0x00					
 #define U27_BICB		NOIC
-#define	U27_ZAEHL		405						// 10,075 Sek Startverzögerung
+#define	U27_ZAEHL		406						// Sek Startverzögerung
 #define	U27_ZEITG		40						// 1 s
 #define	U27_TASK		WiloPumpenSteuerung
 #else
@@ -367,13 +367,13 @@
 #define	U27_ZEITG		4
 #define	U27_TASK		Leer
 #endif	
-//----------------- Reserve --------------------------------------------------------------
-#define	U28_STAT		0x80					
+//----------------- Steuerung der Quellenregeneration --------------------------------------------------------------
+#define	U28_STAT		0x00					
 #define U28_BICB		NOIC
 #define	U28_ZAEHL		4
-#define	U28_ZEITG		4
-#define	U28_TASK		Leer
-
+#define	U28_ZEITG		40						// 1 s
+#define	U28_TASK		Steuer_QRG
+//----------------- Reserve --------------------------------------------------------------
 #define	U29_STAT		0x80					
 #define U29_BICB		NOIC
 #define	U29_ZAEHL		4

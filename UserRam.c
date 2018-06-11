@@ -751,6 +751,15 @@ NtDynam			ntd[NTMAX];
 /*--------------- Reglerparameter für Solar-Regelung -------------*/
 SoStandard	sos[SOMAX];
 SoDynam	sod[SOMAX];
+
+/*--------------- Reglerparameter für Weichekreis -------------*/
+WeStandard	wes[];
+WeDynam	wed[];
+
+/*--------------- Reglerparameter für Quellenkreis -------------*/
+QuStandard	qus[];
+QuDynam	qud[];
+
 // ***AnFre 
 char NotBetr;		//Anzeige Notbetrieb
 UINT NotTage;		//Anzahl Tage bis Notbetrieb

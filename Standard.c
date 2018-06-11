@@ -578,13 +578,19 @@ const bicvec bicuser1[]	=	{
 	{EEPADR,	(char	*)&sod[SO1].lzPufPuH,	PUFH1_ADR,		+ 0,					2},	
 #endif
 
-#if SOANZ > 1		// ***AnFre
-	{EEPADR,	(char	*)&sos[SO2],					SO2_ADR,				( ( SOSLENG > 64 ) ? 64 : SOSLENG )},
-	{EEPADR,	(char	*)&sos[SO2] + 64,			SO2_ADR + 64,		( ( SOSLENG > 64 ) ? SOSLENG-64 : 0 )},
+//#if SOANZ > 1		// ***AnFre
+//	{EEPADR,	(char	*)&sos[SO2],					SO2_ADR,				( ( SOSLENG > 64 ) ? 64 : SOSLENG )},
+//	{EEPADR,	(char	*)&sos[SO2] + 64,			SO2_ADR + 64,		( ( SOSLENG > 64 ) ? SOSLENG-64 : 0 )},
+//
+//	{EEPADR,	(char	*)&sod[SO2].lzKolPuH,	SOLH1_ADR			+ 2,					2},	
+//	{EEPADR,	(char	*)&sod[SO2].lzPufPuH,	PUFH1_ADR,		+ 2,					2},	
+//#endif
 
-	{EEPADR,	(char	*)&sod[SO2].lzKolPuH,	SOLH1_ADR			+ 2,					2},	
-	{EEPADR,	(char	*)&sod[SO2].lzPufPuH,	PUFH1_ADR,		+ 2,					2},	
-#endif
+/* ------------------------ Weichen-und Quellen-Regelung -----------------------------*/
+	{EEPADR,	(char	*)&wes[0],						WEI_ADR,				( ( WESLENG > 64 ) ? 64 : WESLENG )},
+	{EEPADR,	(char	*)&wes[0] + 64,			WEI_ADR + 64,		( ( WESLENG > 64 ) ? WESLENG-64 : 0 )},
+	{EEPADR,	(char	*)&qus[0],						QUE_ADR,				( ( QUSLENG > 64 ) ? 64 : QUSLENG )},
+	{EEPADR,	(char	*)&qus[0] + 64,			QUE_ADR + 64,		( ( QUSLENG > 64 ) ? QUSLENG-64 : 0 )},
 
 /* ------------------------ Benutzersteuerung mit UNI-Elementen --------*/
 #if STEUER_UNI == 1

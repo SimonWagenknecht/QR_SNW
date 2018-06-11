@@ -321,19 +321,7 @@
 #endif
 
 //------------------ letzter Task: Archivierung mit SD-Card ------------------------------
-#if ARCHIV_SDM == 1
-#define	U25_STAT		0x00					
-#define U25_BICB		NOIC
-#define	U25_ZAEHL		80
-#define	U25_ZEITG		10
-#define	U25_TASK		ArchivSDM
-#else
-#define	U25_STAT		0x80					
-#define U25_BICB		NOIC
-#define	U25_ZAEHL		4
-#define	U25_ZEITG		4
-#define	U25_TASK		Leer
-#endif
+
 
 //------------------ Benutzersteuerung mit UNI-Elementen --------------------------------
 #if STEUER_UNI == 1

@@ -48,7 +48,8 @@ extern const char ModBusMaster[];
 extern const char ModBusSlave[];	
 
 
-
+extern const char Weimod[];
+extern const char Quemod[];
 // ***AnFre
 extern const char Solmod[];
 extern const char Sosmod[];
@@ -191,6 +192,14 @@ extern const NtStandard  Nt_Standparam[];
 /*  Liste von Standardwerten für verschiedene Solarkreise	*/
 extern const char SO_PROFILE ;
 extern const SoStandard  So_Standparam[];
+
+/*  Liste von Standardwerten für verschiedene Weichenkreise	*/
+extern const char WEI_PROFILE ;
+extern const WeStandard  We_Standparam[];
+
+/*  Liste von Standardwerten für verschiedene Quellenkreise	*/
+extern const char QU_PROFILE ;
+extern const QuStandard  Qu_Standparam[];
 
 /*  Liste von Standardwerten für Benutzersteuerung mit UNI-Elementen	*/
 extern const char UNI_PROFILE ;

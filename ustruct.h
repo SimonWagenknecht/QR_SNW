@@ -1338,7 +1338,39 @@ typedef struct sd {
 } SoDynam;	
  
 //---------------------------------------------------------------------
+/* SiWa: Strukturen für den Weichenkreis und Quellenkreis */
 
+// Weichenkreis
+typedef struct weis {
+	char	chpa_puwei_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	char	chpa_puwei_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	char	chpa_rvwei_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	int		 ipa_rvwei_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	
+} WeStandard;
+
+#define WESLENG sizeof (struct weis)
+
+typedef struct weid {
+	char	chpa_bmpuwei;					// Betriebsmeldung der Quellenpumpe	
+} WeDynam;
+
+// Quellenkreis
+typedef struct qs {
+	char	chpa_puqu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	char	chpa_puqu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	char	chpa_rvqu_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	int		 ipa_rvqu_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	
+} QuStandard;
+
+#define QUSLENG sizeof (struct qs)
+
+typedef struct qd {
+	char	chpa_bmpuqu;					// Betriebsmeldung der Quellenpumpe	
+} QuDynam;
+
+//---------------------------------------------------------------------
 /* Struktur der Regelparameter Benutzersteuerung mit UNI-Elementen */
 // Statische Parameter (mit Standdardwerten)
 typedef struct uns {

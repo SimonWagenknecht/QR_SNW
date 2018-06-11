@@ -144,12 +144,19 @@
 #define	KE4_ADR							0x0C80	// 2 Page
 
 
-/* ------------------------ Warmwasser ---------------------------------*/
-// Warmwasser 1													
-#define WW1_ADR							0x0D00	// 2 Page
+///* ------------------------ Warmwasser ---------------------------------*/
+//// Warmwasser 1													
+//#define WW1_ADR							0x0D00	// 2 Page
+//
+//// Warmwasser 2	
+//#define WW2_ADR							0x0D80	// 2 Page
 
-// Warmwasser 2	
-#define WW2_ADR							0x0D80	// 2 Page
+/* ------------------------ Weichen und Quellen-Regelung -----------------------------*/
+// Weichenregelung
+#define	WEI_ADR							0x0D00	// 2 Page
+
+// Quellenregelung
+#define	QUE_ADR							0x0D80	// 2 Page
 																				
 /* ------------------------ Netztrennung -------------------------------*/
 // Netztrennung 1
