@@ -401,13 +401,7 @@ void Wmeng ( void )
 		return;
 	}
 	else
-	{	// Volumen-Impulse erfassen
-		// 06.01.2017: WZ2-Solar zählt nicht, wenn MVKOLEA auf Pufferweg AB-->B
-		if ( w == 2 && MVKOLEA[SO1]->wert == 1 )
-		{
-			wmengCtr[w].pZaehlsp->zwert = wmengCtr[w].lastWert;		// im System aufgezählen Wert zurücksetzen
-		}
-
+	{
 		anzImp = (char)( ( wmengCtr[w].pZaehlsp->zwert - wmengCtr[w].lastWert ) / impulsWert );	// max. 3
 		wmengCtr[w].volumen =	(UINT)( wmengCtr[w].pZaehlsp->zwert - wmengCtr[w].lastWert );			// in Liter
 		wmengCtr[w].lastWert = wmengCtr[w].pZaehlsp->zwert;
