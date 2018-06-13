@@ -503,7 +503,10 @@ typedef struct rs{
 	int  Tvsol0;		// Solltemperatur bei 0V					[°C] * 10
 	UINT Sollstell;	// HAND Sollwert stellen	Volt *100
 	int 	VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
+	
 	char	VorrangZeitabsenkung;
+	char 	PuBmVerz;				// [min]
+	
 // ***AnFre 06.06.2012 Legionelle für NahwärmeNetz von KER1s02_SEZ01
 	char Legjn;							// Legionellentod HK1-Temp.-Anhebung
 	char Legtag;						// Legionellentage

@@ -21,13 +21,14 @@ const Pgrup hk1[] = {
 	{" 12;"," VORLAUF   MAX  "," C    ", P&hks[HK1].Tvma,					US_INT, 1, P&hid1,	V1, 0, 0},
 	{" 13;"," VORLAUF   MIN  "," C    ", P&hks[HK1].Tvmi,					US_INT, 1, P&hid1,	V1, 0, 0},
 
-	{"*14:"," ANFORDER.EXT 1 "," C    ", P&hkd[HK1].ExtAnf1Hk,			ANA_FORM, 1, P&vis,	V0, 0, 0},
-	{"*14:"," ANFORDER.EXT 1 "," C    ", P&hkd[HK1].ExtAnf1Hk,	 ANA_FORM, 0x81, P&kom,	V0, FUEHLER, 0},
-	{" ->."," ANFORD.GUELTIG "," 1=JA  ", P&hks[HK1].ExtAnf1_Ja,	 	 US_CHAR, 0, P&hid2,V0, 0, 0},
-	{"*15:"," ANFORDER.EXT 2 "," C    ", P&hkd[HK1].ExtAnf2Hk,			ANA_FORM, 1, P&vis,	V0, 0, 0},
-	{"*15:"," ANFORDER.EXT 2 "," C    ", P&hkd[HK1].ExtAnf2Hk,	 ANA_FORM, 0x81, P&kom,	V0, FUEHLER, 0},
-	{" ->."," ANFORD.GUELTIG "," 1=JA  ", P&hks[HK1].ExtAnf2_Ja,	   US_CHAR, 0, P&hid2,V0, 0, 0},
-	{" 16;"," ANHEB. EXT.ANF."," K     ", P&hks[HK1].TvAnhExt,				US_INT, 1, P&hid1,V0, 0, 0},
+	{"*14."," LADETEMPERATUR "," C    ", P&hkd[HK1].tvsb_hkl,			US_INT, 1, P&vis,	V0, 0, 0},
+	{"*15:"," ANFORDER. HK1  "," C    ", P&hkd[HK3].tvsb,			US_INT, 1, P&vis,		V0, 0, 0},
+	//{"*14:"," ANFORDER. HK1  "," C    ", P&hkd[HK3].tvsb,	 ANA_FORM, 0x81, P&kom,	V0, FUEHLER, 0},
+	//{" ->."," ANFORD.GUELTIG "," 1=JA  ", P&hks[HK1].ExtAnf1_Ja,	 	 US_CHAR, 0, P&hid2,V0, 0, 0},
+	{"*16:"," ANFORDER. HK2  "," C    ", P&hkd[HK4].tvsb,			US_INT, 1, P&vis,		V0, 0, 0},
+	//{"*15:"," ANFORDER. HK2  "," C    ", P&hkd[HK4].tvsb,	 ANA_FORM, 0x81, P&kom,	V0, FUEHLER, 0},
+	//{" ->."," ANFORD.GUELTIG "," 1=JA  ", P&hks[HK1].ExtAnf2_Ja,	   US_CHAR, 0, P&hid2,V0, 0, 0},
+	{" 17;"," ANHEBUNG HK    "," K     ", P&hks[HK1].TvAnhExt,				US_INT, 1, P&hid1,V0, 0, 0},
 
 	#if TRLBEG_HK1==1
 	{" 18;"," RUECKLAUF MAX  "," C    ", P&hks[HK1].Trma,					US_INT, 1, P&hid1,	V1, 0, 0},

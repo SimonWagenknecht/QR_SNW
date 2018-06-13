@@ -26,10 +26,10 @@ const Pgrup hk4[] = {
 	{" 08;"," Ta-SOMMER [AUS]"," C    ", P&hks[HK4].Taa,						US_INT, 1, P&hid1,	V1, 0, 0},
 	{"*09;"," SOMMER ?       ","       ", P&hkd[HK4].sowi,		 JANEIN_FORM, 0, P&hid1,	V1, 0, 0},
 
-	{" 10:"," STEIGUNG       ","       ", P&hks[HK4].Anst,					US_INT, 2, P&vis,		V0, 0, 0},
-	{" 11:"," NIVEAU         "," C    ", P&hks[HK4].Tvpa,					US_INT, 1, P&vis,		V0, 0, 0},
-	{" 12:"," VORLAUF   MAX  "," C    ", P&hks[HK4].Tvma,					US_INT, 1, P&vis,		V0, 0, 0},
-	{" 13:"," VORLAUF   MIN  "," C    ", P&hks[HK4].Tvmi,					US_INT, 1, P&vis,		V0, 0, 0},
+	{" 10:"," STEIGUNG       ","       ", P&hks[HK4].Anst,					US_INT, 2, P&vis,		V1, 0, 0},
+	{" 11:"," NIVEAU         "," C    ", P&hks[HK4].Tvpa,					US_INT, 1, P&vis,		V1, 0, 0},
+	{" 12:"," VORLAUF   MAX  "," C    ", P&hks[HK4].Tvma,					US_INT, 1, P&vis,		V1, 0, 0},
+	{" 13:"," VORLAUF   MIN  "," C    ", P&hks[HK4].Tvmi,					US_INT, 1, P&vis,		V1, 0, 0},
 
 //	#if TRAUMK_HK4==1
 //	{" 14:"," RAUM      SOLL "," C    ", P&hks[HK4].Tiso,					US_INT, 1, P&vis,		V1, 0, 0},

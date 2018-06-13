@@ -554,10 +554,10 @@ const Anl37 R37_Beleg[] = {
 		BMPU1,		// HKL: BM Ladekpu				 BM PU LK		// Digital-Eingang DE5	
 		STWHK2,		// NK1: Sicherheitstemp.w  STW NK1		// Digital-Eingang DE6	
 		
-		TMANF1,	// ANL: Sollw.-Anf.										// Analog-Ausgang  AA1
+		TMANF1,		// ANL: Sollw.-Anf.										// Analog-Ausgang  AA1
 		RVENT3,		// HK1: Regelv. Heizk.1		 RV HK1 		// Analog-Ausgang  AA2
 		AA_FREI,	// 			FREI													// Analog-Ausgang  AA3
-		AA_UNI4,	// HK2:	Regelv. Heizk.2		 RV HK2			// Analog-Ausgang  AA4
+		RVENT4,		// HK2:	Regelv. Heizk.2		 RV HK2			// Analog-Ausgang  AA4
 	
 		SSTM1,		// ANL: Sammelstörmeldung							// Digital-Ausgang DA1
 		DA_UNI1,	// ANL: ext.WW-Vorrang								// Digital-Ausgang DA2 
@@ -1004,6 +1004,14 @@ const HkStandard  Hk_Standparam[] = {
 		0,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		0,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0,	// char VentiloeffngTag;				// Wochentag
+		{0,0},	// uhrzeit VentiloeffngBeg;		// Beginn
+		{0,0},	// uhrzeit VentiloeffngEnd;		// Ende
+		0,	// int VentiloeffngAbs;				// Absenkwert (>= 50,0 K führt zum Abschalten)
+		0,	// int GrenztempVentiloeffng;	// untere Grenze der Außentemperatur
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1117,6 +1125,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1231,6 +1247,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	 0,		// Legjn	= 1				Legionellentod
 	0x02,	// Legtag = Mo				Legionellentage
@@ -1344,6 +1368,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1458,6 +1490,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage

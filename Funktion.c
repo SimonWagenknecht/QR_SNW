@@ -57,6 +57,58 @@ float Dy_rel ( int  kp, int kd, int ts, UINT tn, float ei, float ei1, float ei2 
 //-		return ( ((float)kp/100) * ei );	// P-Regler
 		return ( ((float)kp/100) * ( ei -ei1 ) );	// P-Regler -> keine Änderung der Stellgröße bei konstanter Regelabweichung
 }		
+/******************************************************************************************************/	
+// Funktion: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+//           Maximalwert über 100% und unter 0% wird aus dem Produkt Kp * ei ermittelt (gleitend)
+// Input:    float Stellgröße
+//           int   Verstärkung Kp [0,01] %
+//           int   Festwert    Wup [0,1] %  (0 = gleitend)
+//           float Regelabweichung ei
+// Output:   float Stellgröße bzw. begrenzte Stellgröße bei Werten über 100% oder unter 0% 
+float anti_windup(float fl_y_rel, int Kp, int Wup, float fl_ei)
+{
+	float fl_y_rel_max;
+	
+	if(fl_ei < 0)
+		fl_ei *= -1;																					// Absolutwert wird benötigt																				
+	
+	if(Wup == 0)																						// gleitend
+		fl_y_rel_max = (float)Kp / 100 * fl_ei;
+	else
+		fl_y_rel_max = (float)Wup / 10;												// fester Maximalwert
+			
+	
+	if(fl_y_rel > 0)																				// Stellgröße positiv
+	{
+		if(fl_y_rel > fl_y_rel_max + 100)											
+			fl_y_rel = fl_y_rel_max + 100;											// Begrenzung auf positiven Maximalwert über 100%
+	}
+	
+	if(fl_y_rel < 0)																				// Stellgröße negativ
+	{
+		if(fl_y_rel < fl_y_rel_max * (-1) )											
+			fl_y_rel = fl_y_rel_max * (-1);											// Begrenzung auf negativen Maximalwert unter 0%
+	}
+	
+	return(fl_y_rel);
+}
+
+// Funktion: Ausgabe der PID-Stellgröße als Stellsignal an den Systemausgang mit Begrenzung auf 0-100%
+int y_stell(float fl_y_rel)
+{
+	int y_rel;
+	
+	y_rel = (int)(fl_y_rel * 10);										// PID-Stellgröße float to int wird zum Stellsignal
+
+	// Begrenzung des Stellsignals auf 0% bzw. 100%
+	if(y_rel > 1000)
+		y_rel = 1000;
+	if(y_rel < 0)
+		y_rel = 0;
+		
+	return(y_rel);
+}		
+/******************************************************************************************************/	
 	
 
 /***** Daten eines Monats ( Heizgradtage ) zur Anzeige aus EEPROM in RAM kopieren *****/

@@ -37,6 +37,11 @@ void RegelHk(void)
 	char	tvret;
 	char hkAbsch;
 
+	// Ventilöffnung
+	char vo, er;
+	UINT abschBeg, abschEnd, aktuell;
+	
+
 	int	x1, x2, y;		//für Skalierung der Sollwert-Ausgabe 0...10Volt
 	// Dynamische Ventilstellung Min ***AnFre 06.06.2012
 	int	tvPrim =0;		// PrimärVorlauf zuweisen HK1 oder HK2
@@ -44,6 +49,9 @@ void RegelHk(void)
 	char	externeAnforderung1Aktiv = 0;
 	char	externeAnforderung2Aktiv = 0;
 		
+		
+		
+	char	i;		// Laufvariable für HK1 und HK2 bei der Sollwertberechnung	
 	// Lokale Pointer auf Hk-Strukturen
 	HkDynam    *pHkd;	
 	HkStandard *pHks;
@@ -51,6 +59,7 @@ void RegelHk(void)
 	if(++hk >= HKMAX)										// Regelkreis-Index erhöhen
 		hk = 0;
 	
+										
 	// Projektabfrage, ob Regelkreis aktiv
 	if(Projekte[proj_typ].hkcode[hk] == 0)
 		return;													// Heizkreis nicht aktiv
@@ -58,6 +67,9 @@ void RegelHk(void)
 	// Strukturpointer zuweisen
 	pHkd = &hkd[hk];	
 	pHks = &hks[hk];
+
+	if (hk < 2)						// Beginn: Die nachfolgende Abarbeitung bezieht sich auf HKN1 und HKL (Frenzel)   
+	{	
 
 	//--------------------------------------------------------------------------
 	// Betriebsart, Absenkanzeige
@@ -362,15 +374,16 @@ void RegelHk(void)
 	{
 		if ( pHkd->bedLadung > 0 )
 		{
-			hkAbschalten = 0;
+			//hkAbschalten = 0;
 			pHkd->tvsb = hkd[HK2].tvsb + pHks->Tvpa;
 		}
 		else
 		{
 			pHkd->tvsb = 0;
 //			pHkd->absSolBer = 0;	// 03.03.2015 Funktion entfernt 06.01.2017
-			hkAbschalten = 1;
+			//hkAbschalten = 1;
 		}
+				pHkd->tvsb_hkl=pHkd->tvsb;							// für die Anzeige in HKL: die Ladetemperatur 
 	}	
 /* Ende ****************** Sollwert-Berechnung nur für Lade-Heizkreis HK1: ********************* */
 
@@ -468,6 +481,28 @@ void RegelHk(void)
 //			pHkd->tvsb -= pHkd->absSolBer;
 //	 }
 	
+	// Maximale Anforderung von HK1 und HK2 und HKL für HKL
+	
+	/* *********************** Sollwert-Berechnung nur für Lade-Heizkreis HK1: ********************* */
+	if ( hk == HK1 )	// nur für Lade-HeizKreis 
+	{
+		for ( i = HK3; i < HKANZ; i++ )
+		{
+		if ( hkd[i].tvsb > 0 && ( hkd[i].tvsb + hks[i].TvpAnh + pHks->TvAnhExt > pHkd->tvsb ) )
+			pHkd->tvsb = hkd[i].tvsb + hks[i].TvpAnh + pHks->TvAnhExt;
+		}
+		
+		// Abschalten
+		if (pHkd->tvsb < 200)
+			{
+			hkAbschalten = 1;
+			}
+			else
+				{
+					hkAbschalten = 0;
+				}
+	}	
+/* Ende ****************** Sollwert-Berechnung nur für Lade-Heizkreis HK1: ********************* */
 /* ----------------------------- Maximalwertbegrenzung ---------------------------------*/
 	if(pHkd->tvsb > pHks->Tvma)
 		 pHkd->tvsb = pHks->Tvma;
@@ -704,7 +739,582 @@ void RegelHk(void)
 	if ( STWHK[hk]->bwert == TRUE )
 	{
 		RVENT[hk]->awert = 0;					// Ausgabe 0 Volt an Stellventil
+	}	
+	
+	}					// Ende mit NHK1 und HKL nach Frenzel
+	else			// Beginn HK3 und HK4
+		{
+			// Komplett aus RegelHk vom R36Pool
+			
+			// Ventilstellungsbegrenzungen int to float
+	fl_Y_rel_beg = (float)pHks->Y_rel_beg / 10;			// Beginn der Ventilöffnung
+	fl_Y_rel_min = (float)pHks->Y_rel_min / 10;			// Minimalbegrenzung
+	
+	//--------------------------------------------------------------------------
+	// Betriebsart, Absenkanzeige
+	//--------------------------------------------------------------------------
+	if(pHkd->absenSchalter == 1)							
+	{	// Schalterabsenkung
+		pHkd->regie  = REG_SCHALTER;
+		pHkd->absen  = pHkd->absenSchalter ;			// Zustand  Absenkphase
+		pHkd->aufhe  = 0 ;												// Zustand  Aufheizphase
+		pHkd->absch  = pHkd->abschSchalter ;			// Zustand	Abschaltphase
+		pHkd->hunt   = 0;													// Zustand  Heizunterbrechung
+		pHkd->stuetz = pHkd->stuetzSchalter;			// Zustand 	Stützbetrieb
+		pHkd->frost  = pHkd->frostSchalter ;			// Zustand	Frostschutzbetrieb
+	}
+	else if(pHkd->vorra_bed == TRUE)						// bei Vorrang Bedarfsabsenkung vor Zeitabsenkung
+	{	// Bedarfsabsenkung
+		pHkd->regie  = REG_BEDARF;
+		pHkd->absen  = abs_bed[hk].absen ;				// Zustand  Absenkphase
+		pHkd->aufhe  = abs_bed[hk].aufhe ;				// Zustand  Aufheizphase
+		pHkd->absch  = abs_bed[hk].absch ;				// Zustand	Abschaltphase
+		pHkd->hunt   = abs_bed[hk].hunt  ;				// Zustand  Heizunterbrechung
+		pHkd->stuetz = abs_bed[hk].stuetz;				// Zustand 	Stützbetrieb
+		pHkd->frost  = abs_bed[hk].frost ;				// Zustand	Frostschutzbetrieb
+	}
+	else	// Zeitabsenkung
+	{
+		if(pHkd->absenFerien == 1)								// Ferienbetrieb
+		{
+			pHkd->regie  = REG_FERIEN;
+			pHkd->absen  = pHkd->absenFerien ;			// Zustand  Absenkphase
+			pHkd->aufhe  = 0 ;											// Zustand  Aufheizphase
+			pHkd->absch  = pHkd->abschFerien ;			// Zustand	Abschaltphase
+			pHkd->hunt   = 0;												// Zustand  Heizunterbrechung
+			pHkd->stuetz = pHkd->stuetzFerien;			// Zustand 	Stützbetrieb
+			pHkd->frost  = pHkd->frostFerien ;			// Zustand	Frostschutzbetrieb
+		}
+		else																			// Normal Zeitabsenkung
+		{		
+			pHkd->regie  = REG_ZEIT;
+			pHkd->absen  = abs_ram[hk].absen ;			// Zustand  Absenkphase
+			pHkd->aufhe  = abs_ram[hk].aufhe ;			// Zustand  Aufheizphase
+			pHkd->absch  = abs_ram[hk].absch ;			// Zustand	Abschaltphase
+			pHkd->hunt   = abs_ram[hk].hunt  ;			// Zustand  Heizunterbrechung
+			pHkd->stuetz = abs_ram[hk].stuetz;			// Zustand 	Stützbetrieb
+			pHkd->frost  = abs_ram[hk].frost ;			// Zustand	Frostschutzbetrieb
+		}	
+	}				
+	switch(pHkd->regie)
+	{
+		case REG_SCHALTER:
+			memcpy(pHkd->regie_txt, TXT_SCHALTER, 15);
+			break;
+		case REG_BEDARF:
+			memcpy(pHkd->regie_txt, TXT_BEDARF, 15);
+			break;
+		case REG_FERIEN:
+			memcpy(pHkd->regie_txt, TXT_FERIEN, 15);
+			break;
+		case REG_ZEIT:
+			memcpy(pHkd->regie_txt, TXT_ZEIT, 15);
+			break;
+		default:
+			memcpy(pHkd->regie_txt, TXT_DEFAULT, 15);
+			break;
 	}		
+				
+
+
+	//--------------------------------------------------------------------------
+	// Abfrage Handbetrieb
+	//--------------------------------------------------------------------------
+	if(pHks->Haut == TRUE)			
+	{	
+		RZU[hk]->wert = pHkd->vzu;								// Handwert[s] für Zufahren ausgeben
+		if(pHkd->vzu > 0)													// Ausgabe aktiv ?
+		{	 pHkd->vzu -= 1;												// Zeit decrementieren
+			 pHkd->vauf = 0;												// Vorrang vor Auffahren 
+		}                               					
+		else																			// Ausgabe für Zufahren nicht aktiv
+		{	RAUF[hk]->wert = pHkd->vauf;						// Handwert[s] für Auffahren ausgeben
+			if(pHkd->vauf > 0)											// Ausgabe aktiv ?
+				 pHkd->vauf -= 1;											// Zeit decrementieren
+		}                               					
+
+		RVENT[hk]->awert = pHks->Vstell;								// Analogventil 0-100,0% 
+		hkd[hk].fl_y_rel = (float)pHks->Vstell / 10;
+
+		if(pHkd->vzu > 0 || pHkd->vauf > 0)				// return, solange Ausgabe läuft (wegen 1 Sekunden Takt) 
+			return;
+	}                                 					
+	else																				// Automatikbetrieb
+	{	pHks->Haut = 0;														// evtl. Fehleingaben löschen
+		pHkd->vzu	= 0;														// Handwerte löschen
+		pHkd->vauf	= 0;
+	}
+	//----------------------------------------------------------------------------
+	
+	// Regler-Tastzeit
+	if(++pHkd->zts < pHks->Ts/10)
+		 return;																	// Tastzeit noch nicht erreicht
+	pHkd->zts = 0;	 
+
+
+	// Sommer/Winter-Automatik
+	//-----------------------------------------------------------------------------
+	// Entscheidung: zentrale Werte aus ANL oder Extrawerte aus HK
+	if(pHks->SoWiExtra == 0)
+	{	// zentrale Werte auf Heizkreis kopieren
+		pHks->Tae  = Tae;
+		pHks->Taa  = Taa;
+		pHkd->sowi = sowi;
+	}
+	else
+	{	// Extrawerte für den Heizkreis ausgewählt
+		if(ta1mh.messw <= pHks->Tae) 							// ta1mh <= Winter-Ein-Temp. ?
+			pHkd->sowi = 0;													// Winterbetrieb
+		else if(ta1mh.messw >= pHks->Taa)					// ta1mh >= Sommer-Ein-Temp. ?
+			pHkd->sowi = 1;													// Sommerbetrieb
+	}		
+
+	pHkd->somme = pHks->Swhk;										// Sommer/Winter-Automatik nach Statusanzeige		
+	if(pHks->Swhk > 0)													// Automatik aktiv ?
+	{	
+		// Außentemperatur-Heizgrenze abtesten
+		if(ta1m.stat != 0)
+			pHkd->heiz_grenz = 0;										// Merker
+		else
+		{ if(pHkd->heiz_grenz == 1)								// war Merker gesetzt ?
+			{	if (ta1m.messw < pHks->TaHeizgrenze - 20)	// Hysterese 2,0K
+					pHkd->heiz_grenz = 0;
+			}
+			else
+			{	if (ta1m.messw >= pHks->TaHeizgrenze)
+					pHkd->heiz_grenz = 1;
+			}
+		}			
+		
+		pHkd->somme = pHkd->sowi | pHkd->heiz_grenz;	// Sommer/Winter-Zustand oder Heizgrenz-Zustand nach Statusanzeige	
+
+		if(pHkd->somme > 0)												// Sommerbetrieb ?
+		{	
+			if(hkAbschalten == 0)
+				hkAbschalten = 1;
+		}
+	}
+	
+	// GWW-Vorrang
+	//-------------------------------------------------------------------------------
+//-	pHkd->wwvorKorr = 0;							// voreinstellen
+//-	pHkd->vorra = pHks->Wwvh;					// Schalter Vorrang hk nach Statusanzeige
+//-	if(pHks->Wwvh > 0)								// Schalter gesetzt ?
+//-	{	
+//-		pHkd->vorra = wwd[WW1].wwvor && wwd[WW1].zvorrad;
+//-		if ( pHkd->vorra )							// Vorrangbetrieb ?
+//-		{	if(pHks->Kpww >= 1000)				// wenn Kpww >= 10,00
+//-			{	
+//-			if(hkAbschalten == 0)
+//-				hkAbschalten =2;						// Abschalten ohne Starttemp. init
+//-			}
+//-			else													// gleitenden Absenkwert errechnen
+//-				pHkd->wwvorKorr = (int) ( (float)wwd[WW1].ei_ww * ((float)pHks->Kpww / 100) );
+//-
+//-			#if SP_WW1 == 0
+//-				if ( pHkd->wwvorKorr > 100 )
+//-					pHkd->wwvorKorr = 100;		// Siefke : bei WW-Bereitung ohne Speicher Absenkung auf 10 K begrenzt
+//-			#endif												// dafuer ohne zeitl. Begrenzung moeglich
+//-																		// hier : Wiedereinschalten nach TvorrZeit									
+//-		}
+//-	}	
+
+	// GWW-Vorrang, zwei WW-Kreise
+//	if ( hkAbschalten == 0 )
+//	{
+//
+//		pHkd->vorra = ( ( pHks->Wwvh[WW1] && wwd[WW1].wwvor && wwd[WW1].zvorrad ) );
+//
+//		wwvorKorr[WW1] = 0;
+//		//	wwvorKorr[WW2] = 0;
+//		
+//		if ( pHks->Wwvh[WW1] && wwd[WW1].wwvor && wwd[WW1].zvorrad )
+//		{
+////			pHkd->vorra = 1;
+//			if ( pHks->Kpww[WW1] >= 1000 )
+//				hkAbschalten = 2;
+//			else
+//				wwvorKorr[WW1] = (int) ( (float)wwd[WW1].ei_ww * ((float)pHks->Kpww[WW1] / 100) );			
+//		}
+////		if ( WWANZ > 1 && hkAbschalten == 0 )
+////		{
+////			if ( pHks->Wwvh[WW2] && wwd[WW2].wwvor && wwd[WW2].zvorrad )
+////			{
+//////				pHkd->vorra = 1;
+////				if ( pHks->Kpww[WW2] >= 1000 )
+////					hkAbschalten = 2;
+////				else
+////					wwvorKorr[WW2] = (int) ( (float)wwd[WW2].ei_ww * ((float)pHks->Kpww[WW2] / 100) );			
+////			}
+////		}		
+//		if ( hkAbschalten == 0 )
+//			pHkd->wwvorKorr = ( wwvorKorr[WW1] >= wwvorKorr[WW2] ) ? wwvorKorr[WW1] : wwvorKorr[WW2];	
+//		else
+//			pHkd->wwvorKorr = 0;		
+//		#if SP_WW1 == 0
+//		if ( pHkd->wwvorKorr > 100 )
+//			pHkd->wwvorKorr = 100;		// Siefke : bei WW-Bereitung ohne Speicher Absenkung auf 10 K begrenzt
+//		#endif
+//	}
+//	else
+//	{
+//		pHkd->vorra = 0;		
+//		pHkd->wwvorKorr = 0;
+//	}
+//	
+		
+	//---------------------------------------------------------------------------------------------------
+	// Sonderphasen (Aufheizphase, Stützbetrieb, Frostschutzbetrieb) testen
+	// --> tvsb <-- wird entsprechend gesetzt
+	//---------------------------------------------------------------------------------------------------
+
+	hkd[hk].kaskaKorr = 0;
+	 
+	if ( pHkd->somme == TRUE )	
+		; 
+	else if(test_aufhe(hk) == 1)																// 1 = Sonderphase
+		hkAbschalten = 0;
+	else	
+	{	
+		// ---------------------------- Normalphase -----------------------------------------------
+		// Berechnung der Heizungsvorlauftemp.(tvsb) über die Heizkennlinie
+		tvret = tvsoll_ber(hk);	// wenn ok, dann tvsb berechnet(tvret=1), sonst tvsb = Tvmi (tvret= 0)
+		//-----------------------------------------------------------------------------------------
+
+		//-----------------------------------------------------------------------------------------
+		// Anlagenschalter steht auf Nichtnutzung HK 
+		//-----------------------------------------------------------------------------------------
+		if(pHkd->absenSchalter == 1)	
+		{	//------------------------------------------------
+			// Schalter-Regie
+			//------------------------------------------------
+			if(pHkd->abschSchalter == TRUE)										// Abschalten ermittelt in Absenk.c (TestSchalter)
+			{																									// kommt bei Frostbetrieb hier nicht vorbei
+				if(hkAbschalten == 0)
+					hkAbschalten = 1;
+			}				
+			else																							// kein Abschalten
+			{	if(tvret)
+					pHkd->tvsb -= pHkd->tvabSchalter;							// Berechn. Absenkwert abziehen
+			}		
+		}
+		else
+		{	//-----------------------------------------------------------------------------------------
+			// Regel- oder Absenkphasen
+			//-----------------------------------------------------------------------------------------
+			if(pHkd->vorra_bed == TRUE)													// Vorrang Bedarfsabsenkung vor Zeitabsenkung
+			{	
+				//------------------------------------------------
+				// Bedarfs-Regie
+				//------------------------------------------------
+				// Kaskade mit Kaskadewerten vom RIEcon50
+				if(pHkd->bedarf == BEDARF_JA)											// Nur in der Nutzungszeit
+				{	
+					if ( pHkd->tisobed > 10 && pHkd->tibed > 10 )  	// nur wenn Soll- und Ist-Temp.> 1,0 °C ( sonst Fehler )
+						raum_kaskade(hk, 1);													// 1 = R50-Kaskadewerte benutzen
+				}						
+				else
+				{	// Bedarfsabsenkung bei 'Kein  Bedarf'
+					if(abs_bed[hk].tvab > 0)												// wenn Absenkwert eingetragen (berechnet in Bedarf.c)
+					{	if(abs_bed[hk].absch == TRUE  )								// Abschalten ermittelt in Bedarf.c
+						{																							// kommt bei Frostbetrieb hier nicht vorbei
+							if(hkAbschalten == 0)
+								hkAbschalten = 1;
+						}				
+						else																					// kein Abschalten
+						{	if(tvret)
+								pHkd->tvsb -= abs_bed[hk].tvab;						// Absenkwert benutzen
+						}								
+					}
+				}	
+			}						
+			else	// Zeitabsenkung oder Ferienabsenkung
+			{
+				//-------------------------------------------------
+				// Ferien-Regie
+				//-------------------------------------------------
+				if( pHkd->vorra_bed == FALSE && ferienStat == 1 && pHkd->tvabFerien )	
+				{	
+					if(pHkd->abschFerien == TRUE)											// Abschalten ermittelt in Absenk.c (TestFerien)
+					{																									// kommt bei Frostbetrieb hier nicht vorbei
+						if(hkAbschalten == 0)
+							hkAbschalten = 1;
+					}				
+					else																							// kein Abschalten
+					{	if(tvret)
+							pHkd->tvsb -= pHkd->tvabFerien;								// Berechn. Absenkwert abziehen
+					}		
+				}
+				else
+				{	//-----------------------------------------------
+					// Zeit-Regie
+					//-----------------------------------------------
+					if(abs_ram[hk].tvab == 0)													// kein Absenkwert eingetragen (berechnet in Absenk.c)
+					{	// Kaskade mit Raumtemperaturfühler
+						if(TI[hk]->stat == 0 && abs_ram[hk].absen == 0 )// wenn Status ok und nicht in Absenkung
+							raum_kaskade(hk, 0);													// 0 = keine R50-Kaskadewerte benutzen
+					}
+					else
+					{	// Absenkung nach Absenktabellen
+						if(abs_ram[hk].absch == TRUE  )									// Abschalten ermittelt in Absenk.c
+						{																								// kommt bei Frostbetrieb hier nicht vorbei
+							if(hkAbschalten == 0)
+								hkAbschalten = 1;
+						}				
+						else																						// kein Abschalten
+						{	if(tvret)
+								pHkd->tvsb -= abs_ram[hk].tvab;							// Absenkwert benutzen
+						}
+					}
+				}											
+			}
+		}	
+		
+		// Gleitender Warmwasservorrang, errechneten Absenkwert abziehen
+		if(tvret)
+			pHkd->tvsb -= pHkd->wwvorKorr;
+		
+		if(pHkd->tvsb < pHks->Tvmi)				// Minimaltemp. nicht unterschreiten	
+			pHkd->tvsb = pHks->Tvmi;
+		
+		// Rücklauftemperaturbegrenzung
+		pHkd->rlbegr = 0;									// Statusanzeige Rücklauftemp.begrenzung löschen
+		if(pHks->Psbegr > 0)							// Begrenzung auf Primär-Rücklauftemp. ?
+		{	pHks->Psbegr = 1;								// evtl. Fehlbedienung korrigieren
+			if(TRP[ANL]->stat == 0)  				// Primär-Rücklauffühler ok ?
+				rueckl_begr(hk, 1);						// 1 = Begrenzung auf Primär-Rücklauftemp.
+		}
+		else															// Begrenzung auf Sekundär-Rücklauftemp. 
+		{	if(TRS[hk]->stat == 0)					// Sekundär-Rücklauffühler ok ?
+				rueckl_begr(hk, 0);						// 0 = Begrenzung auf Sekundär-Rücklauftemp.
+		}		
+	
+	}	// ------------------------ Ende tvsb-Berechnung in der Normalphase ----------------------------------------
+
+
+	if ( pHkd->somme == FALSE && FRGHK[hk]->bstat == 0 )		// Freigabe wird im Sommer ignoriert, Sommer dominiert
+	{																												// Freigabesignal ist definiert
+		if ( FRGHK[hk]->bwert == 0 )
+		{																											// Heizkreis nicht freigegeben
+			if ( ta1m.stat == 0 && ta1m.messw > pHks->TaFrostgrenze )
+			{	if(hkAbschalten == 0)
+					hkAbschalten = 1;
+			}
+			else
+				pHkd->tvsb = pHks->Tvmi;
+		}
+	}
+
+	// Heizkreis abschalten mangels Bedarf
+	hkAbsch = RaumAbschaltung	( hk );
+	if ( hkAbschalten == 0 )
+		hkAbschalten = hkAbsch;	
+	
+	// Maximalwertbegrenzung
+	if(pHkd->tvsb > pHks->Tvma)
+		 pHkd->tvsb = pHks->Tvma;
+	else if(pHkd->tvsb < pHks->Tvmi)
+		 pHkd->tvsb = pHks->Tvmi;	
+
+
+// Test: Estrich-Programm
+	pHkd->estrichProg = TestEstrichProg ( hk );
+	if ( pHkd->estrichProg == TRUE )
+	{
+		pHkd->tvsb = pHkd->estrichTemp * 10;
+		if (pHkd->tvsb > pHks->Tvma )
+	 		pHkd->tvsb = pHks->Tvma;
+	 	hkAbschalten = 0;							// alle Abschaltbedingungen ( Sommer ! ) sind unwirksam
+	}
+				
+#if LEIST_BEGR > 0
+	if ( grenzLeistung.begrenzung > 0 && grenzLeistung.leistBegr > ( GrenzLeistung.GrenzLeistg - GrenzLeistung.LeistgHyst ) )
+	{
+		pHkd->leistBegrAbsenk = (UINT)( ( (ULONG)grenzLeistung.leistBegr - ( GrenzLeistung.GrenzLeistg - GrenzLeistung.LeistgHyst ) )
+																			 * pHks->XpLeistBegr * 10 / ( GrenzLeistung.GrenzLeistg - GrenzLeistung.LeistgHyst ) );
+		if ( pHkd->tvsb - pHks->Tvmi > pHkd->leistBegrAbsenk )
+			pHkd->tvsb -= pHkd->leistBegrAbsenk;
+		else
+			pHkd->tvsb = pHks->Tvmi;		
+	}
+	else
+		pHkd->leistBegrAbsenk = 0;
+#endif				
+
+
+// Abschalten während der von der Einzelraum-Regelung erzwungenen Ventilöffnung
+// nicht wenn Ta zu gering, nicht bei Abgasmessung oder aktiviertem Estrich-Programm
+	vo = FALSE;
+	
+	if ( hk == HK1 )
+		er = ( BEDRAUM_HK1 == 1	&& FBH_HK1 == 0 ) ? 1 : 0;
+	else if ( hk == HK2 )
+		er = ( BEDRAUM_HK2 == 1	&& FBH_HK2 == 0 ) ? 1 : 0;
+	else if ( hk == HK3 )
+		er = ( BEDRAUM_HK3 == 1	&& FBH_HK3 == 0 ) ? 1 : 0;
+	else if ( hk == HK4 )
+		er = ( BEDRAUM_HK4 == 1	&& FBH_HK4 == 0 ) ? 1 : 0;
+	else 
+		er = FALSE;		
+
+
+	if ( er && pHks->VentiloeffngAbs && ssfEinAnl == FALSE && pHkd->estrichProg == FALSE )
+	{
+		if ( pHks->VentiloeffngTag & wotbit() )
+		{
+			abschBeg = pHks->VentiloeffngBeg.std * 60 + pHks->VentiloeffngBeg.min;
+			abschEnd = pHks->VentiloeffngEnd.std * 60 + pHks->VentiloeffngEnd.min;
+			aktuell = Std * 60 + Min;	
+			
+			if ( aktuell >= abschBeg && aktuell < abschEnd )
+			{
+				vo = TRUE;
+				if ( pHks->VentiloeffngAbs >= 500 && ta1m.messw > pHks->GrenztempAbschalten )
+					hkAbschalten = 1;
+				else
+				{
+					pHkd->tvsb -= pHks->VentiloeffngAbs;
+					if ( pHkd->tvsb < pHks->Tvmi )
+						pHkd->tvsb = pHks->Tvmi;	
+				}
+			}		
+		}
+	}
+	pHkd->ventiloeffng = vo;
+
+
+	//-------------------------------------------------------------------
+	// Untersuchung auf hkAbschalten
+	//-------------------------------------------------------------------
+
+	#if SSF == 1
+	if ( ssfEinAnl == TRUE )							// Abgasmessung
+	{
+		if ( hkAbschalten )
+		{
+			hkAbschalten = 0;									// Programm läuft nicht über Funktion hk_abschalten (),
+			pHkd->tvsb  = 0;									// der Kessel wird bei Abgasmessung immer eingeschaltet. Wenn im Sommer jedoch tvsb
+		}																		// verändert würde, schaltete bei Mehr-Kessel-Anlagen u.U. nicht nur der zu messende.
+	}
+	#endif	
+	
+	if(hkAbschalten != 0)
+	{
+		hk_abschalten ( hk, hkAbschalten )	;
+		return;																		// TASK ENDE	!!!!!
+	}	
+
+	//-------------------------------------------------------------------
+
+//Schwerin: wenn Druck Rücklauf sekundär aufgeschaltet
+//-	// Heizung abschalten bei Druckalarm
+//-	if ( hks[hk].HzgAusSMDruck && ( anaInp[U2].ugwSM || anaInp[U2].ogwSM ) )
+//-	{
+//-		hkd[hk].zpu = 0;								// Pumpe ohne Nachlauf abschalten
+//-		hk_abschalten ( hk, 1 )	;
+//-		return;																		// TASK ENDE	!!!!!
+//-	}				
+
+		// Schornsteinfeger-Funktion. Solltemp.wird bei laufender Estrich-Trocknung	nicht verändert !	
+	#if SSF == 1
+	if ( ssfEinAnl == TRUE && pHkd->estrichProg == FALSE )
+	{
+		pHkd->tsol = pHks->Tvma;
+		pHkd->fl_tsol	= (float)pHkd->tsol / 10;
+	}
+	else
+	#endif	
+
+	// Dämpfung des berechneten Sollwertes: tvsb --> gedämpfte tsol
+	if( (pHkd->regstart == 0) || (pHkd->wwvorKorr > 0) )	// nach Reset oder bei gleit. WW-Vorrang
+	{	 pHkd->tsol			= pHkd->tvsb;												// keine Filterung
+		 pHkd->fl_tsol	= (float)pHkd->tsol / 10;
+		 pHkd->regstart	= 1;
+	}	 
+	else
+	{
+		pHkd->fl_tsol = g_filter(pHkd->fl_tsol, pHkd->tvsb, pHks->Ts, pHks->Fzk);
+		pHkd->tsol 	  = (int)(pHkd->fl_tsol * 10);					// für Anzeige
+	}
+	//	----------------------------------------------------------------------
+	//	Reglertyp: P- / PID-Regler
+	//	----------------------------------------------------------------------
+	// Test Vorlauffühler
+	if(TVS[hk]->stat == 0)	// Status: 0...Ok, 41H...Überlauf,  21H...Unterlauf
+	{	
+		// Regelabweichung Soll - Ist
+		fl_ei	= pHkd->fl_tsol - (float)TVS[hk]->messw / 10;
+		
+		// -------------- PID-Regelalgorithmus ---------------------------------
+		// Berechnung der relativen Stellgrößen
+		fl_dy_rel = Dy_rel ( pHks->Kp, pHks->Kd, pHks->Ts, pHks->Tn, 
+														fl_ei, pHkd->fl_ei1, pHkd->fl_ei2 );
+
+		pHkd->fl_y_rel += fl_dy_rel;
+		
+		pHkd->dy_rel	= (int)(fl_dy_rel * 1000);					// für debug
+
+		//---------------------------------------------------------------------
+		// Regelabweichungen merken
+		pHkd->fl_ei2 = pHkd->fl_ei1;
+		pHkd->fl_ei1 = fl_ei;						
+		// Parameterumwandlung float to int
+		pHkd->ei = (int)(fl_ei * 10);											// [0,1%] zur Anzeige
+		
+		//--------------------------------------------------------------------------
+		// Abfrage Handbetrieb
+		//--------------------------------------------------------------------------
+		if(pHks->Haut == TRUE)			
+			hkd[hk].fl_y_rel = (float)pHks->Vstell / 10;		// PID-Wert durch Handwert überschreiben
+		else
+		{
+			// Berechnung und Ausgabe der absoluten Stellgrößen
+			// --------------------------------------------------------------------
+			// Ausgabe an 3-Punkt Ventil
+			if ( pHks->Vst > 0 )
+			{	
+				pHkd->stellzeit = (int)( fl_dy_rel * (float)pHks->Hub * 60 / (float)pHks->Vst ); // [0.01 s]			
+				pHkd->stellsum += pHkd->stellzeit;			
+				if(abs(pHkd->stellsum) >= 100)								// ab 1 Sekunde ausgeben
+				{
+					pHkd->fahren		= pHkd->stellsum / 100;			// nur ganze Sekunden fahren
+					pHkd->stellsum	= pHkd->stellsum % 100; 		// Rest merken
+					if(pHkd->fahren > 0)		
+						RAUF[hk]->wert = (char)pHkd->fahren;
+					else
+						RZU[hk]->wert  = (char)abs(pHkd->fahren);	
+				}
+			}	
+			
+			// Ausgabe an 0-10V Ventil
+			
+			// Begrenzung der PID-Stellgröße (anti windup) auf Kp * ei (gleitend) oder fest
+			pHkd->fl_y_rel = anti_windup( pHkd->fl_y_rel, pHks->Kp, pHks->Wup, fl_ei );		// in Funktion.c
+			pHkd->si_y_rel = (int)(pHkd->fl_y_rel * 10);		// debug
+			
+			// Abfrage Ventilstellungsbegrenzungen			
+			if(pHks->Y_rel_beg > 0)													// Ventilöffnungsbeginn gesetzt ?
+			{
+				if(fl_dy_rel > 1)															// nur bei positiver Änderung
+				{	if(pHkd->fl_y_rel < fl_Y_rel_beg)						// und Wert kleiner als Ventilöffnungsbeginn,
+						 pHkd->fl_y_rel = fl_Y_rel_beg;						// dann Setzen auf Ventilöffnungsbeginn
+				}
+			}	
+			if(pHks->Y_rel_min > 0)													// Minimalbegrenzung gesetzt ?
+			{			
+				if(pHkd->fl_y_rel  < fl_Y_rel_min)						// Wert kleiner als Minimalbegrenzung,								
+					 pHkd->fl_y_rel  = fl_Y_rel_min;						// dann setzen auf Minimalbegrenzung
+			}		 
+				
+			// Ausgabe der PID-Stellgröße als Stellsignal an den Systemausgang mit Begrenzung auf 0-100%
+			pHkd->y_rel = y_stell(pHkd->fl_y_rel);					// in Funktion.c
+
+			RVENT[hk]->awert = pHkd->y_rel;									// Ausgabe an Stellventil
+		}
+	}	
+		
+		}	// Ende HK3 und HK4
+		
 }
 
 /*---------------------- Ende Task RegelHk -----------------------------------*/

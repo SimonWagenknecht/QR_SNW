@@ -445,7 +445,7 @@ const Anlage Projekte[] = {
 		{"TEST PROJEKT   "},
 		
 		// Steuercode für Heizkreise
-		{1,2,1,3},	// Nummern der Kaltstartparametersätze für jeden Heizkreis [HK_PROFILE]
+		{1,2,3,3},	// Nummern der Kaltstartparametersätze für jeden Heizkreis [HK_PROFILE]
 					// 0 = Heizkreis nicht vorhanden
 		
 		{1,2,0,0},	// Nummern der Absenkprofile für jeden Heizkreis [ABS_PROFILE]
@@ -1004,6 +1004,14 @@ const HkStandard  Hk_Standparam[] = {
 		0,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		0,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0,	// char VentiloeffngTag;				// Wochentag
+		{0,0},	// uhrzeit VentiloeffngBeg;		// Beginn
+		{0,0},	// uhrzeit VentiloeffngEnd;		// Ende
+		0,	// int VentiloeffngAbs;				// Absenkwert (>= 50,0 K führt zum Abschalten)
+		0,	// int GrenztempVentiloeffng;	// untere Grenze der Außentemperatur
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1117,6 +1125,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1231,6 +1247,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	 0,		// Legjn	= 1				Legionellentod
 	0x02,	// Legtag = Mo				Legionellentage
@@ -1344,6 +1368,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1458,6 +1490,14 @@ const HkStandard  Hk_Standparam[] = {
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
 		2,	//PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+		0x20,		// char VentiloeffngTag;				// Wochentag Freitag
+		{50,9},		// uhrzeit VentiloeffngBeg;			// Beginn 9:50
+		{25,10},	// uhrzeit VentiloeffngEnd;			// Ende 10:25
+		0,				// int VentiloeffngAbs;					// Absenkwert (>= 50,0 K führt zum Abschalten)
+		-10,			// int GrenztempVentiloeffng;		// untere Grenze der Außentemperatur, -1,0°C
+
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage

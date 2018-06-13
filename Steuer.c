@@ -53,17 +53,23 @@ void Steuer(void)
 	} 
 
 	/*+++++++++++++++ maximale Anforderung +++++++++++++++++++++++*/
-	#if HKANZ > 0		
-	for ( i = HK1; i < HKANZ; i++ )
-		if ( hkd[i].tvsb > 0 && ( hkd[i].tvsb + hks[i].TvpAnh > maxAnf ) )
-			maxAnf = hkd[i].tvsb + hks[i].TvpAnh;
-	#endif
 
-	#if ANF_EXT > 0			
-	for ( i = 0; i < ANF_EXT; i++ )
-		if ( anfExt[i].stat == 0 && anfExt[i].messw > maxAnf )	
-			maxAnf = anfExt[i].messw;						
-	#endif
+	// Übergabe von HKL
+		maxAnf = hkd[HK1].tvsb;
+
+//	#if HKANZ > 0		
+//	for ( i = HK1; i < HKANZ; i++ )
+//		if ( hkd[i].tvsb > 0 && ( hkd[i].tvsb + hks[i].TvpAnh > maxAnf ) )
+//			maxAnf = hkd[i].tvsb + hks[i].TvpAnh;
+//	#endif
+//
+//	#if ANF_EXT > 0			
+//	for ( i = 0; i < ANF_EXT; i++ )
+//		if ( anfExt[i].stat == 0 && anfExt[i].messw > maxAnf )	
+//			maxAnf = anfExt[i].messw;						
+//	#endif
+
+
 // ***AnFre				
 //	#if WWANZ > 0	
 //	if ( wwd[WW1].wwlad )

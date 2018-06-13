@@ -683,6 +683,8 @@ void Steuer(void)
 	DManager();
 #endif
 
+PumpenbusParli ( );			// Wird benötigt, um die BM der PU SOL, PU PK, PU NK1 und PU LK abzuarbeiten. Pumpen-Parameter für Anzeige in den Gruppen der Parli erzeugen
+
 }	
 /*---------------------- Task Steuer Ende ---------------------------------*/
 
