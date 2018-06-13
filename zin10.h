@@ -1,14 +1,14 @@
 const Pgrup ze7[] = { // IN10
-	{"_**:"," WAERMEZAEHLER 3","       ", P&ZE[7],			 				ZE_FORMP, 1,	P&vis,	V0, 0, 0},
+	{"_**:"," WAERMEZAEHLER  ","       ", P&ZE[7],			 				ZE_FORMP, 1,	P&vis,	V0, 0, 0},
 #if ZE10WM == 1
-	{"*01:"," WAERMEMENGE Q3 "," kWh   ", P&wmengCtr[3].wmeng,	 US_LONG, 0,  P&vis,	V1, 0, 0},
-	{"*02:"," LEISTUNG    P3 "," kW    ", P&wmengCtr[3].wmLeistg,US_INT,	0,  P&vis,	V1, 0, 0}, 
-	{"*03:"," VOLUMEN     V3 ","       ", P&ZE[7],			 				ZE_FORMP, 0,  P&vis,	V0, 0, 0},
-	{"*04:"," VOLUMENSTROM 3 "," m/h  ", P&wmengCtr[3].flow,		 US_LONG,	3,  P&vis,	V1, 0, 0},	// ***AnFre 23.03.2010
-	{"*05;"," TEMP.VORLAUF 3 "," C    ", P&WZxTV[3],	 					ANA_FORM, 1,  P&vis,	V0, 0, 0},
-	{" ->."," Korrektur TV3  "," K     ", P&WZxTVKorr[3],					S_INT, 	1, 	P&hid4,	V0, 0, 0},
-	{"*06;"," TEMP.RUECKLAUF3"," C    ", P&WZxTR[3],	 					ANA_FORM, 1,  P&vis,	V0, 0, 0},
-	{" ->."," Korrektur TR3  "," K     ", P&WZxTRKorr[3],					S_INT, 	1, 	P&hid4,	V0, 0, 0},
+	{"*01:"," WAERMEMENGE WQK"," kWh   ", P&wmengCtr[3].wmeng,	 US_LONG, 0,  P&vis,	V1, 0, 0},
+	{"*02:"," LEISTUNG    WQK"," kW    ", P&wmengCtr[3].wmLeistg,US_INT,	0,  P&vis,	V1, 0, 0}, 
+	{"*03:"," VOLUMEN     WQK","       ", P&ZE[7],			 				ZE_FORMP, 0,  P&vis,	V0, 0, 0},
+	{"*04:"," VOLUMENSTRO WQK"," m/h  ", P&wmengCtr[3].flow,		 US_LONG,	3,  P&vis,	V1, 0, 0},	// ***AnFre 23.03.2010
+	{"*05;"," TEMP.VOR   TVQ "," C    ", P&WZxTV[3],	 					ANA_FORM, 1,  P&vis,	V0, 0, 0},
+	{" ->."," Korrektur  TVQ "," K     ", P&WZxTVKorr[3],					S_INT, 	1, 	P&hid4,	V0, 0, 0},
+	{"*06;"," TEMP.RUECK TRQ "," C    ", P&WZxTR[3],	 					ANA_FORM, 1,  P&vis,	V0, 0, 0},
+	{" ->."," Korrektur  TRQ "," K     ", P&WZxTRKorr[3],					S_INT, 	1, 	P&hid4,	V0, 0, 0},
 //	{"*08;"," AKT.MON.VOLUM. ","       ", P&ZE[7],							ZE_FORMP, 5,  P&hid1,	V0, 0, 0},
 
 	{"*10:"," JANUAR         "," kWh   ", P&wmengCtr[3].verbr[0],						US_LONG, 	0, P&vis,  V1, 0 ,0},

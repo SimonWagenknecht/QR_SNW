@@ -17,30 +17,30 @@ void Steuer_QRG (void)
 /*------------------------Steuerung des Weichenkreis------------------------*/
 
 // Handbetrieb Weichenpumpe PU WEI 
-if (wes[0].chpa_puwei_Hau > 0)
+if (wes[0].chpa_pu_Hau > 0)
 	{
-		DA_UNI[U3]->wert = wes[0].chpa_puwei_ein;
+		DA_UNI[U3]->wert = wes[0].chpa_pu_ein;
 	}
 
 // Handbetrieb Regelventil RV WEI 
-if (wes[0].chpa_rvwei_Hau > 0)
+if (wes[0].chpa_rv_Hau > 0)
 	{
-		AA_UNI[U5]->awert = wes[0].ipa_rvwei_stellung;
+		AA_UNI[U5]->awert = wes[0].ipa_rv_stellung;
 	}
 
 
 /*------------------------Steuerung des Quellenkreis------------------------*/
 
 // Handbetrieb Quellenpumpe PU QU 
-if (qus[0].chpa_puqu_Hau > 0)
+if (qus[0].chpa_pu_Hau > 0)
 	{
-		DA_UNI[U2]->wert = qus[0].chpa_puqu_ein;
+		DA_UNI[U2]->wert = qus[0].chpa_pu_ein;
 	}	
 
 // Handbetrieb Regelventil RV WEI 
-if (qus[0].chpa_rvqu_Hau > 0)
+if (qus[0].chpa_rv_Hau > 0)
 	{
-		AA_UNI[U6]->awert = qus[0].ipa_rvqu_stellung;
+		AA_UNI[U6]->awert = qus[0].ipa_rv_stellung;
 	}
 
 }	// Ende Steuer_QRG

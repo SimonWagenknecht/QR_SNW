@@ -503,7 +503,10 @@ typedef struct rs{
 	int  Tvsol0;		// Solltemperatur bei 0V					[°C] * 10
 	UINT Sollstell;	// HAND Sollwert stellen	Volt *100
 	int 	VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
+	
 	char	VorrangZeitabsenkung;
+	char 	PuBmVerz;				// [min]
+	
 // ***AnFre 06.06.2012 Legionelle für NahwärmeNetz von KER1s02_SEZ01
 	char Legjn;							// Legionellentod HK1-Temp.-Anhebung
 	char Legtag;						// Legionellentage
@@ -531,6 +534,10 @@ typedef struct rs{
 // ***AnFre 03.03.2015 Absenkung HKL bei "Solares Heizen Ein"
 //	UINT AbsenkSol;		//HKL:	Absenkung bei Solares Heizen (hkSolJa = Ja)		Funktion entfernt 06.01.2017
 //	UINT AbsenkFaktor;//HKL: Absenk-Faktor (TS3 - SollHKL) * Faktor [ 0,00]	Funktion entfernt 06.01.2017
+
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+	int		Wup;									// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
+
 }HkStandard;
 #define HKSLENG sizeof(struct rs)
 
@@ -550,7 +557,8 @@ typedef struct rd{
 	int		stellsum;			// Summenzähler für Stellausgabe
 	int 	fahren;				// Fahrzeit Stellausgabe in ganzen Sekunden
 	int		y_rel;				// Stellausgabe an 0-10V Ventil	[%] * 10
-	float	fl_y_rel;			//		"		
+	float	fl_y_rel;			// PID-Stellgröße
+	int   si_y_rel;			// PID-Stellgröße für debug [%] * 10		
 	int		dy_rel;				// für debug
 	UINT	zpu;					// Zähler für Pumpenachlaufzeit
 	char	vzu;					// Hand Ventil zufahren			[s]
@@ -1342,10 +1350,10 @@ typedef struct sd {
 
 // Weichenkreis
 typedef struct weis {
-	char	chpa_puwei_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
-	char	chpa_puwei_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
-	char	chpa_rvwei_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
-	int		 ipa_rvwei_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
 	
 } WeStandard;
 
@@ -1357,10 +1365,10 @@ typedef struct weid {
 
 // Quellenkreis
 typedef struct qs {
-	char	chpa_puqu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
-	char	chpa_puqu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
-	char	chpa_rvqu_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
-	int		 ipa_rvqu_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
 	
 } QuStandard;
 

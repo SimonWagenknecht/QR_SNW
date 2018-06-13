@@ -24,8 +24,8 @@ void punt_Bm(char nt);
 #endif
 void PumpenLaufzeit ( void );
 void LaufzeitHk ( char hk );
-// ***AnFre 06.06.2012	void Pu_Ein ( char hk );
-void Pu_Drehzahl ( char hk );	//***AnFre 06.06.2012 L-Pumpendrehzahl HK1:
+void Pu_Ein ( char hk );
+//void Pu_Drehzahl ( char hk );	//***AnFre 06.06.2012 L-Pumpendrehzahl HK1:
 //void Pumpenbus_HZ ( char hk );	// nicht benutzt, da HK1-LadePumpe anders geschaltet wird
 void PumpenbusSM ( void );				// für ALLE Pumpenbus-Pumpen (Genibus, Wilo)
 void PumpenbusParli ( void );			// ***AnFre 12.12.2012 Parameter für ALLE WILO-Pumpen regenerieren 
@@ -454,9 +454,66 @@ void Steuer(void)
 
 	PumpenLaufzeit ( );									// Laufzeit der Heizungspumpen und der Hauptpumpe
 	
+	/*++++++++++ Pumpen ein/aus ++++++++++++++++++++++++++++++++++++++*/ // nur für Hk 3 und hk 4
+	for(i = 2; i < HKMAX; i++)					// in allen Reglern
+	{	aus = FALSE;
+		if(hks[i].Haut > 0)								// bei Handbetrieb,
+		{	PU[i]->wert			= hks[i].Puea;	// Pumpenrelais Handwert eintragen
+			#if PUDO == TRUE
+			PUD[i]->wert		= hks[i].Pu2ea;
+			#endif
+//#####090119
+			PUMIN[i]->wert	= hks[i].PuMin;
+			hkd[i].puBm  		= 0;						// kein Soft-Alarm für fehlende Betriebsmeldung
+		}
+		else
+		{	// Betriebsmeldung der Heizungspumpe überwachen
+			pu_Bm(i);
+					
+//#####ulsch: 28.02.07 Pumpen schalten entsprechend tvsb !
+			if ( hkd[i].tvsb > 0 || ssfEinAnl == TRUE )
+			{	// Pumpe einschalten
+				Pu_Ein ( i );
+				
+//#####090119
+//-				if(hkd[i].vorra_bed == FALSE)					// kein Vorrang Bedarfsabsenkung vor Zeitabsenkung
+//-					PUMIN[i]->wert = abs_ram[i].absen;	// Minimaldrehzahl in der Absenkphase
+				PUMIN[i]->wert = ( hkd[i].absen && hkd[i].aufhe == 0 ) ? 1 : 0;	// auch bei Bedarfsabsenkung: Minimaldrehzahl in der Absenkphase, nicht bei Aufheizphase
+
+				hkd[i].zpu 			= hks[i].Puna * 2;		// Zähler für Pumpennachlaufzeit laden (* 30 Sek-Task)
+			}
+			else
+				pu_aus(i);									// Prozedur: Pumpe ausschalten
+
+//			#if BUS_PU_MAX > 0
+//			Pumpenbus_HZ ( i );	
+//			#endif
+		}		
+
+		hkd[i].ucCool = 0;
+
+//-		hkd[i].ucHeat = ( hkd[i].somme	== FALSE ) ? ( 1 << i ) : 0;
+// 110916: Forderung Dr.Riedel/Diele: Heizen trotz Sommer setzen, wenn Vorlauf nicht wirklich kalt 
+// - der R50 soll dann die Heizkörperventile nicht öffnen (stromlos machen)
+		if ( hkd[i].somme	== FALSE )
+			hkd[i].ucHeat = TRUE;
+		else
+		{
+			if ( TVS[i]->stat == 0 )	
+			{
+				if ( TVS[i]->messw <= hks[i].VorlaufMaxSommer )
+					hkd[i].ucHeat = FALSE;				
+				else if ( TVS[i]->messw >= hks[i].VorlaufMaxSommer + 5 )		// Hysterese 0,5 K
+					hkd[i].ucHeat = TRUE;				
+			}
+			else
+				hkd[i].ucHeat = FALSE;					
+		}
+
+	}
+	
 #if ( BUS_PU_MAX > 0 )
-	PumpenbusSM ( );				// Überwachung der Rückmeldungen Betriebsart / Regelart für ALLE Pumpen
-	PumpenbusParli ( );			// Pumpen-Parameter für Anzeige in den Gruppen der Parli erzeugen
+	PumpenbusSM ( );										// Überwachung der Rückmeldungen Betriebsart / Regelart für ALLE Pumpen
 #endif
 	
 	/*++++++++++ Pumpe HK1: Lade-Pumpe ein/aus ++++++++++++++++++++++++++++++++++++++*/
@@ -493,7 +550,7 @@ void Steuer(void)
 			pu_Bm(HK1);			// Betriebsmeldung der Heizungspumpe überwachen
 
 // ***AnFre 06.06.2012 
-			Pu_Drehzahl ( HK1 );	// --------- Lade-PumpenDrehzahl HK1: --------------
+			//Pu_Drehzahl ( HK1 );	// --------- Lade-PumpenDrehzahl HK1: --------------
 			if ( hkdSoL[HK1].solLadung == 0 )
 			{
 				AA_UNI[U2]->awert	= hkd[HK1].puSoll;
@@ -589,7 +646,7 @@ void Steuer(void)
 			pu_Bm(HK2);// Betriebsmeldung der Heizungspumpe überwachen
 
 // ***AnFre 06.06.2012 *******************************************************
-			Pu_Drehzahl ( HK2 );	// --------- Netz-PumpenDrehzahl HK2: --------------
+			//Pu_Drehzahl ( HK2 );	// --------- Netz-PumpenDrehzahl HK2: --------------
 			AA_UNI[U3]->awert	= hkd[HK2].puSoll;
 			if ( BusPuPara[PU_BUS_HK2-1].Funktion == 1 )								// ***AnFre Wilo-PumpenBus
 			{
@@ -625,6 +682,8 @@ void Steuer(void)
 #if DM_MODE == 1		// Gerät im DM_Modus (Data Master),	Datenbearbeitung in der Funktion: DManager(), Organisation der Datenübertragung im Task: DTimer() 
 	DManager();
 #endif
+
+PumpenbusParli ( );			// Wird benötigt, um die BM der PU SOL, PU PK, PU NK1 und PU LK abzuarbeiten. Pumpen-Parameter für Anzeige in den Gruppen der Parli erzeugen
 
 }	
 /*---------------------- Task Steuer Ende ---------------------------------*/
@@ -678,82 +737,55 @@ void pu_aus(char hk)
 {
 	if(hkd[hk].zpu > 0)
 		hkd[hk].zpu--;
-	else
-	{
-		if ( hk == HK1 )
-		{
-			BusPuPara[PU_BUS_HK1-1].Betrieb		= 0;
-			BusPuPara[PU_BUS_HK1-1].Sollwert	= 0;
-			if ( BusPuPara[PU_BUS_HK1-1].Funktion == 0 )	// ***AnFre Kein Wilo-PumpenBus
-				PU[hk]->wert	= 0;						// Pumpe ausschalten
-			else
-			{
-				PU[hk]->wert	= 1;						// Pumpenrelais immer einschalten
-			}
-		}	
-		if ( hk == HK2 )
-		{
-			BusPuPara[PU_BUS_HK2-1].Betrieb		= 0;
-			BusPuPara[PU_BUS_HK2-1].Sollwert	= 0;
-			if ( BusPuPara[PU_BUS_HK2-1].Funktion == 0 )	// ***AnFre Kein Wilo-PumpenBus
-				PU[hk]->wert	= 0;						// Pumpe ausschalten
-			else
-			{
-				PU[hk]->wert	= 1;						// Pumpenrelais immer einschalten
-			}
-		}	
+else
+	{	PU[hk]->wert			= 0;						// Pumpenrelais ausschalten
+		#if PUDO == TRUE
+		PUD[hk]->wert			= 0;
+		#endif
+		PUMIN[hk]->wert		= 0;						// Relais f. Minimaldrehzahl abschalten
 		// Blockierschutz bei Sommerbetrieb
 		if(hkd[hk].sowi > 0)
 		{	if((Wotag == 1) && (Std == 0) && (Min == hk))
 			{	PU[hk]->wert	= 1;						// Pumpenrelais einschalten
-				BusPuPara[PU_BUS_HK1-1].Betrieb	= 1;
-				BusPuPara[PU_BUS_HK1-1].Sollwert	= hks[HK1].PuDzMin;
-				BusPuPara[PU_BUS_HK2-1].Betrieb	= 1;
-				BusPuPara[PU_BUS_HK2-1].Sollwert	= hks[HK2].BusPuSollwert;
+				#if PUDO == TRUE
+				PUD[hk]->wert	= 1;
+				#endif
 				hkd[hk].zpu		= 5;						// ca. 2 Minuten
 			}
 		}
 	}
 }				
 
-// Betriebsmeldung der Heizungspumpe überwachen ***AnFre 06.06.2012
+// Betriebsmeldung der Heizungspumpe überwachen
 void pu_Bm(char hk)
 {
-	if(BMPU[hk]->bwert == 1)			// Betriebsmelde-Kontakt Ein ?
-	{
-		hkd[hk].puBm = 0;				// kein Alarm
-		hkd[hk].puBmVerz = 0;		// Verzögerung Alarm =0
-	}
+	if ( BMPU[hk]->bstat != NICHTV && hks[hk].PuBmVerz > 0 )	
+	{																	// Nur wenn Betriebsmelde-Kontakt vorhanden und Verzögerung nicht 0
+		if( PU[hk]->wert == 1 )					// Pumpe EIN ?
+		{
+			if ( BMPU[hk]->bwert == 1 )		// Betriebsmeldung auch EIN ?
+			{
+				hkd[hk].puBm = 0;						// kein Alarm
+				hkd[hk].puBmVerz = 0;
+			}
+			else
+			{
+				if ( hkd[hk].puBmVerz < 0xFFFF )
+					++hkd[hk].puBmVerz;
+				if ( hkd[hk].puBmVerz >= hks[hk].PuBmVerz * 2 )
+					hkd[hk].puBm = 1;					// Soft-Alarm: 'kein Betriebsmeldungs-Signal'
+			}
+		}
+		else
+			hkd[hk].puBmVerz = 0;	
+	}	
 	else
-	{
-		if ( hk == HK1 )
-		{
-			if ( BusPuPara[PU_BUS_HK1 - 1].Funktion == 0 ) // ***AnFre wenn kein PumpenBus
-			{
-				if(PU[hk]->wert == 1)				// Pumpe EIN ?
-				{
-					if (hkd[hk].puBmVerz < 3)	// Verzögerung Soft-Alarm: 'kein Betriebsmeldungs-Signal' ***AnFre 06.06.12
-						hkd[hk].puBmVerz ++;
-					else
-						hkd[hk].puBm = 1;				// Soft-Alarm: 'kein Betriebsmeldungs-Signal'
-				}
-			}
-		}
-		if ( hk == HK2 )
-		{
-			if ( BusPuPara[PU_BUS_HK2 - 1].Funktion == 0 ) // ***AnFre wenn kein PumpenBus
-			{
-				if(PU[hk]->wert == 1)				// Pumpe EIN ?
-				{
-					if (hkd[hk].puBmVerz < 3)	// Verzögerung Soft-Alarm: 'kein Betriebsmeldungs-Signal' ***AnFre 06.06.12
-						hkd[hk].puBmVerz ++;
-					else
-						hkd[hk].puBm = 1;				// Soft-Alarm: 'kein Betriebsmeldungs-Signal'
-				}
-			}
-		}
-	}		
+	{	
+		hkd[hk].puBm = 0;								// kein Alarm
+		hkd[hk].puBmVerz = 0;
+	}	
 }
+
 
 // Laufzeit der Heizungspumpen
 // Laufzeit der Hauptpumpe/Netztrennungspumpe
@@ -770,18 +802,12 @@ void PumpenLaufzeit ( void )
 	{
 		case HK1 :
 			#if PULZ_HK1 == 1	
-			if ( BusPuPara[PU_BUS_HK1-1].Funktion == 0 )	// ***AnFre Kein Wilo-PumpenBus
-			{
-				LaufzeitHk ( HK1 );
-			}		
+			LaufzeitHk ( i );		
 			#endif
 			break;
 		case HK2 :
 			#if PULZ_HK2 == 1	
-			if ( BusPuPara[PU_BUS_HK2-1].Funktion == 0 )	// ***AnFre Kein Wilo-PumpenBus
-			{
-				LaufzeitHk ( HK2 );
-			}		
+			LaufzeitHk ( i );		
 			#endif
 			break;
 		case HK3 :
@@ -855,101 +881,190 @@ void LaufzeitHk ( char hk )
 }
 
 ;	//***AnFre 06.06.2012 LadePumpen-Sollwert HK1:	und NetzPumpe HKN: 
-void Pu_Drehzahl ( char hk )
+void Pu_Ein ( char hk )
 {
-	if ( hk == HK1 )
+	char fuehrPu;
+	char pudo = 0;
+	
+#if PUDO == 1
+
+	switch(hk)
 	{
-		if ( (BusPuPara[PU_BUS_HK1-1].Funktion == 0 && PU[HK1]->wert > 0) || (BusPuPara[PU_BUS_HK1-1].Funktion > 0 && BusPuPara[PU_BUS_HK1-1].Betrieb > 0) )
-		{	// Ladepumpe ist EIN
-// 06.01.2017 Ta-abhängige Pu.drehzahl wird ersetzt durch temperabhängige Tsoll (tvsb) - Tist (TH1) Drehzahl
-//			if ( hks[HK1].PuDzTaMin > hks[HK1].PuDzTaMax )
+		case HK1:
+		pudo = PUDO_HK1;
+		break;
+		case HK2:
+		pudo = PUDO_HK2;
+		break;
+		case HK3:
+		pudo = PUDO_HK3;
+		break;
+		case HK4:
+		pudo = PUDO_HK4;
+		break;	
+	}
+
+	if (pudo == 1)
+	{
+		fuehrPu = hks[hk].FuehrPu;
+		if ( fuehrPu == 0 || fuehrPu > 2 )
+			fuehrPu = 1; 
+		
+	// muss die Führungs-Pumpe gewechselt werden ?	
+		if ( hks[hk].FuehrPuFest > 3 )
+			hks[hk].FuehrPuFest = 3;												// Eingabefehler korrigieren
+			
+		if ( hks[hk].FuehrPuFest != 1 && hks[hk].FuehrPuFest != 2 )
+		{																									// laufzeitabh.Wechsel parametriert
+			if ( fuehrPu == 1 )
+			{
+				if ( hkd[hk].puLz > hkd[hk].pudLz && ( hkd[hk].puLz - hkd[hk].pudLz >= hks[hk].PuWechseln ) )
+					fuehrPu = 2;
+			}
+			else if ( fuehrPu == 2 )
+			{
+				if ( hkd[hk].pudLz > hkd[hk].puLz && ( hkd[hk].pudLz - hkd[hk].puLz >= hks[hk].PuWechseln ) )
+					fuehrPu = 1;
+			}
+		}
+		else
+			fuehrPu = hks[hk].FuehrPuFest; 
+	
+	// Führungspumpe gestört ?
+		if ( fuehrPu == 1 )
+		{
+			if ( PUAL[hk]->bstat != NICHTV && PUAL[hk]->bwert )
+				fuehrPu = 2;
+		}						
+		else if ( fuehrPu == 2 )
+		{
+			if ( PUDAL[hk]->bstat != NICHTV && PUDAL[hk]->bwert )
+				fuehrPu = 1;
+		}	
+		
+		hks[hk].FuehrPu = fuehrPu;
+		
+		if ( hks[hk].FuehrPuFest == 3 || ( ( PUAL[hk]->bstat != NICHTV && PUAL[hk]->bwert) || ( PUDAL[hk]->bstat != NICHTV && PUDAL[hk]->bwert ) ) )
+		{																			// immer beide Pumpen gleichzeitig einschalten
+			PU[hk]->wert = 1;
+			PUD[hk]->wert = 1;
+		}	
+		else if ( fuehrPu == 2 )
+		{
+			PUD[hk]->wert = 1;
+			PU[hk]->wert = 0;	
+		}
+		else
+		{
+			PU[hk]->wert = 1;
+			PUD[hk]->wert = 0;	
+		}		
+	
+	}
+	
+	else
+		PU[hk]->wert = 1;	
+
+#else
+
+		PU[hk]->wert = 1;	
+
+#endif
+}					
+	
+//	if ( hk == HK1 )
+//	{
+//		if ( (BusPuPara[PU_BUS_HK1-1].Funktion == 0 && PU[HK1]->wert > 0) || (BusPuPara[PU_BUS_HK1-1].Funktion > 0 && BusPuPara[PU_BUS_HK1-1].Betrieb > 0) )
+//		{	// Ladepumpe ist EIN
+//// 06.01.2017 Ta-abhängige Pu.drehzahl wird ersetzt durch temperabhängige Tsoll (tvsb) - Tist (TH1) Drehzahl
+////			if ( hks[HK1].PuDzTaMin > hks[HK1].PuDzTaMax )
+////			{
+////				hkd[HK1].puSoll = hks[HK1].PuDzMin;
+////			}
+////			else
+////			{
+////				if ( hks[HK1].PuDzTaMin == hks[HK1].PuDzTaMax )
+////				{
+////					hkd[HK1].puSoll = hks[HK1].PuDzMax;
+////					if ( ta1m.messw > hks[HK1].PuDzTaMin && ta1m.stat == 0 )
+////					{
+////						hkd[HK1].puSoll = hks[HK1].PuDzMin;
+////					}
+////				}
+////				else
+////				{
+////					hkd[HK1].puSoll = Gerade_YvonX ( ta1m.messw, hks[HK1].PuDzTaMax, hks[HK1].PuDzMin, hks[HK1].PuDzTaMin, hks[HK1].PuDzMax );
+////					if ( hkd[HK1].puSoll > hks[HK1].PuDzMax || ta1m.stat != 0 )
+////					{
+////						hkd[HK1].puSoll = hks[HK1].PuDzMax;
+////					}
+////					else if ( hkd[HK1].puSoll < hks[HK1].PuDzMin )
+////					{
+////						hkd[HK1].puSoll = hks[HK1].PuDzMin;
+////					}
+////				}
+////			}
+//
+//// 06.01.2017 neue Funktion: LadePumpen-Drehzahl Steuerung entsprechend der LadeTemperatur
+////	Tist > Tsoll --> Steigerung der Drehzahl um 2%/30s bis DrehzahlMax
+////	Tist + dT 5,0 K < Tsoll --> Verringerung Drehzahl  um 2%/30s bis DrehzahlMin
+//
+//			if( TVS[HK1]->stat != 0 )	// Status: 0...Ok, 41H...Überlauf,  21H...Unterlauf
 //			{
-//				hkd[HK1].puSoll = hks[HK1].PuDzMin;
+//				hkd[HK1].puSoll = hks[HK1].PuDzMax;
 //			}
 //			else
 //			{
-//				if ( hks[HK1].PuDzTaMin == hks[HK1].PuDzTaMax )
+//				if ( (TVS[HK1]->messw + hks[HK1].DTPuDzMin) < hkd[HK1].tvsb )
 //				{
-//					hkd[HK1].puSoll = hks[HK1].PuDzMax;
-//					if ( ta1m.messw > hks[HK1].PuDzTaMin && ta1m.stat == 0 )
-//					{
-//						hkd[HK1].puSoll = hks[HK1].PuDzMin;
-//					}
+//					hkd[HK1].puDzSteiEin = 0;		// Drehzahl verringern bis PuDzMin
 //				}
-//				else
+//				else if ( (TVS[HK1]->messw + 10) > hkd[HK1].tvsb )
 //				{
-//					hkd[HK1].puSoll = Gerade_YvonX ( ta1m.messw, hks[HK1].PuDzTaMax, hks[HK1].PuDzMin, hks[HK1].PuDzTaMin, hks[HK1].PuDzMax );
-//					if ( hkd[HK1].puSoll > hks[HK1].PuDzMax || ta1m.stat != 0 )
-//					{
-//						hkd[HK1].puSoll = hks[HK1].PuDzMax;
-//					}
-//					else if ( hkd[HK1].puSoll < hks[HK1].PuDzMin )
-//					{
-//						hkd[HK1].puSoll = hks[HK1].PuDzMin;
-//					}
+//					hkd[HK1].puDzSteiEin = 1;		// Drehzahl steigern bis PuDzMax
 //				}
 //			}
-
-// 06.01.2017 neue Funktion: LadePumpen-Drehzahl Steuerung entsprechend der LadeTemperatur
-//	Tist > Tsoll --> Steigerung der Drehzahl um 2%/30s bis DrehzahlMax
-//	Tist + dT 5,0 K < Tsoll --> Verringerung Drehzahl  um 2%/30s bis DrehzahlMin
-
-			if( TVS[HK1]->stat != 0 )	// Status: 0...Ok, 41H...Überlauf,  21H...Unterlauf
-			{
-				hkd[HK1].puSoll = hks[HK1].PuDzMax;
-			}
-			else
-			{
-				if ( (TVS[HK1]->messw + hks[HK1].DTPuDzMin) < hkd[HK1].tvsb )
-				{
-					hkd[HK1].puDzSteiEin = 0;		// Drehzahl verringern bis PuDzMin
-				}
-				else if ( (TVS[HK1]->messw + 10) > hkd[HK1].tvsb )
-				{
-					hkd[HK1].puDzSteiEin = 1;		// Drehzahl steigern bis PuDzMax
-				}
-			}
-
-			if ( hkd[HK1].puDzSteiEin == 0 )
-			{ // Drehzahl verringern
-				hkd[HK1].puSollBer = hkd[HK1].puSollBer - hks[HK1].PuDzSteig;
-				if ( hkd[HK1].puSollBer < hks[HK1].PuDzMin )
-					hkd[HK1].puSollBer = hks[HK1].PuDzMin;
-			}
-			else
-			{ // Drehzahl steigern
-				hkd[HK1].puSollBer = hkd[HK1].puSollBer + hks[HK1].PuDzSteig;
-				if ( hkd[HK1].puSollBer > hks[HK1].PuDzMax )
-					hkd[HK1].puSollBer = hks[HK1].PuDzMax;
-			}
-			hkd[HK1].puSoll = hkd[HK1].puSollBer;
-		}
-		else
-		{
-			hkd[HK1].puSoll = 0;
-			hkd[HK1].puDzSteiEin = 0;		// Drehzahl steigern aus
-			hkd[HK1].puSollBer = 0;
-		}
-	}
-	if ( hk == HK2 )
-	{
-		if ( (BusPuPara[PU_BUS_HK2-1].Funktion == 0 && PU[HK2]->wert > 0) || (BusPuPara[PU_BUS_HK2-1].Funktion > 0 && BusPuPara[PU_BUS_HK2-1].Betrieb > 0) )
-		{
-			if ( hkd[HK2].absen == 0 )
-			{
-				hkd[HK2].puSoll = hks[HK2].BusPuSollwert;
-			}
-			else
-			{
-				hkd[HK2].puSoll = hks[HK2].BusPuSollwertAbsenk;
-			}
-		}
-		else
-		{
-			hkd[HK2].puSoll = 0;
-		}
-	}
-}
+//
+//			if ( hkd[HK1].puDzSteiEin == 0 )
+//			{ // Drehzahl verringern
+//				hkd[HK1].puSollBer = hkd[HK1].puSollBer - hks[HK1].PuDzSteig;
+//				if ( hkd[HK1].puSollBer < hks[HK1].PuDzMin )
+//					hkd[HK1].puSollBer = hks[HK1].PuDzMin;
+//			}
+//			else
+//			{ // Drehzahl steigern
+//				hkd[HK1].puSollBer = hkd[HK1].puSollBer + hks[HK1].PuDzSteig;
+//				if ( hkd[HK1].puSollBer > hks[HK1].PuDzMax )
+//					hkd[HK1].puSollBer = hks[HK1].PuDzMax;
+//			}
+//			hkd[HK1].puSoll = hkd[HK1].puSollBer;
+//		}
+//		else
+//		{
+//			hkd[HK1].puSoll = 0;
+//			hkd[HK1].puDzSteiEin = 0;		// Drehzahl steigern aus
+//			hkd[HK1].puSollBer = 0;
+//		}
+//	}
+//	if ( hk == HK2 )
+//	{
+//		if ( (BusPuPara[PU_BUS_HK2-1].Funktion == 0 && PU[HK2]->wert > 0) || (BusPuPara[PU_BUS_HK2-1].Funktion > 0 && BusPuPara[PU_BUS_HK2-1].Betrieb > 0) )
+//		{
+//			if ( hkd[HK2].absen == 0 )
+//			{
+//				hkd[HK2].puSoll = hks[HK2].BusPuSollwert;
+//			}
+//			else
+//			{
+//				hkd[HK2].puSoll = hks[HK2].BusPuSollwertAbsenk;
+//			}
+//		}
+//		else
+//		{
+//			hkd[HK2].puSoll = 0;
+//		}
+//	}
+//}
 
 // Vergleich der ausgegebenen und rückgelesenen Parameter 
 // von Betriebsart (EIN, AUS, MIN, MAX) und Regelart (Konstantdruck etc.)

@@ -10,23 +10,23 @@ const Pgrup hk2[] = {
 	{"*02:"," RUECKL.   TRNK1"," C    ", P&TRS[HK2],					ANA_FORMP, 0x81, P&kom,		E1, FUEHLER, 0},
 	#endif
 	
-	{" 06;"," SO/WI HK-EXTRA "," 1=JA  ", P&hks[HK2].SoWiExtra,		 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" 07;"," Ta-WINTER [EIN]"," C    ", P&hks[HK2].Tae,						US_INT, 1, P&hid1,	V1, 0, 0},
-	{" 08;"," Ta-SOMMER [AUS]"," C    ", P&hks[HK2].Taa,						US_INT, 1, P&hid1,	V1, 0, 0},
+	{" 06;"," SO/WI HK-EXTRA "," 1=JA  ", P&hks[HK2].SoWiExtra,		 US_CHAR, 0, P&hid1,	V0, 0, 0},
+	{" 07;"," Ta-WINTER [EIN]"," C    ", P&hks[HK2].Tae,						US_INT, 1, P&hid1,	V0, 0, 0},
+	{" 08;"," Ta-SOMMER [AUS]"," C    ", P&hks[HK2].Taa,						US_INT, 1, P&hid1,	V0, 0, 0},
 	{"*->;"," Sommer ?       ","       ", P&hkd[HK2].sowi,		 JANEIN_FORM, 0, P&hid2,	V0, 0, 0},
 
-	{" 10;"," STEIGUNG       ","       ", P&hks[HK2].Anst,					US_INT, 2, P&hid1,	V1, 0, 0},
-	{" 11;"," NIVEAU         "," C    ", P&hks[HK2].Tvpa,					US_INT, 1, P&hid1,	V1, 0, 0},
+	{" 10;"," STEIGUNG       ","       ", P&hks[HK2].Anst,					US_INT, 2, P&hid1,	V0, 0, 0},
+	{" 11;"," NIVEAU         "," C    ", P&hks[HK2].Tvpa,					US_INT, 1, P&hid1,	V0, 0, 0},
 	{" 12;"," VORLAUF   MAX  "," C    ", P&hks[HK2].Tvma,					US_INT, 1, P&hid1,	V1, 0, 0},
 	{" 13;"," VORLAUF   MIN  "," C    ", P&hks[HK2].Tvmi,					US_INT, 1, P&hid1,	V1, 0, 0},
 
-	{"*14:"," ANFORDER.EXT 1 "," C    ", P&hkd[HK2].ExtAnf1Hk,			ANA_FORM, 1, P&vis,	V1, 0, 0},
-	{"*14:"," ANFORDER.EXT 1 "," C    ", P&hkd[HK2].ExtAnf1Hk,	 ANA_FORM, 0x81, P&kom,	E1, FUEHLER, 0},
+	{"*14:"," ANFORDER.EXT 1 "," C    ", P&hkd[HK2].ExtAnf1Hk,			ANA_FORM, 1, P&vis,	V0, 0, 0},
+	{"*14:"," ANFORDER.EXT 1 "," C    ", P&hkd[HK2].ExtAnf1Hk,	 ANA_FORM, 0x81, P&kom,	V0, FUEHLER, 0},
 	{" ->."," ANFORD.GUELTIG "," 1=JA  ", P&hks[HK2].ExtAnf1_Ja,	 	 US_CHAR, 0, P&hid2,V0, 0, 0},
-	{"*15:"," ANFORDER.EXT 2 "," C    ", P&hkd[HK2].ExtAnf2Hk,			ANA_FORM, 1, P&vis,	V1, 0, 0},
-	{"*15:"," ANFORDER.EXT 2 "," C    ", P&hkd[HK2].ExtAnf2Hk,	 ANA_FORM, 0x81, P&kom,	E1, FUEHLER, 0},
+	{"*15:"," ANFORDER.EXT 2 "," C    ", P&hkd[HK2].ExtAnf2Hk,			ANA_FORM, 1, P&vis,	V0, 0, 0},
+	{"*15:"," ANFORDER.EXT 2 "," C    ", P&hkd[HK2].ExtAnf2Hk,	 ANA_FORM, 0x81, P&kom,	V0, FUEHLER, 0},
 	{" ->."," ANFORD.GUELTIG "," 1=JA  ", P&hks[HK2].ExtAnf2_Ja,	   US_CHAR, 0, P&hid2,V0, 0, 0},
-	{" 16;"," ANHEB. EXT.ANF."," K     ", P&hks[HK2].TvAnhExt,				US_INT, 1, P&hid1,V1, 0, 0},
+	{" 16;"," ANHEB. EXT.ANF."," K     ", P&hks[HK2].TvAnhExt,				US_INT, 1, P&hid1,V0, 0, 0},
 
 	{" 17;"," SOLARE ANHEBUNG"," K     ", P&hks[HK2].SolAnhebung,		US_INT, 1, P&hid1,	V1, 0, 0},
 	{" ->;"," SOL.AN. TSPo-L>"," C    ", P&hks[HK2].SolAnhebTH3,		US_INT, 1, P&hid1,	V0, 0, 0},
@@ -46,7 +46,7 @@ const Pgrup hk2[] = {
 	{" ->."," Vorlauf Filt.ZK"," s     ", P&hks[HK2].Fzk,						US_INT, 1, P&hid2,	V0, 0, 0},
 
 	#if LEIBEGR_HK2 == 1
-	{"*21:"," ABSENK.LEI.BEGR"," K     ", P&hkd[HK2].leistBegrAbsenk,US_INT,1, P&vis,		V1,	0, 0},
+	{"*21:"," ABSENK.LEI.BEGR"," K     ", P&hkd[HK2].leistBegrAbsenk,US_INT,1, P&vis,		V0,	0, 0},
 	#endif
 
 	#if FBH_HK2==1 // ***AnFre 06.06.2012 JA
@@ -94,50 +94,50 @@ const Pgrup hk2[] = {
 	{" 29:"," VORRANG ZEITABS"," 1=JA  ", P&hks[HK2].VorrangZeitabsenkung, US_CHAR, 0, P&vis,	V1, 0, 0},
 	#endif
 
-	{" 30;"," ABSENK-BEGIN WO"," h:min ", P&abs_tab[HK2][0].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" 31;"," ABSENK-DAUER WO"," h     ", P&abs_tab[HK2][0].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" 32;"," ABSENK-WERT  WO"," K     ", P&abs_tab[HK2][0].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
-	{" 34;"," GANZE WOCHE SET"," 1=JA  ", P&setwoche[HK2],				 US_CHAR, 0, P&hid1,		V1, 0, 0},
+	{" 30;"," ABSENK-BEGIN WO"," h:min ", P&abs_tab[HK2][0].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" 31;"," ABSENK-DAUER WO"," h     ", P&abs_tab[HK2][0].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" 32;"," ABSENK-WERT  WO"," K     ", P&abs_tab[HK2][0].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
+	{" 34;"," GANZE WOCHE SET"," 1=JA  ", P&setwoche[HK2],				 US_CHAR, 0, P&hid1,		V0, 0, 0},
 
-	{" 35;"," ABSENK-BEGIN Mo"," h:min ", P&abs_tab[HK2][1].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-DAUER Mo"," h     ", P&abs_tab[HK2][1].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-WERT  Mo"," K     ", P&abs_tab[HK2][1].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
+	{" 35;"," ABSENK-BEGIN Mo"," h:min ", P&abs_tab[HK2][1].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-DAUER Mo"," h     ", P&abs_tab[HK2][1].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-WERT  Mo"," K     ", P&abs_tab[HK2][1].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
 
-	{" 36;"," ABSENK-BEGIN Di"," h:min ", P&abs_tab[HK2][2].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-DAUER Di"," h     ", P&abs_tab[HK2][2].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-WERT  Di"," K     ", P&abs_tab[HK2][2].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
+	{" 36;"," ABSENK-BEGIN Di"," h:min ", P&abs_tab[HK2][2].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-DAUER Di"," h     ", P&abs_tab[HK2][2].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-WERT  Di"," K     ", P&abs_tab[HK2][2].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
 
-	{" 37;"," ABSENK-BEGIN Mi"," h:min ", P&abs_tab[HK2][3].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-DAUER Mi"," h     ", P&abs_tab[HK2][3].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-WERT  Mi"," K     ", P&abs_tab[HK2][3].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
+	{" 37;"," ABSENK-BEGIN Mi"," h:min ", P&abs_tab[HK2][3].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-DAUER Mi"," h     ", P&abs_tab[HK2][3].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-WERT  Mi"," K     ", P&abs_tab[HK2][3].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
 
-	{" 38;"," ABSENK-BEGIN Do"," h:min ", P&abs_tab[HK2][4].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-DAUER Do"," h     ", P&abs_tab[HK2][4].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-WERT  Do"," K     ", P&abs_tab[HK2][4].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
+	{" 38;"," ABSENK-BEGIN Do"," h:min ", P&abs_tab[HK2][4].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-DAUER Do"," h     ", P&abs_tab[HK2][4].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-WERT  Do"," K     ", P&abs_tab[HK2][4].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
 
-	{" 39;"," ABSENK-BEGIN Fr"," h:min ", P&abs_tab[HK2][5].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-DAUER Fr"," h     ", P&abs_tab[HK2][5].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-WERT  Fr"," K     ", P&abs_tab[HK2][5].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
+	{" 39;"," ABSENK-BEGIN Fr"," h:min ", P&abs_tab[HK2][5].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-DAUER Fr"," h     ", P&abs_tab[HK2][5].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-WERT  Fr"," K     ", P&abs_tab[HK2][5].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
 
-	{" 40;"," ABSENK-BEGIN Sa"," h:min ", P&abs_tab[HK2][6].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-DAUER Sa"," h     ", P&abs_tab[HK2][6].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-WERT  Sa"," K     ", P&abs_tab[HK2][6].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
+	{" 40;"," ABSENK-BEGIN Sa"," h:min ", P&abs_tab[HK2][6].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-DAUER Sa"," h     ", P&abs_tab[HK2][6].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-WERT  Sa"," K     ", P&abs_tab[HK2][6].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
 
-	{" 41;"," ABSENK-BEGIN So"," h:min ", P&abs_tab[HK2][7].begin,ZEIT_FORM,0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-DAUER So"," h     ", P&abs_tab[HK2][7].dauer, US_CHAR, 0, P&hid1,		V1, 0, 0},
-	{" ->;"," ABSENK-WERT  So"," K     ", P&abs_tab[HK2][7].abwert,	US_INT, 1, P&hid1,		V1, 0, 0},
+	{" 41;"," ABSENK-BEGIN So"," h:min ", P&abs_tab[HK2][7].begin,ZEIT_FORM,0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-DAUER So"," h     ", P&abs_tab[HK2][7].dauer, US_CHAR, 0, P&hid1,		V0, 0, 0},
+	{" ->;"," ABSENK-WERT  So"," K     ", P&abs_tab[HK2][7].abwert,	US_INT, 1, P&hid1,		V0, 0, 0},
 
 	{"*->."," Zeitabsenkphase","       ", P&abs_ram[HK2].absen,	 JANEIN_FORM, 0, P&hid2,V0, 0, 0},
 //*** AnFre 06.06.2012 
-	{" 42;"," LEGIONELLENTOD "," JA=1  ", P&hks[HK2].Legjn,				 US_CHAR, 0, P&vis,		V1, 0, 0},
-	{" 43;"," LEGION.-TAGE   "," Mo=1..", P&hks[HK2].Legtag,	GWOTAG2_FORM, 0, P&hid1,	V1, 0, 0},
-	{" 44;"," LEGION.-ZEIT   "," h:min ", P&hks[HK2].Legzeit,		 ZEIT_FORM, 0, P&hid1,	V1, 0, 0},
-	{" 45;"," LEGION.-DAUER  "," h     ", P&hks[HK2].Legdau,			 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" 46;"," LEGION.-TEMP.  "," C    ", P&hks[HK2].Twwleg,				US_INT, 1, P&hid1,	V1, 0, 0},
+	{" 42;"," LEGIONELLENTOD "," JA=1  ", P&hks[HK2].Legjn,				 US_CHAR, 0, P&vis,		V0, 0, 0},
+	{" 43;"," LEGION.-TAGE   "," Mo=1..", P&hks[HK2].Legtag,	GWOTAG2_FORM, 0, P&hid1,	V0, 0, 0},
+	{" 44;"," LEGION.-ZEIT   "," h:min ", P&hks[HK2].Legzeit,		 ZEIT_FORM, 0, P&hid1,	V0, 0, 0},
+	{" 45;"," LEGION.-DAUER  "," h     ", P&hks[HK2].Legdau,			 US_CHAR, 0, P&hid1,	V0, 0, 0},
+	{" 46;"," LEGION.-TEMP.  "," C    ", P&hks[HK2].Twwleg,				US_INT, 1, P&hid1,	V0, 0, 0},
 	{" ->."," Legio Dauer Cnt"," *30 s ", P&hkd[HK2].zleg,			 		US_INT, 0, P&hid2,	V0, 0, 0},
 	
-	{" 50;"," PU-SOLL NORMAL "," %     ", P&hks[HK2].BusPuSollwert,		 		US_INT, 1, P&hid1,	V1, 0, 0},
-	{" 51;"," PU-SOLL ABSENK "," %     ", P&hks[HK2].BusPuSollwertAbsenk,	US_INT, 1, P&hid1,	V1, 0, 0},
+	{" 50;"," PU-SOLL NORMAL "," %     ", P&hks[HK2].BusPuSollwert,		 		US_INT, 1, P&hid1,	V0, 0, 0},
+	{" 51;"," PU-SOLL ABSENK "," %     ", P&hks[HK2].BusPuSollwertAbsenk,	US_INT, 1, P&hid1,	V0, 0, 0},
 	{" 55;"," REGELART SOLL  "," 0..3  ", P&BusPuPara[PU_BUS_HK2 - 1].Regelart,	US_CHAR,  0, P&wilo4,	V1, 0, IDX0_FELD},
 
 	{" 60;"," SOMMER AUS     "," JA=1  ", P&hks[HK2].Swhk,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
@@ -153,16 +153,16 @@ const Pgrup hk2[] = {
 	{"*71:"," LEGION.BETRIEB?","       ", P&hkd[HK2].legio,		 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
 	{"*73:"," PU NK1     EIN?","       ", P&hkd[HK2].puEinAnz, JANEIN_FORM, 0, P&vis,		V1, 0, 0},
 	{"*->."," Pumpen-Laufzeit"," h     ", P&hkd[HK2].puLzAnz,			 US_LONG, 0, P&hid2,	V1, 0, 0},
-	{" ->."," Pu-Nachlaufzeit"," min   ", P&hks[HK2].Puna,					US_CHAR, 0, P&hid2,	V1, 0, 0},
+	{" ->."," Pu-Nachlaufzeit"," min   ", P&hks[HK2].Puna,					US_CHAR, 0, P&hid2,	V0, 0, 0},
 	{" ->."," Pum-Nachl.  Cnt"," *30 s ", P&hkd[HK2].zpu,						 US_INT, 0, P&hid2,	V0, 0, 0},
-	{"*->:"," PUMPENSOLLWERT "," %     ", P&AA_UNI[U3],					AOUT_FORMP, 1, P&vis,		V1, 0, 0},
+	{"*->:"," PUMPENSOLLWERT "," %     ", P&AA_UNI[U3],					AOUT_FORMP, 1, P&vis,		V0, 0, 0},
 	{"*->:"," BM PU NK1  EIN?","       ", P&hkd[HK2].puBmAnz,  JANEIN_FORM, 0, P&vis,		V1, 0, 0},
-	{"*->:"," WILO-BUS NETZ-P","       ", P&BusPuPara[PU_BUS_HK2 - 1].Funktion,PU_FUNC_FORM,0, P&vis,	V1, 0, IDX0_FELD},
-	{"*->;"," BUS-ADRESSE    ","       ", P&BusPuPara[PU_BUS_HK2 - 1].Adresse,		 US_CHAR,  0, P&wilo4,V1, 0, IDX0_FELD},
-	{"*->:"," REGELART IST   ","       ", P&BusPuData[PU_BUS_HK2 - 1].regelArtIst,ASCII_FORM,15,P&wilo4,V1,0, IDX0_FELD},
-	{"*->;"," DREHZAHL IST   "," 1/min ", P&modb_data[PU_BUS_HK2 - 1].input_reg5, 	US_INT,  0, P&wilo4,V1, 0, IDX0_FELD},
-	{"*->;"," DIFFERENZDRUCK "," mWS   ", P&modb_data[PU_BUS_HK2 - 1].input_reg0, 	US_INT,	 1, P&wilo4,V1, 0, IDX0_FELD},
-	{"*->;"," FOERDERSTROM   "," m/h  ", P&modb_data[PU_BUS_HK2 - 1].input_reg1, 	US_INT,	 1, P&wilo4,V1, 0, IDX0_FELD},
+//	{"*->:"," WILO-BUS NETZ-P","       ", P&BusPuPara[PU_BUS_HK2 - 1].Funktion,PU_FUNC_FORM,0, P&vis,	V0, 0, IDX0_FELD},
+//	{"*->;"," BUS-ADRESSE    ","       ", P&BusPuPara[PU_BUS_HK2 - 1].Adresse,		 US_CHAR,  0, P&wilo4,V0, 0, IDX0_FELD},
+//	{"*->:"," REGELART IST   ","       ", P&BusPuData[PU_BUS_HK2 - 1].regelArtIst,ASCII_FORM,15,P&wilo4,V0,0, IDX0_FELD},
+//	{"*->;"," DREHZAHL IST   "," 1/min ", P&modWiloPu[PU_BUS_HK2 - 1].wiloInReg.mwspSpeed.messw, 	US_INT,  0, P&wilo4,V0, 0, IDX0_FELD},
+//	{"*->;"," DIFFERENZDRUCK "," mWS   ", P&modWiloPu[PU_BUS_HK2 - 1].wiloInReg.mwspActualDifferentialPressure.messw, 	US_INT,	 1, P&wilo4,V0, 0, IDX0_FELD},
+//	{"*->;"," FOERDERSTROM   "," m/h  ", P&modWiloPu[PU_BUS_HK2 - 1].wiloInReg.mwspFlowRate.messw, 	US_INT,	 1, P&wilo4,V0, 0, IDX0_FELD},
 
 //#if PU_BUS_HK2 > 0								// Bus-Pumpe
 //	{"*75:"," BUS-PUMPE EIN ?","       ", P&hkd[HK2].busPuEin, 			 JANEIN_FORM, 0, P&vis,		V1, 0, 0},	//Ausgang nach Pumpe
@@ -202,7 +202,7 @@ const Pgrup hk2[] = {
 	{" 95;"," OEFFNUNGSBEGINN"," %     ", P&hks[HK2].Y_rel_beg,	 		US_INT, 1, P&hid1,	V1, 0, 0},
 
 	{"*96;"," SOLLWERT       "," C    ", P&hkd[HK2].tsol,					US_INT, 1, P&hid1,	V1, 0, 0},
-	{"*97;"," REGELABWEICHUNG"," K     ", P&hkd[HK2].ei,						 S_INT, 1, P&hid1,	V1, 0, 0},
+	{"*97;"," REGELABWEICHUNG"," K     ", P&hkd[HK2].ei,						 S_INT, 1, P&hid1,	V0, 0, 0},
 	{"*->;"," dy_rel         ","       ", P&hkd[HK2].dy_rel,				 S_INT, 3, P&hid2,	V0, 0, 0},
 
 	#if DREIP_HK2==0
@@ -216,8 +216,8 @@ const Pgrup hk2[] = {
 	{" 99;"," HAND/AUTOMATIK "," HAND=1", P&hks[HK2].Haut,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
 
 	{" ->:"," PU NK1 EIN/AUS "," EIN=1 ", P&hks[HK2].Puea,		 		 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" ->;"," PU NK1 REGELART"," 0..3  ", P&BusPuPara[PU_BUS_HK2-1].RegelartHand,	US_CHAR, 0, P&wilo4,	V1, 0, IDX0_FELD},
-	{" ->;"," PU NK1 SOLLWERT"," %     ", P&hks[HK2].PuDzHand,		  US_INT, 1, P&hid1,	V1, 0, 0},
+//	{" ->;"," PU NK1 REGELART"," 0..3  ", P&BusPuPara[PU_BUS_HK2-1].RegelartHand,	US_CHAR, 0, P&wilo4,	V1, 0, IDX0_FELD},
+//	{" ->;"," PU NK1 SOLLWERT"," %     ", P&hks[HK2].PuDzHand,		  US_INT, 1, P&hid1,	V1, 0, 0},
 
 	{" ->:"," VENT ST. RV NK1"," %     ", P&hks[HK2].Vstell,			  US_INT, 1, P&hid1,	V1, 0, 0},
 

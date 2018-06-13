@@ -38,12 +38,12 @@ const char Ntmod[16]								= {"SEKUND-REGELUNG"};
 const char Hkmod_fuss[16]						= {"FUSSBODEN      "};
 
 const char Hkmod[4][16]	= {
-	{"SPEICHERLADUNG "},
-	{"NAHWAERME-NETZ "},
-	{"               "},
-	{"               "},
+	{"Ladekreis      "},
+	{"Netzheizkreis  "},
+	{"Statisch Heiz. "},
+	{"Fussbodenheiz. "},
 };	
-const char Hkmod_SoL[16]						= {"SOLAR-EINSPEIS."};	//***AnFre
+const char Hkmod_SoL[16]						= {"Solare Einsp.  "};	//***AnFre
 
 const char Wwmod[16]								= {"DURCHFLUSS     "};
 const char Solmod[16]								= {"PUFFERSPEICHER "};
@@ -56,7 +56,7 @@ const char Gasmod[16]								= {"VOLUMEN        "};
 const char Extmod[16]								= {"               "};
 const char Wilomod[16]							= {"MODBUS         "};	//***AnFre Wilo-Pumpen
 const char ModBusmod[16]						= {"SLAVE          "};	//***AnFre 08.05.2013 ModBus allgemein (z.B. MASTER / SLAVE )
-const char Diamod[16]								= {"WZ1,WZ3,TH2,TN2"};	//***AnFre WZ1,WZ3, TH2, TN2  24.09.2014
+const char Diamod[16]								= {"DIAG           "};	//***AnFre WZ1,WZ3, TH2, TN2  24.09.2014
 const char DiaLeistmod[16]					= {"LEISTUNG       "};	//***AnFre Leistung,  	24.09.2014
 const char DiaVolstmod[16]					= {"VOLUMENSTROM   "};	//***AnFre Volumenstrom 24.09.2014
 const char DiaVorlmod[16]						= {"VORLAUFTEMP.   "};	//***AnFre Vorlauftemp. 24.09.2014
@@ -97,15 +97,15 @@ const char c_Funktion_S1            = GBUS_FU;              // NULL_FU   = dummy
 const char c_Parity_S1              = NULL_PARI;            // NULL_PARI = dummy,  NOPAR, EVEN, ODD 
 const char c_Stopbits_S1            = NULL_STOP;            // NULL_STOP = dummy,  1, 2 
 
-const char c_Mode_S2                = MASTER;            // NULL_MODE = dummy,  MASTER, SLAVE
+const char c_Mode_S2                = NULL_MODE;            // NULL_MODE = dummy,  MASTER, SLAVE
 const UINT c_Baudrate_S2            = 9600;                    // 0         = dummy
-const char c_Funktion_S2            = MODBUS1_FU;              // NULL_FU   = dummy   GBUS_FU, MODBUS1_FU, MBUS1_FU, GENI1_FU...siehe projdef.h
+const char c_Funktion_S2            = NULL_FU;              // NULL_FU   = dummy   GBUS_FU, MODBUS1_FU, MBUS1_FU, GENI1_FU...siehe projdef.h
 const char c_Parity_S2              = EVEN;            // NULL_PARI = dummy,  NOPAR, EVEN, ODD 
 const char c_Stopbits_S2            = 1;            // NULL_STOP = dummy,  1, 2 
 
-const char c_Mode_S3                = NULL_MODE;            // NULL_MODE = dummy,  MASTER, SLAVE
-const UINT c_Baudrate_S3            = 0;                    // 0         = dummy
-const char c_Funktion_S3            = NULL_FU;              // NULL_FU   = dummy,  GBUS_FU, MODBUS1_FU, MBUS1_FU, GENI1_FU...siehe projdef.h
+const char c_Mode_S3                = MASTER;            // NULL_MODE = dummy,  MASTER, SLAVE
+const UINT c_Baudrate_S3            = 9600;                    // 0         = dummy
+const char c_Funktion_S3            = MBUS1_FU;              // NULL_FU   = dummy,  GBUS_FU, MODBUS1_FU, MBUS1_FU, GENI1_FU...siehe projdef.h
 const char c_Parity_S3              = NULL_PARI;            // NULL_PARI = dummy,  NOPAR, EVEN, ODD 
 const char c_Stopbits_S3            = NULL_STOP;            // NULL_STOP = dummy,  1, 2 
 
@@ -445,10 +445,10 @@ const Anlage Projekte[] = {
 		{"TEST PROJEKT   "},
 		
 		// Steuercode für Heizkreise
-		{1,2},	// Nummern der Kaltstartparametersätze für jeden Heizkreis [HK_PROFILE]
+		{1,2,1,3},	// Nummern der Kaltstartparametersätze für jeden Heizkreis [HK_PROFILE]
 					// 0 = Heizkreis nicht vorhanden
 		
-		{1,2},	// Nummern der Absenkprofile für jeden Heizkreis [ABS_PROFILE]
+		{1,2,0,0},	// Nummern der Absenkprofile für jeden Heizkreis [ABS_PROFILE]
 					// 0 = nicht vorhanden
 		
 		// Steuercode für Solare Heizkreise		***AnFre
@@ -464,7 +464,7 @@ const Anlage Projekte[] = {
 					// 0 = nicht vorhanden
 		
 		// Steuercode für Kessel
-		{1},	// Nummern der Kaltstartparametersätze für jeden Kesselkreis [KE_PROFILE]
+		{0},	// Nummern der Kaltstartparametersätze für jeden Kesselkreis [KE_PROFILE]
 					// 0 = nicht vorhanden
 
 		// Steuercode für Fernwärmevorregelkreis (Netztrennumg)
@@ -476,7 +476,7 @@ const Anlage Projekte[] = {
 					// 0 = nicht vorhanden
 
 		// Steuercode für MBUS
-		{0},	// Nummern der Kaltstartparametersätze für jeden MBUS-Zähler[MB_PROFILE]
+		{1,1,1},	// Nummern der Kaltstartparametersätze für jeden MBUS-Zähler[MB_PROFILE]
 							// 0 = nicht vorhanden
 
 // Steuercode für SteuerUni
@@ -547,14 +547,14 @@ const Anl37 R37_Beleg[] = {
 				
 	// 1. Belegungssatz Anwendung für R37_1
 	{	
-		STWHK3,		// HK2: Sicherheitstemp.w. STW HK			// Digital-Eingang DE1  
+		STWHK4,		// HK2: Sicherheitstemp.w. STW HK			// Digital-Eingang DE1  
 		SAMAL1,		// ANL. Externer Sammela.							// Digital-Eingang DE2  
 		QUITTS1,	// QSM: Quittierungstaste							// Eingang Digital DE3
 		BMPU2,		// NK1: BM Netzkpu				 BM PU NK1	// Digital-Eingang DE4	
 		BMPU1,		// HKL: BM Ladekpu				 BM PU LK		// Digital-Eingang DE5	
 		STWHK2,		// NK1: Sicherheitstemp.w  STW NK1		// Digital-Eingang DE6	
 		
-		RVENTKE1,	// ANL: Sollw.-Anf.										// Analog-Ausgang  AA1
+		TMANF1,	// ANL: Sollw.-Anf.										// Analog-Ausgang  AA1
 		RVENT3,		// HK1: Regelv. Heizk.1		 RV HK1 		// Analog-Ausgang  AA2
 		AA_FREI,	// 			FREI													// Analog-Ausgang  AA3
 		AA_UNI4,	// HK2:	Regelv. Heizk.2		 RV HK2			// Analog-Ausgang  AA4
@@ -569,8 +569,8 @@ const Anl37 R37_Beleg[] = {
 		BMPU3,		// HK1: BM Heizk.1				 BM PU HK1	// Digital-Eingang DE1
 		BMPUPUF1,	// SOL: BM Puffer-Pumpe 	 BM PU PK		// Digital-Eingang DE2
 		BMPUSOL1,	// SOL: BM Solar-Pumpe	 	 BM PU SOL	// Digital-Eingang DE3 
-		DE_UNI1,	// QRG: BM PU Quellenk.		 BM PU QRG	// Digital-Eingang DE4 
-		DE_UNI2,	// WEI: BM PU Weichenk.		 BM PU WEI	// Digital-Eingang DE5 
+		BM_UNI1,	// QRG: BM PU Quellenk.		 BM PU QRG	// Digital-Eingang DE4 
+		BM_UNI2,	// WEI: BM PU Weichenk.		 BM PU WEI	// Digital-Eingang DE5 
 		BMPU4,		// HK2: BM PU HK2					 BM PU HK2	// Digital-Eingang DE6
 		
 		RVENT2,		// NK1: Regelv. Netzk.		 RV NK1		 	// Analog-Ausgang  AA1
@@ -630,7 +630,7 @@ const Anl38 R38_Beleg[] = {
 	{	
 		TVS3,			// HK1: HK1 Vorlauf							TVHK1			// Pt1000 Eingang IN1
 		TRS3,			// HK1  HK1 Rücklauf						TRHK1			// Pt1000 Eingang IN2
-		TP_FREI,//TVS4,			// HK2: HK2 Vorlauf							TVHK2			// Pt1000 Eingang IN3
+		TVS4,			// HK2: HK2 Vorlauf							TVHK2			// Pt1000 Eingang IN3
 		TRS4,			// HK2  HK2 Rücklauf						TRHK2			// Pt1000 Eingang IN4
 		TRS1,			// HKL: Rücklauf Ladekreis			TRH				// Pt1000 Eingang IN5
 		TP_FREI,																						// Pt1000 Eingang IN6
@@ -1003,6 +1003,7 @@ const HkStandard  Hk_Standparam[] = {
 		0,	// UINT Sollstell	// HAND Sollwert stellen	Volt *100
 		0,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
+		0,	//PuBmVerz;				// [min]
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1027,6 +1028,8 @@ const HkStandard  Hk_Standparam[] = {
 	0,		// UINT VentMaxSolar; //HKL: RV-Begrenzung bei "Solares Heizen" (hkSolJa = Ja)
 //	 0,		// UINT AbsenkSol; 		//HKL: Absenkung bei "Solares Heizen" (hkSolJa = Ja)  Funktion entfernt!!! 06.01.2017
 //	 0,		// UINT AbsenkFaktor; //HKL: Absenk-Faktor (TS3 - SollHKL) * Faktor [ 0,00] Funktion entfernt!!! 06.01.2017
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+		0,	// int		Wup;								// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
  },
  
  // Profil 1: Lade-Heizkreis für Netz-Speicher
@@ -1113,6 +1116,7 @@ const HkStandard  Hk_Standparam[] = {
 		0,	// UINT Sollstell	// HAND Sollwert stellen	Volt *100
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
+		2,	//PuBmVerz;				// [min]
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1137,6 +1141,8 @@ const HkStandard  Hk_Standparam[] = {
 	700,	// UINT VentMaxSolar; //HKL: RV-Begrenzung bei "Solares Heizen" (hkSolJa = Ja)
 //	 0,		// UINT AbsenkSol; 		//HKL: Absenkung bei "Solares Heizen" (hkSolJa = Ja)  Funktion entfernt!!! 06.01.2017
 //	 0,		// UINT AbsenkFaktor; //HKL: Absenk-Faktor (TS3 - SollHKL) * Faktor [ 0,00] Funktion entfernt!!! 06.01.2017
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+		0,	// int		Wup;								// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
  },
 
  
@@ -1224,6 +1230,7 @@ const HkStandard  Hk_Standparam[] = {
 		0,	// UINT Sollstell	// HAND Sollwert stellen	Volt *100
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
+		2,	//PuBmVerz;				// [min]
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	 0,		// Legjn	= 1				Legionellentod
 	0x02,	// Legtag = Mo				Legionellentage
@@ -1248,6 +1255,8 @@ const HkStandard  Hk_Standparam[] = {
 		0,		// UINT VentMaxSolar; //HKL: RV-Begrenzung bei "Solares Heizen" (hkSolJa = Ja)
 //	 0,		// UINT AbsenkSol; 		//HKL: Absenkung bei "Solares Heizen" (hkSolJa = Ja)  Funktion entfernt!!! 06.01.2017
 //	 0,		// UINT AbsenkFaktor; //HKL: Absenk-Faktor (TS3 - SollHKL) * Faktor [ 0,00] Funktion entfernt!!! 06.01.2017
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+		0,	// int		Wup;								// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
  },
  
  // Profil 3 (Fußboden)
@@ -1334,6 +1343,7 @@ const HkStandard  Hk_Standparam[] = {
 		0,	// UINT Sollstell	// HAND Sollwert stellen	Volt *100
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
+		2,	//PuBmVerz;				// [min]
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1358,6 +1368,8 @@ const HkStandard  Hk_Standparam[] = {
 	0,		// UINT VentMaxSolar; //HKL: RV-Begrenzung bei "Solares Heizen" (hkSolJa = Ja)
 //	 0,		// UINT AbsenkSol; 		//HKL: Absenkung bei "Solares Heizen" (hkSolJa = Ja)  Funktion entfernt!!! 06.01.2017
 //	 0,		// UINT AbsenkFaktor; //HKL: Absenk-Faktor (TS3 - SollHKL) * Faktor [ 0,00] Funktion entfernt!!! 06.01.2017
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+		0,	// int		Wup;								// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
  },
 
  
@@ -1445,6 +1457,7 @@ const HkStandard  Hk_Standparam[] = {
 		0,	// UINT Sollstell	// HAND Sollwert stellen	Volt *100
 	990,	//VorlaufMaxSommer;	// wenn VL > VorlaufMaxSommer, wird ucHeat = 1 trotz Sommer (R50 öffnet dann nicht die Heizungs-Ventile)
 		0,	//VorrangZeitabsenkung;
+		2,	//PuBmVerz;				// [min]
 // ***AnFre 08.07.2010 Legionellen im Nahwärmenetz
 	0,		// Legjn	= 0				Legionellentod
 	0,		// Legtag = 0				Legionellentage
@@ -1469,6 +1482,8 @@ const HkStandard  Hk_Standparam[] = {
 	0,		// UINT VentMaxSolar; //HKL: RV-Begrenzung bei "Solares Heizen" (hkSolJa = Ja)
 //	 0,		// UINT AbsenkSol; 		//HKL: Absenkung bei "Solares Heizen" (hkSolJa = Ja)  Funktion entfernt!!! 06.01.2017
 //	 0,		// UINT AbsenkFaktor; //HKL: Absenk-Faktor (TS3 - SollHKL) * Faktor [ 0,00] Funktion entfernt!!! 06.01.2017
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+		0,	// int		Wup;								// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
  },
 
 }; 	
@@ -2174,10 +2189,10 @@ const char SO_PROFILE = sizeof ( So_Standparam ) / sizeof ( SoStandard );
 /*				Liste von Standardwerten für Weichenkreis		*/
 /*----------------------------------------------------------------------------------*/
 const WeStandard  We_Standparam[] = {
-	0,		// char	chpa_puwei_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
-	0,		// char	chpa_puwei_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
-	0,		// char	chpa_rvwei_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
-	0,		// int		 ipa_rvwei_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	0,		// char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	0,		// char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	0,		// char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	0,		// int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
 }; 
 const char WEI_PROFILE = 1;	
 
@@ -2185,10 +2200,10 @@ const char WEI_PROFILE = 1;
 /*				Liste von Standardwerten für Quellenkreis		*/
 /*----------------------------------------------------------------------------------*/
 const QuStandard  Qu_Standparam[] = {
-	0,		// char	chpa_puqu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
-	0,		// char	chpa_puqu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
-	0,		// char	chpa_rvqu_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
-	0,		// int		 ipa_rvqu_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	0,		// char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	0,		// char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	0,		// char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
+	0,		// int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
 }; 
 const char QU_PROFILE = 1;	
 
@@ -2256,9 +2271,9 @@ const zaehldim ze_dimsys[20 + MBUSANZ] = {
 	{0,				0,			0,			0,		0,			0,			3,			{0,1,1},	 {0},			"UNBEKANNT      ", "               "},// ZIN5
 	{0,				0,			0,			0,		0,			0,			4,			{0,1,1},	 {0},			"UNBEKANNT      ", "               "},// ZIN6
 	{3,				6,			0,			0,		0,			0,			5,			{1,1,1},	 {0},			"KALTWASSER TWE ", "               "},// ZIN7
-	{2,				6,			0,			1,		0,			0,			6,			{0,1,1},	 {0},			"KESSEL-EINTRAG ", "               "},// ZIN8		// 1 Impuls =   10 l  (0,01m³)
+	{2,				6,			0,			1,		0,			0,			6,			{0,1,1},	 {0},			"NAHWAERMENETZ  ", "               "},// ZIN8		// 1 Impuls =   10 l  (0,01m³)
 	{3,				6,			0,			0,		0,			0,			7,			{0,1,1},	 {0},			"SOLAR-EINTRAG  ", "               "},// ZIN9		// 1 Impuls =    1 l  (0,001m³)
-	{2,				6,			0,			1,		0,			0,			8,			{0,1,1},	 {0},			"NAHWAERMENETZ  ", "               "},// ZIN10	// 1 Impuls =   10 l  (0,01m³)
+	{2,				6,			0,			1,		0,			0,			8,			{0,1,1},	 {0},			"QUELLENREGEN.  ", "               "},// ZIN10	// 1 Impuls =   10 l  (0,01m³)
 // R37_1
 	{0, 			0,			0,			0,		0,			0,			11,			{0,1,1},	 {0},			"UNBEKANNT      ", "               "},// ZIN11	// 1 Impuls =   10 l  (0,01m³)
 	{0,				0,			0,			0,		0,			0,			12,			{0,1,1},	 {0},			"UNBEKANNT      ", "               "},// ZIN12

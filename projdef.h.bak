@@ -108,7 +108,7 @@
 #define DIAG				1							// Diagnose für Soft-Wärmezähler
 #define ANALOG_AE		6							// Skalierung der 0-10V Eingänge, Grenzwertüberwachung, Anzahl 0..8, immer die ersten n AE_UNI ab AE_UNI1 werden skaliert
 #define WRE100			0							// WRE100 Kommandos für WRELES uund WREINIT werden unterstützt
-#define MBUSANZ     0             // Anzahl MBus-Zähler (maximal 8)
+#define MBUSANZ     3             // Anzahl MBus-Zähler (maximal 8)
 #define MBUS_MASTER 0             // 1/0
 #define STEUER_UNI  0             // 1/0 Benutzersteuerung mit UNI-Elementen (SteuerUni.c, parli_uni.h, UniStandard, UniDynam)
 
@@ -124,9 +124,9 @@
 #define DM_SLAVES			3						// Min:1 Max:4  Anzahl der Slave-Geräte, mit denen der Datenmanager arbeiten soll
 
 // Implementierung von Anwendungen für serielle Schnittstellen S1 S2 S3
-#define IMPLEMENT_S1			(GBUS_IMPL + MODBUS1_IMPL)
-#define IMPLEMENT_S2			(GBUS_IMPL + MODBUS1_IMPL)
-#define IMPLEMENT_S3			(GBUS_IMPL + MODBUS1_IMPL)		// Standard für WILO-Pumpen
+#define IMPLEMENT_S1			(GBUS_IMPL)
+#define IMPLEMENT_S2			(GBUS_IMPL)
+#define IMPLEMENT_S3			(GBUS_IMPL + MBUS1_IMPL)		// 
 //#define MODBUS_MASTER     0       // 1 = Modbus als Master 
 #define MODBUS_MASTER     1       // 1 = Modbus als Master 
 #define MODBUS_SLAVE      0       // 1 = Modbus als Slave
@@ -144,11 +144,11 @@
   #define GRUNDFOS_MODBUS      0   // HIER Angeben ob Grundfos oder Wilo (beides zusammen geht nicht)
 
 #else
-#define MODBUS_SIO							0
+#define MODBUS_SIO							1	//Frenzel Wilo knallt sonst
 
-#define MODBUS_UNI	0
+#define MODBUS_UNI	1            //Frenzel Wilo knallt sonst
 #define MODBUS_EXT    0
-  #define WILO_MODBUS          0
+  #define WILO_MODBUS          1	//Frenzel Wilo knallt sonst
   #define GRUNDFOS_MODBUS      0
 #endif
 
@@ -168,7 +168,7 @@
 #if (GENI == 1 || WILO_MODBUS == 1 || GRUNDFOS_MODBUS == 1)
   #define BUS_PU_MAX   4  // Pumpenanzahl gemäß Projektspezifkationen setzen!
 #else	
-  #define BUS_PU_MAX   0
+  #define BUS_PU_MAX   0	// Weil WiloBus von Frenzel
 #endif
 #if ( (IMPLEMENT_S3 & ANYBUS1_IMPL) == ANYBUS1_IMPL )
 #define	ANYBUS_MODUL		1
@@ -238,42 +238,42 @@
 #define FRG_HK2			0							// 1 = Freigabe-Signal definiert ( RegelHk ) ( bei Lüftung ARES/PEWO/HAR0111 benutzt )
 #define SWAUS_HK2		0							// 1 = Anlagenschalter-Signal definiert (HK Nichtnutzung )
 #define PULZ_HK2		1							// Pumpenlaufzeit berechnen und anzeigen ( parli, steuer.c, 
-#define FBH_HK2			1							// Fußbodenheizung mit Estrich-Programm 
+#define FBH_HK2			0							// Fußbodenheizung mit Estrich-Programm 
 #define LEIBEGR_HK2	0							// Leistungsbegrenzung (Leistungsberechnung von ext.Wärmezähler)
 #define PU_BUS_HK2	4							// ungleich 0: Pumpe busgesteuert, Wert = Parameter-Index bei Solar nicht verändern!!!	
 
 // Einstellung für Parli: hk3[]
-#define TRLBEG_HK3	0							// Rücklauftemperaturbegrenzung
+#define TRLBEG_HK3	1							// Rücklauftemperaturbegrenzung
 #define TRAUMK_HK3	0							// Kaskade mit eigenem Raumtemperaturfühler
 #define BEDARF_HK3	0							// Bedarfssteuerung durch R50
 #define BEDRAUM_HK3	0							// Kaskade mit Raum-/Soll-Temp. vom R50
 #define DREIP_HK3		0							// 1=DreipunktAusgabe 0=Analogausgabe
 #define STW_HK3			0							// STW-ALARM
 #define PUAL_HK3		0							// Pumpenalarm
-#define PUBM_HK3		0							// Betriebsmeldung Pumpe
+#define PUBM_HK3		1							// Betriebsmeldung Pumpe
 #define PUDO_HK3		0 						// Doppelpumpe
 #define STRPU_HK3		0							// Strahlpumpe statt Ventil
 #define FRG_HK3			0							// 1 = Freigabe-Signal definiert ( RegelHk ) ( bei Lüftung ARES/PEWO/HAR0111 benutzt )
 #define SWAUS_HK3		0							// 1 = Anlagenschalter-Signal definiert (HK Nichtnutzung )
-#define PULZ_HK3		0							// Pumpenlaufzeit berechnen und anzeigen ( parli, steuer.c, 
+#define PULZ_HK3		1							// Pumpenlaufzeit berechnen und anzeigen ( parli, steuer.c, 
 #define FBH_HK3			0							// Fußbodenheizung mit Estrich-Programm 
 #define LEIBEGR_HK3	0							// Leistungsbegrenzung (Leistungsberechnung von ext.Wärmezähler)
 #define PU_BUS_HK3	0							// ungleich 0: Pumpe busgesteuert, Wert = Parameter-Index 
 
 // Einstellung für Parli: hk4[]
-#define TRLBEG_HK4	0							// Rücklauftemperaturbegrenzung
+#define TRLBEG_HK4	1							// Rücklauftemperaturbegrenzung
 #define TRAUMK_HK4	0							// Kaskade mit eigenem Raumtemperaturfühler
 #define BEDARF_HK4	0							// Bedarfssteuerung durch R50
 #define BEDRAUM_HK4	0							// Kaskade mit Raum-/Soll-Temp. vom R50
 #define DREIP_HK4		0							// 1=DreipunktAusgabe 0=Analogausgabe
-#define STW_HK4			0							// STW-ALARM
+#define STW_HK4			1							// STW-ALARM
 #define PUAL_HK4		0							// Pumpenalarm
-#define PUBM_HK4		0							// Betriebsmeldung Pumpe
+#define PUBM_HK4		1							// Betriebsmeldung Pumpe
 #define PUDO_HK4		0 						// Doppelpumpe
 #define STRPU_HK4		0							// Strahlpumpe statt Ventil
 #define FRG_HK4			0							// 1 = Freigabe-Signal definiert ( RegelHk ) ( bei Lüftung ARES/PEWO/HAR0111 benutzt )
 #define SWAUS_HK4		0							// 1 = Anlagenschalter-Signal definiert (HK Nichtnutzung )
-#define PULZ_HK4		0							// Pumpenlaufzeit berechnen und anzeigen ( parli, steuer.c, 
+#define PULZ_HK4		1							// Pumpenlaufzeit berechnen und anzeigen ( parli, steuer.c, 
 #define FBH_HK4			0							// Fußbodenheizung mit Estrich-Programm 
 #define LEIBEGR_HK4	0							// Leistungsbegrenzung (Leistungsberechnung von ext.Wärmezähler)
 #define PU_BUS_HK4	0							// ungleich 0: Pumpe busgesteuert, Wert = Parameter-Index 
@@ -356,7 +356,7 @@
 #define PU_BUS_ZPU_WW1 	0					// ungleich 0: Pumpe busgesteuert, Wert = Parameter-Index
 
 // --------------- Kessel-Regelungen --------------------------------------
-#define KEANZ				1							// projektierte Anzahl von Regelkreisen
+#define KEANZ				0							// projektierte Anzahl von Regelkreisen
 #define KEMAX				1							// maximale Anzahl (wegen Speicherzuweisung mindestens 1)
 #define SSF					0							// Schornsteinfeger-Funktion
 #define SW_ANH_VAR	0							// variable Sollwertanhebung
@@ -454,9 +454,9 @@
 #define ZE5					0	
 #define ZE6					0	
 #define ZE7					0	//  Vol.geber 	KWZ: KaltWasser -Zähler	
-#define ZE8					1	//	"				"		WZ1: Kessel	
-#define ZE9					1	//  "				"		WZ2: Solar
-#define ZE10				1	//  "				"		WZ3: Netzheizkreis
+#define ZE8					1	//	"				"		WN1: NHK1	
+#define ZE9					1	//  "				"		WSK: Solar
+#define ZE10				1	//  "				"		WQK: QK
 
 #define ZE7WM				0 						// 1/0 Wärmemenge berechnen / nicht berechnen
 #define ZE8WM				1 						// 1/0 Wärmemenge berechnen / nicht berechnen
@@ -470,9 +470,9 @@
 #endif
 
 #define LEIST_BER_ZE7				0					// Berechnung der maximalen Durchschnittsleistung (int./ext.WMZ)
-#define LEIST_BER_ZE8				1					// Berechnung der maximalen Durchschnittsleistung (int./ext.WMZ)
-#define LEIST_BER_ZE9				1					// Berechnung der maximalen Durchschnittsleistung (int./ext.WMZ)
-#define LEIST_BER_ZE10			1					// Berechnung der maximalen Durchschnittsleistung (int./ext.WMZ)
+#define LEIST_BER_ZE8				0					// Berechnung der maximalen Durchschnittsleistung (int./ext.WMZ)
+#define LEIST_BER_ZE9				0					// Berechnung der maximalen Durchschnittsleistung (int./ext.WMZ)
+#define LEIST_BER_ZE10			0					// Berechnung der maximalen Durchschnittsleistung (int./ext.WMZ)
 
 #if ( LEIST_BER_ZE7 || LEIST_BER_ZE8 || LEIST_BER_ZE9 || LEIST_BER_ZE10 )
 #define LEIST_BER 1

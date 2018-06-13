@@ -30,12 +30,12 @@ const Pgrup anl[] = {
 	{"*03:"," BETRIEBSSTUNDEN"," h     ", P&bst,											US_INT, 0, P&vis,		V1, 0, 0},
 
 	{"*09."," ANZEIGE-TAFEL  ","       ", P&Leer15,							ASCII_FORM, 0, P&hid4,		V0, 0, 0},
-	{"*->."," KOLLEKTOR   TS1"," C    ", P&TS1_[0],						 ANA_FORMP, 1, P&hid4,		V1, 0, 0},
-	{"*->."," PUFFER o TSPo-P"," C    ", P&TS6_[0],						 ANA_FORMP, 1, P&hid4,		V1, 0, 0},
-  {"*->."," LEISTUNG    P2 "," kW    ", P&wmengCtr[2].wmLeistg,		US_INT,	0, P&hid4,		V1, 0, 0},
-  {"*->."," Q2 - KOLLEKTOR "," kWh   ", P&wmengCtr[2].wmeng,		US_LONG,	0, P&hid4,		V1, 0, 0},
-  {"*->."," CO2-EINSPARUNG "," kg    ", P&CO2_Einspar,					US_LONG,	0, P&hid4,		V1, 0, 0},
-  {"*->."," ANZEIGE RESERVE","       ", P&anz_dummy,						US_CHAR,	0, P&hid4,		V1, 0, 0},
+	{"*->."," KOLLEKTOR   TS1"," C    ", P&TS1_[0],						 ANA_FORMP, 1, P&hid4,		V0, 0, 0},
+	{"*->."," PUFFER o TSPo-P"," C    ", P&TS6_[0],						 ANA_FORMP, 1, P&hid4,		V0, 0, 0},
+  {"*->."," LEISTUNG    P2 "," kW    ", P&wmengCtr[2].wmLeistg,		US_INT,	0, P&hid4,		V0, 0, 0},
+  {"*->."," Q2 - KOLLEKTOR "," kWh   ", P&wmengCtr[2].wmeng,		US_LONG,	0, P&hid4,		V0, 0, 0},
+  {"*->."," CO2-EINSPARUNG "," kg    ", P&CO2_Einspar,					US_LONG,	0, P&hid4,		V0, 0, 0},
+  {"*->."," ANZEIGE RESERVE","       ", P&anz_dummy,						US_CHAR,	0, P&hid4,		V0, 0, 0},
 
 	#include "parli_Copy.h"
 	
@@ -400,19 +400,28 @@ const Pgrup ke1[] = {
 	#include "parli_HkSol.h"
 #endif
 /*------------------------------ Heizkreis 3 -------------------------------------------*/
+#if HKANZ > 2
+	#include "hk3.h"
+#endif
 /*------------------------------ Heizkreis 4 -------------------------------------------*/
-
+#if HKANZ > 3
+	#include "hk4.h"
+#endif
 /*------------------------------ Warmwasser -------------------------------------------*/
 
 /*------------------------------ Solar-Steuerung SOL: und Solar-Sensor SOS: ----------------------------------------*/
 #if SOANZ > 0
 	#include "parli_Solar.h"
 #endif
+/*------------------------------ Quellenregeneration ----------------------------------------*/
+	#include "parli_quellenregeneration.h"
+
+
 // ***AnFre	Ende
 //*------------------------------ Genibus ----------------------------------------*/
-#if GENI == 1
-	#include "parli_genibus.h"
-#endif
+//#if GENI == 1
+//	#include "parli_genibus.h"
+//#endif
 
 
 
@@ -495,9 +504,9 @@ const Pgrup ke1[] = {
 	#include "x1zin6.h"
 #endif
 /*------------------------------ Externe Zähler R37_2 ----------------------------------*/
-#if ZE21==1
-	#include "x2zin1.h"
-#endif
+//#if ZE21==1
+//	#include "x2zin1.h"
+//#endif
 #if ZE22==1
 	#include "x2zin2.h"
 #endif
@@ -660,15 +669,15 @@ const Pgrup rf[] = {
 #endif
 
 //*------------------------------ Modbus Allgemein ----------------------------------------*/
-#if MODBUS_UNI > 0
-  #include "Modbus/modbusparli.h"
-#endif
+//#if MODBUS_UNI > 0
+//  #include "Modbus/modbusparli.h"
+//#endif
 
 //*------------------------------ Modbus WILO-Pumpen----------------------------------------*/
 
-#if WILO_MODBUS > 0
-	#include "parli_Wilo.h"
-#endif
+//#if WILO_MODBUS > 0
+//	#include "parli_Wilo.h"
+//#endif
 
 
 /*------------------------------------ ZLT ---------------------------------------------------*/
@@ -1190,6 +1199,14 @@ const Parli Pgruppe[] = {
  {"NK1:", hk2, sizeof(hk2) / PGLENG, P&hk_vis[HK2]},	// ***AnFre
 #endif
 
+#if HKANZ > 2 // HK1 (Radiatorenheizung)
+ {"HK1:", hk3, sizeof(hk3) / PGLENG, P&hk_vis[HK3]},	// ***AnFre
+#endif
+
+#if HKANZ > 3 // HK2 (FBH)
+ {"HK2:", hk4, sizeof(hk4) / PGLENG, P&hk_vis[HK4]},	// ***AnFre
+#endif
+
 #if HKANZ > 0
  {"HKL:", hk1, sizeof(hk1) / PGLENG, P&hk_vis[HK1]},	// Lade-Heizkreis
 #endif
@@ -1207,17 +1224,19 @@ const Parli Pgruppe[] = {
  {"SOS:", so2, sizeof(so2) / PGLENG, P&so_vis[SO1]},
 #endif
 
+ {"WEI:", wei, sizeof(wei) / PGLENG, P&so_vis[SO1]},
+ {"QRG:", que, sizeof(que) / PGLENG, P&so_vis[SO1]},
 
 #if ZE8WM == 1
- {"WHZ:", ze5, sizeof(ze5) / PGLENG, P&ze_vis[5]},	// ***AnFre Kessel//SiWa ehemalig WZ1
+ {"WN1:", ze5, sizeof(ze5) / PGLENG, P&ze_vis[5]},	// ***AnFre Kessel//SiWa ehemalig WZ1
 #endif
-
+//
 #if ZE9WM == 1
  {"WSK:", ze6, sizeof(ze6) / PGLENG, P&ze_vis[6]},	// ***AnFre Solar // SiWa ehemalig WZ2
 #endif
-
+//
 #if ZE10WM == 1
- {"WN1:", ze7, sizeof(ze7) / PGLENG, P&ze_vis[7]},	// ***AnFre Netz //ehemalig WZ3
+ {"WQK:", ze7, sizeof(ze7) / PGLENG, P&ze_vis[7]},	// ***AnFre Netz //ehemalig WZ3
 #else
 	#if ZE10==1
  	{"ZAE:", ze7, sizeof(ze7) / PGLENG, P&ze_vis[7]},
@@ -1225,9 +1244,9 @@ const Parli Pgruppe[] = {
 #endif
 
 // -------------- Externe Zähler R37_2 ---------------
-#if ZE21==1
- {"ZAE:", x2ze0, sizeof(x2ze0) / PGLENG, P&x2ze_vis[0]},	// ***AnFre Externer Zähler Gas
-#endif
+//#if ZE21==1
+// {"ZAE:", x2ze0, sizeof(x2ze0) / PGLENG, P&x2ze_vis[0]},	// ***AnFre Externer Zähler Gas
+//#endif
 
 #if DIAG == 1
  {"DIA;", dia, sizeof(dia) / PGLENG, P&dia_vis},				// Sichtbarkeit wie DIA
@@ -1329,9 +1348,9 @@ const Parli Pgruppe[] = {
 //-----------------------------------------------------
 	{"ALK;", alk, sizeof(alk) / PGLENG, P&syc_vis},
 //WILOAF
-#if WILO_MODBUS == 1
-	{"WLP:", wlp, sizeof(wlp) / PGLENG, P&zlt_vis},
-#endif
+//#if WILO_MODBUS == 1
+//	{"WLP:", wlp, sizeof(wlp) / PGLENG, P&zlt_vis},
+//#endif
 
 
 	{"ZLT;", zlt, sizeof(zlt) / PGLENG, P&zlt_vis},

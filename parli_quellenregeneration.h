@@ -5,16 +5,16 @@ const Pgrup wei[] = {
 //{"*01:"," KOLLEKTOR   TS1"," C    ", P&TS1_[0],					ANA_FORMP, 0x81, P&kom,		E1, FUEHLER, 0},
 
 
-	{"*->:"," BM PU WEI EIN ?","       ", P&DE_UNI[U2],	JANEIN_FORMOP, 0, P&vis,	V1, 0, 0},
+	{"*->:"," BM PU WEI EIN ?","       ", P&BM_UNI[U2],	JANEIN_FORMOP, 0, P&vis,	V1, 0, 0},
 
-	{"*88:"," HANDBE PU WEI ?","       ", P&wes[0].chpa_puwei_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
-	{"*89:"," HANDBE RV WEI ?","       ", P&wes[0].chpa_rvwei_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
+	{"*88:"," HANDBE PU WEI ?","       ", P&wes[0].chpa_pu_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
+	{"*89:"," HANDBE RV WEI ?","       ", P&wes[0].chpa_rv_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
 //
  
-	{" 98;"," HAND PU WEI    "," HAND=1", P&wes[0].chpa_puwei_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" ->;"," PU WEI  EIN/AUS"," EIN=1 ", P&wes[0].chpa_puwei_ein,			 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" 98;"," HAND RV WEI    "," HAND=1", P&wes[0].chpa_rvwei_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" ->;"," RV WEI stellen "," %     ", P&wes[0].ipa_rvwei_stellung,			 US_INT, 1, P&hid1,	V1, 0, 0},
+	{" 98;"," HAND PU WEI    "," HAND=1", P&wes[0].chpa_pu_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
+	{" ->;"," PU WEI  EIN/AUS"," EIN=1 ", P&wes[0].chpa_pu_ein,			 US_CHAR, 0, P&hid1,	V1, 0, 0},
+	{" 98;"," HAND RV WEI    "," HAND=1", P&wes[0].chpa_rv_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
+	{" ->;"," RV WEI stellen "," %     ", P&wes[0].ipa_rv_stellung,			 US_INT, 1, P&hid1,	V1, 0, 0},
 };
 	
 /*------------------------------ Quellen-Regelung------------ ----------------------------*/	
@@ -37,15 +37,15 @@ const Pgrup que[] = {
 {" ->."," Druck 10 Volt  "," bar   ", P&AnaInpPara[U6].Skal10,			S_INT, 1, P&hid2,	V0, 0 , 0},	
 {" ->."," Filterzeit     "," s     ", P&AnaInpPara[U6].ZkFilt,		 US_INT, 0, P&hid2,	V0, 0 , 0},
 
-	{"*->:"," BM PU QU  EIN ?","       ", P&DE_UNI[U1],	JANEIN_FORMOP, 0, P&vis,	V1, 0, 0},
+	{"*->:"," BM PU QU  EIN ?","       ", P&BM_UNI[U1],	JANEIN_FORMOP, 0, P&vis,	V1, 0, 0},
 
-	{"*88:"," HANDBE PU QU ? ","       ", P&qus[0].chpa_puqu_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
-	{"*89:"," HANDBE RV QU ? ","       ", P&qus[0].chpa_rvqu_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
+	{"*88:"," HANDBE PU QU ? ","       ", P&qus[0].chpa_pu_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
+	{"*89:"," HANDBE RV QU ? ","       ", P&qus[0].chpa_rv_Hau,		  JANEIN_FORM, 0, P&vis,	E1, EREIGNIS, 0},
 //
  
-	{" 98;"," HAND PU QU     "," HAND=1", P&qus[0].chpa_puqu_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" ->;"," PU QU   EIN/AUS"," EIN=1 ", P&qus[0].chpa_puqu_ein,			 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" 98;"," HAND RV QU     "," HAND=1", P&qus[0].chpa_rvqu_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
-	{" ->;"," RV QU  stellen "," %     ", P&qus[0].ipa_rvqu_stellung,			 US_INT, 1, P&hid1,	V1, 0, 0},
+	{" 98;"," HAND PU QU     "," HAND=1", P&qus[0].chpa_pu_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
+	{" ->;"," PU QU   EIN/AUS"," EIN=1 ", P&qus[0].chpa_pu_ein,			 US_CHAR, 0, P&hid1,	V1, 0, 0},
+	{" 98;"," HAND RV QU     "," HAND=1", P&qus[0].chpa_rv_Hau,				 US_CHAR, 0, P&hid1,	V1, 0, 0},
+	{" ->;"," RV QU  stellen "," %     ", P&qus[0].ipa_rv_stellung,			 US_INT, 1, P&hid1,	V1, 0, 0},
 
 };
