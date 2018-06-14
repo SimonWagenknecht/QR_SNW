@@ -45,12 +45,19 @@ void RegelHkSoL(void)
 /* ---- ***AnFre	Heiz-Bedarf melden für Kessel -------------------------- */
 // wenn RV-Stellung für KONVENTIONELLEN HK1 länger als 5 min unter Minimal-Stellung
 	if ( hkd[HK1].y_rel <= hks[HK1].Y_rel_min + 10 )
+
 	{
 		pHkd->zRVauf = 0;
 		if ( pHkd->zRVzu < pHks->RVzu * 60 )
 			pHkd->zRVzu += 1;
 		else
+			{
 			pHkd->heizBed = 0;	//Ventil längere Zeit ZU, kein Kesselbetrieb
+			if (pHkd->hkSolJa > 0)
+				{
+				pHkd->solheiz=1;		// Solares Heizen nur für Anzeige
+				}
+			}
 	}
 	else
 	{
@@ -58,12 +65,30 @@ void RegelHkSoL(void)
 		if ( pHkd->zRVauf < pHks->RVauf * 60 )
 			pHkd->zRVauf += 1;
 		else
+			{
 			pHkd->heizBed = 1;	//Ventil längere Zeit AUF, Kesselbetrieb EIN
-	}
+			pHkd->solheiz=0;		// Solares Heizen
+			}
 
+	}
+				if (pHkd->hkSolJa == 0)
+				{
+				pHkd->solheiz=0;		// Solares Heizen nur für Anzeige
+				}
+				
+				// Betriebszustand Solare Verteilung
+				
+				if (pHkd->solheiz > 0 && pHkd->solLadung > 0 && TW4_[0]->messw > pHks->SolVert_Ein)
+					{
+						pHkd->solvert = 1;
+					}
+					else if (pHkd->solheiz == 0 || pHkd->solLadung > 0 || TW4_[0]->messw <= pHks->SolVert_Ein)
+						{
+							pHkd->solvert = 0;	
+						}
 //-------------- Solare Lade-Unterstützung ein/aus-schalten------------------------------
 //  nach der Möglichkeit TS3 > TH2 (TRS1)
-	if( sod[SO1].solarPu == 1 && hkdSoL[HK1].solLadung == 0 && hkd[HK1].tvsb > 200 )		//  Solar-Pumpe EIN ? und Keine solare Ladung
+	if( sod[SO1].solarPu == 1 && hkd[HK1].tvsb > 200 )		//  Solar-Pumpe EIN ? und Keine solare Ladung
 	{	
 		if ( TS3_[SO1]->messw > (TRS[HK1]->messw + pHks->DTSoLad) )
 		{	
@@ -126,116 +151,116 @@ void RegelHkSoL(void)
 
 //*********** AnFre 06.06.2012 Aufteilung des Programmes ******************************
 //*********** in Pumpen-Regelung und Ventil-Regelung     ******************************
-if ( pHkd->solLadung > 0 )
-{
-// ------------ ***AnFre 06.06.2012 Solare SpeicherLadung ==> Pumpen-Regelung ------------------
-
-	pHkd->tvsb =		0;
-	pHkd->tsol =		0;
-	pHkd->fl_tsol =	0;
-	pHkd->ei =						0;
-	pHkd->fl_ei1 =				0;
-	pHkd->y_rel =					0;
-	pHkd->fl_y_rel = 			0;
-	RVENTSO[HK1]->awert =	1000;
-
-	if ( hkdSoL[HK1].zSoLadMin > 0 )
-	{
-		pHkd->pu_y_rel = pHks->PuSoMin;		//minimaler Lade-Sollwert während Mindestlaufzeit
-		return;
-	}
-
-	// Regler-Tastzeit	Pumpen-Regelung
-	if(++pHkd->pu_zts < pHks->Pu_Ts/10)
-		 return;																	// Tastzeit noch nicht erreicht
-	pHkd->pu_zts = 0;	 
-
-//------- Sollwert aus LadeKreis HK1: oder Netzheizkreis HKN -------------------
-
-	if ( hkd[HK1].tvsb > hkd[HK2].tvsb )
-		pHkd->pu_tvsb = hkd[HK1].tvsb + hks[HK1].Tvpa;		//dT Speicherladung HK1:
-	else	
-		pHkd->pu_tvsb = hkd[HK2].tvsb + hks[HK1].Tvpa;		//dT Speicherladung HK1:
-// Anhebung HKS: statt Absenkung HKL: 06.01.2017
-	if ( 	pHkd->pu_tvsb > 0 )
-				pHkd->pu_tvsb += pHks->TvAnheb;
-				
-	pHkd->pu_tsol = pHkd->pu_tvsb;
-	pHkd->pu_fl_tsol = (float)pHkd->pu_tsol / 10;
-
-//	----------------------------------------------------------------------
-//	Reglertyp: P- / PID-Regler
-//	----------------------------------------------------------------------
-	// Test Vorlauffühler vom konv. HK1
-	if(TVS[HK1]->stat == 0)	// Status: 0...Ok, 41H...Überlauf,  21H...Unterlauf
-	{	
-		// Regelabweichung Soll - Ist
-		pu_fl_ei	= pHkd->pu_fl_tsol - (float)TVS[HK1]->messw / 10;
-		
-		// -------------- PID-Regelalgorithmus ---------------------------------
-		// Berechnung der relativen Stellgrößen
-		pu_fl_dy_rel = - ( Dy_rel  ( pHks->Pu_Kp, pHks->Pu_Kd, pHks->Pu_Ts, pHks->Pu_Tn, // ***AnFre 06.06.2012 Regelung Invertiert
-														pu_fl_ei, pHkd->pu_fl_ei1, pHkd->pu_fl_ei2 ) );
-		
-		pHkd->pu_fl_y_rel += pu_fl_dy_rel; 
-		
-		pHkd->pu_dy_rel	= (int)(pu_fl_dy_rel * 1000);					// für debug
-
-		//---------------------------------------------------------------------
-		// Regelabweichungen merken
-		pHkd->pu_fl_ei2 = pHkd->pu_fl_ei1;
-		pHkd->pu_fl_ei1 = pu_fl_ei;						
-		// Parameterumwandlung float to int
-		pHkd->pu_ei = (int)(pu_fl_ei * 10);											// [0,1%] zur Anzeige
-		
-		//--------------------------------------------------------------------------
-		// Abfrage Handbetrieb
-		//--------------------------------------------------------------------------
-		if(pHks->Haut == TRUE)			
-			pHkd->pu_fl_y_rel = (float)pHks->Vstell / 10;		// PID-Wert durch Handwert überschreiben
-		else
-		{
-			// Berechnung und Ausgabe der absoluten Stellgrößen
-			// --------------------------------------------------------------------
-			
-			if(pHkd->pu_fl_y_rel  > 100)												// Begrenzung max 100 %
-				 pHkd->pu_fl_y_rel  = 100;
-			
-	// Pumpen-Sollwert Begrenzung Max 
-			if( pHkd->pu_fl_y_rel  > pHks->PuSoMax / 10 )		// Begrenzung max 
-				pHkd->pu_fl_y_rel  = pHks->PuSoMax / 10;
-	// Pumpen-Sollwert Begrenzung Min 
-			if( pHkd->pu_fl_y_rel  < pHks->PuSoMin / 10 )		// Begrenzung max 
-				pHkd->pu_fl_y_rel  = pHks->PuSoMin / 10;
-				
-			pHkd->pu_y_rel = (int)(pHkd->pu_fl_y_rel * 10);				// Zur Anzeige und Weiterverarbeitung
-
-			if ( hks[HK1].Haut == 0 )
-			{
-				AA_UNI[U2]->awert = pHkd->pu_y_rel;									// Ausgabe an Lade-Pumpe
-				if ( BusPuPara[PU_BUS_HK1-1].Funktion == 1 )				// ***AnFre Wilo-PumpenBus
-				{
-					BusPuPara[PU_BUS_HK1-1].Sollwert	= pHkd->pu_y_rel;
-				}
-				else
-				{
-					BusPuPara[PU_BUS_HK1-1].Sollwert	= 0;
-				}
-			}
-
-		}
-	}	
-}
-else
-{	// Keine solare Ladung, deshalb keine PumpenRegelung
-	pHkd->pu_zts =			0;	 
-	pHkd->pu_tvsb =			0;
-	pHkd->pu_tsol =			0;
-	pHkd->pu_fl_tsol =	0;
-	pHkd->pu_ei =				0;
-	pHkd->pu_fl_ei1 =		0;
-	pHkd->pu_y_rel =		0;
-	pHkd->pu_fl_y_rel = 0;
+//if ( pHkd->solLadung > 0 )
+//{
+//// ------------ ***AnFre 06.06.2012 Solare SpeicherLadung ==> Pumpen-Regelung ------------------
+//
+//	pHkd->tvsb =		0;
+//	pHkd->tsol =		0;
+//	pHkd->fl_tsol =	0;
+//	pHkd->ei =						0;
+//	pHkd->fl_ei1 =				0;
+//	pHkd->y_rel =					0;
+//	pHkd->fl_y_rel = 			0;
+//	RVENTSO[HK1]->awert =	1000;
+//
+//	if ( hkdSoL[HK1].zSoLadMin > 0 )
+//	{
+//		pHkd->pu_y_rel = pHks->PuSoMin;		//minimaler Lade-Sollwert während Mindestlaufzeit
+//		return;
+//	}
+//
+//	// Regler-Tastzeit	Pumpen-Regelung
+//	if(++pHkd->pu_zts < pHks->Pu_Ts/10)
+//		 return;																	// Tastzeit noch nicht erreicht
+//	pHkd->pu_zts = 0;	 
+//
+////------- Sollwert aus LadeKreis HK1: oder Netzheizkreis HKN -------------------
+//
+//	if ( hkd[HK1].tvsb > hkd[HK2].tvsb )
+//		pHkd->pu_tvsb = hkd[HK1].tvsb + hks[HK1].Tvpa;		//dT Speicherladung HK1:
+//	else	
+//		pHkd->pu_tvsb = hkd[HK2].tvsb + hks[HK1].Tvpa;		//dT Speicherladung HK1:
+//// Anhebung HKS: statt Absenkung HKL: 06.01.2017
+//	if ( 	pHkd->pu_tvsb > 0 )
+//				pHkd->pu_tvsb += pHks->TvAnheb;
+//				
+//	pHkd->pu_tsol = pHkd->pu_tvsb;
+//	pHkd->pu_fl_tsol = (float)pHkd->pu_tsol / 10;
+//
+////	----------------------------------------------------------------------
+////	Reglertyp: P- / PID-Regler
+////	----------------------------------------------------------------------
+//	// Test Vorlauffühler vom konv. HK1
+//	if(TVS[HK1]->stat == 0)	// Status: 0...Ok, 41H...Überlauf,  21H...Unterlauf
+//	{	
+//		// Regelabweichung Soll - Ist
+//		pu_fl_ei	= pHkd->pu_fl_tsol - (float)TVS[HK1]->messw / 10;
+//		
+//		// -------------- PID-Regelalgorithmus ---------------------------------
+//		// Berechnung der relativen Stellgrößen
+//		pu_fl_dy_rel = - ( Dy_rel  ( pHks->Pu_Kp, pHks->Pu_Kd, pHks->Pu_Ts, pHks->Pu_Tn, // ***AnFre 06.06.2012 Regelung Invertiert
+//														pu_fl_ei, pHkd->pu_fl_ei1, pHkd->pu_fl_ei2 ) );
+//		
+//		pHkd->pu_fl_y_rel += pu_fl_dy_rel; 
+//		
+//		pHkd->pu_dy_rel	= (int)(pu_fl_dy_rel * 1000);					// für debug
+//
+//		//---------------------------------------------------------------------
+//		// Regelabweichungen merken
+//		pHkd->pu_fl_ei2 = pHkd->pu_fl_ei1;
+//		pHkd->pu_fl_ei1 = pu_fl_ei;						
+//		// Parameterumwandlung float to int
+//		pHkd->pu_ei = (int)(pu_fl_ei * 10);											// [0,1%] zur Anzeige
+//		
+//		//--------------------------------------------------------------------------
+//		// Abfrage Handbetrieb
+//		//--------------------------------------------------------------------------
+//		if(pHks->Haut == TRUE)			
+//			pHkd->pu_fl_y_rel = (float)pHks->Vstell / 10;		// PID-Wert durch Handwert überschreiben
+//		else
+//		{
+//			// Berechnung und Ausgabe der absoluten Stellgrößen
+//			// --------------------------------------------------------------------
+//			
+//			if(pHkd->pu_fl_y_rel  > 100)												// Begrenzung max 100 %
+//				 pHkd->pu_fl_y_rel  = 100;
+//			
+//	// Pumpen-Sollwert Begrenzung Max 
+//			if( pHkd->pu_fl_y_rel  > pHks->PuSoMax / 10 )		// Begrenzung max 
+//				pHkd->pu_fl_y_rel  = pHks->PuSoMax / 10;
+//	// Pumpen-Sollwert Begrenzung Min 
+//			if( pHkd->pu_fl_y_rel  < pHks->PuSoMin / 10 )		// Begrenzung max 
+//				pHkd->pu_fl_y_rel  = pHks->PuSoMin / 10;
+//				
+//			pHkd->pu_y_rel = (int)(pHkd->pu_fl_y_rel * 10);				// Zur Anzeige und Weiterverarbeitung
+//
+//			if ( hks[HK1].Haut == 0 )
+//			{
+//				AA_UNI[U2]->awert = pHkd->pu_y_rel;									// Ausgabe an Lade-Pumpe
+//				if ( BusPuPara[PU_BUS_HK1-1].Funktion == 1 )				// ***AnFre Wilo-PumpenBus
+//				{
+//					BusPuPara[PU_BUS_HK1-1].Sollwert	= pHkd->pu_y_rel;
+//				}
+//				else
+//				{
+//					BusPuPara[PU_BUS_HK1-1].Sollwert	= 0;
+//				}
+//			}
+//
+//		}
+//	}	
+//}
+//else
+//{	// Keine solare Ladung, deshalb keine PumpenRegelung
+//	pHkd->pu_zts =			0;	 
+//	pHkd->pu_tvsb =			0;
+//	pHkd->pu_tsol =			0;
+//	pHkd->pu_fl_tsol =	0;
+//	pHkd->pu_ei =				0;
+//	pHkd->pu_fl_ei1 =		0;
+//	pHkd->pu_y_rel =		0;
+//	pHkd->pu_fl_y_rel = 0;
 	
 // ------------ ***AnFre 06.06.2012 Solare Heizunterstützung ==> Ventil-Regelung ------------------
 
@@ -283,11 +308,18 @@ else
 		}
 	}
 // Anhebung HKS: statt Absenkung HKL: 06.01.2017
-	if ( pHkd->tvsb > 0 )
-				pHkd->tvsb += pHks->TvAnheb;
+//	if ( pHkd->tvsb > 0 )
+//				pHkd->tvsb += pHks->TvAnheb;
+//
+//	pHkd->tsol = pHkd->tvsb;
+//	pHkd->fl_tsol = (float)pHkd->tsol / 10;
 
-	pHkd->tsol = pHkd->tvsb;
-	pHkd->fl_tsol = (float)pHkd->tsol / 10;
+	if (pHkd->hkSolJa > 0)
+		{
+			pHkd->tvsb = pHks->TH3Max - 50;
+			pHkd->tsol = pHkd->tvsb;
+			pHkd->fl_tsol = (float)pHkd->tsol / 10;
+		}
 
 //	----------------------------------------------------------------------
 //	Reglertyp: P- / PID-Regler
@@ -362,7 +394,7 @@ else
 		}
 
 	}	
-}	// ***AnFre Ende der Ventil-Regelung		
+//}	// ***AnFre Ende der Ventil-Regelung		
 }
 /*---------------------- Ende Task RegelHk -----------------------------------*/
 

@@ -85,7 +85,7 @@ void Alarme(void)
 // ***AnFre Ende Notbetrieb schalten		
 
 // ***AnFre 06.06.2012 TH3 Speichertemp. oben überschritten bei Nahwärmenetz
-	if ( th3 > hksSoL[HK1].TH3Max && th5 > hksSoL[HK1].TH3Max - 101 )
+	if ( th3 > hksSoL[HK1].TH3Max )//&& th5 > hksSoL[HK1].TH3Max - 101 )
 	{
 		hkdSoL[HK1].th3Max = 1;
 	}

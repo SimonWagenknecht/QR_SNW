@@ -732,8 +732,21 @@ void RegelHk(void)
 				
 			pHkd->y_rel = (int)(pHkd->fl_y_rel * 10);				// Zur Anzeige und Weiterverarbeitung
 			RVENT[hk]->awert = pHkd->y_rel;									// Ausgabe an Stellventil
+		
+		if (hk == HK1)
+			{
+				//	Betriebszustand Solare Verteilung
+				if (hkdSoL[HK1].solvert == 1)
+					{
+						//pHkd->fl_y_rel  = hksSoL[HK1].Stell_SolVert/10;
+						//pHkd->y_rel = (int)(pHkd->fl_y_rel * 10);				// Zur Anzeige und Weiterverarbeitung
+						RVENT[hk]->awert = hksSoL[HK1].Stell_SolVert;									// Ausgabe an Stellventil
+					}
+			}
+		
 		}
 	}	
+
 
 // -------- ***AnFre 04.11.2009 STW-Abschaltung -----------
 	if ( STWHK[hk]->bwert == TRUE )

@@ -3,7 +3,7 @@ const Pgrup qsm[] = {
 	{"*01:"," QSM VORHANDEN ?","       ", P&un_qsm,			 						JANEIN_FORM, 0, P&vis,	V1, 0, 0},
 
 //**PARSER-BEGIN-qsm[]**  AUTOMATISCHE ERZEUGUNG *****
-// Diese Zeilen wurde automatisch am : 13.06.2018 um 14:49:31 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
+// Diese Zeilen wurde automatisch am : 14.06.2018 um 15:13:48 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
 // Path: C:\RIEcon36C\Softwarepool\Softwarepool_PES_2018\QR_SNW81\QR_R_3s03_JMX81\User\Komtabparser.exe
 	{"ANL:"," AUSSENLUFTTEMP.","       ", P&alarmtab[0].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},
 	{"ANL:"," SMGRUP STANDARD","       ", P&alarmtab[1].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},
@@ -39,7 +39,7 @@ const Pgrup qsm[] = {
 	{"HKL:"," SM REGELABW.?  ","       ", P&alarmtab[31].alspeicher,		JANEIN_FORM, 0, P&vis,	V1, 0, 0},
 	{"HKL:"," SM PU LK      ?","       ", P&alarmtab[32].alspeicher,		JANEIN_FORM, 0, P&vis,	V1, 0, 0},
 	{"HKL:"," HANDBETRIEB ?  ","       ", P&alarmtab[33].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},
-	{"HKS:"," SPEICHER MAX ? ","       ", P&alarmtab[34].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},
+	{"HKS:"," SPEI MAX ALARM?","       ", P&alarmtab[34].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},
 	{"HKS:"," HANDBETRIEB ?  ","       ", P&alarmtab[35].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},
 	{"SOL:"," KOLLEKTOR   TS1","       ", P&alarmtab[36].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},
 	{"SOL:"," SOLAR-HEIZ. TS3","       ", P&alarmtab[37].alspeicher,		JANEIN_FORM, 0, P&hid3,	V0, 0, 0},

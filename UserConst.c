@@ -1664,6 +1664,10 @@ const HkSoLStandard  HkSoL_Standparam[] = {
 		0,	// char	SoLadSperr;	// Sperrzeit solare Ladung 			[min]
 		0,	// int	TH3Max;			// Solare Ladung abbrechen, wenn TH3 > TH3Max
 		0,	// int	TvAnheb;		// Vorl.-Anhebung HKS:	bei solarer Heizunterstützung			  [K] * 10	06.01.2017	
+		0,	//int		HKS_Sollwert;			// fester Sollwert in [°C] * 10	
+		0,	//	int		SolVert_Ein;			// Aktiviert die Solare Verteilung		[K] * 10
+		0, 	//	int		SolVert_Aus;			// Deaktiviert die Solare Verteilung	[K] * 10
+		0,	//	int		Stell_SolVert;		// Ventilstellung von RV H im Betriebszustand Solare Verteilung in [%]*10
 
  },
  // Profil 1
@@ -1698,7 +1702,13 @@ const HkSoLStandard  HkSoL_Standparam[] = {
 		10,	// char	SoLadSperr;	// Sperrzeit solare Ladung 			[min]
 		900,	// int	TH3Max;			// Solare Ladung abbrechen, wenn TH3 > TH3Max
 		 30,	// int	TvAnheb;		// Vorl.-Anhebung HKS:	bei solarer Heizunterstützung			  [K] * 10	06.01.2017	
- },
+	850,	//int		HKS_Sollwert;			// fester Sollwert in [°C] * 10
+	580,	//	int		SolVert_Ein;			// Aktiviert die Solare Verteilung		[K] * 10
+	550, 	//	int		SolVert_Aus;			// Deaktiviert die Solare Verteilung	[K] * 10
+	500,	//	int		Stell_SolVert;		// Ventilstellung von RV H im Betriebszustand Solare Verteilung in [%]*10
+
+ 
+},
 }; 	
 const char HKSoL_PROFILE = sizeof ( HkSoL_Standparam ) / sizeof ( HkSoLStandard ); 	
 

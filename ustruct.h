@@ -738,6 +738,11 @@ typedef struct rsSoL{
 	char	SoLadSperr;	// Sperrzeit solare Ladung 			[min]
 	int		TH3Max;			// Solare Ladung abbrechen, wenn TH3 > TH3Max
 	int		TvAnheb;		// Vorl.-Anhebung HKS:	bei solarer Heizunterstützung			  [K] * 10		06.01.2017
+	
+        int		HKS_Sollwert;			// fester Sollwert in [°C] * 10	
+	int		SolVert_Ein;			// Aktiviert die Solare Verteilung		[K] * 10
+	int		SolVert_Aus;			// Deaktiviert die Solare Verteilung	[K] * 10
+	int		Stell_SolVert;		// Ventilstellung von RV H im Betriebszustand Solare Verteilung in [%]*10
 }HkSoLStandard;
 #define HKSSoLLENG sizeof(struct rsSoL)
 
@@ -788,6 +793,8 @@ typedef struct rdSoL{
 	UINT	zSoLadMin;		// Zähler Mindestzeit solare Ladung 		[30s]
 	UINT	zSoLadSperr;	// Zähler Sperrzeit solare Ladung 			[30s]
 	char	th3Max;				// Anzeige TH3 Speicher oben Temp. überschritten	
+	char	solheiz;	// Betriebszustand Solares Heizen: Inverse von heizBed und nur für die Anzeige
+	char	solvert;	// Betriebszstand Solare Verteilung	
 }HkSoLDynam;			// ***AnFre Ende	
  
 	

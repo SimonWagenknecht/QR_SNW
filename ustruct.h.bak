@@ -506,6 +506,18 @@ typedef struct rs{
 	
 	char	VorrangZeitabsenkung;
 	char 	PuBmVerz;				// [min]
+
+// Freitags-Ventilöffnung	
+	char VentiloeffngTag;				// Wochentag
+	uhrzeit VentiloeffngBeg;		// Beginn
+	uhrzeit VentiloeffngEnd;		// Ende
+	int VentiloeffngAbs;				// Absenkwert (>= 50,0 K führt zum Abschalten)
+	int GrenztempAbschalten;		// untere Grenze der Außentemperatur
+
+
+
+
+
 	
 // ***AnFre 06.06.2012 Legionelle für NahwärmeNetz von KER1s02_SEZ01
 	char Legjn;							// Legionellentod HK1-Temp.-Anhebung
@@ -636,6 +648,9 @@ typedef struct rd{
 	char 	ucHeat;					// Meldung Heizen
 
 	UINT	leistBegrAbsenk;	// [K] * 10	
+
+char	ventiloeffng;
+
 //***AnFre 08.07.2010 Legionelle für NahwärmeNetz von KER1s02_SEZ01
 	char legio;			// Legionellenbetrieb
 	int  zleg;			// Zähler für Legionellenbetrieb
