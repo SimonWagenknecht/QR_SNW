@@ -151,14 +151,14 @@ void Steuer(void)
 //--------- ***AnFre 06.06.2012 Solare Anhebung für NahwärmeNetz HKN: in RegelHk.c benutzt ----------------------
 	if ( hkd[HK2].solAnheb == 0 )
 	{
-		if ( (sod[SO1].kollEin > 0) && (ts5 > hks[HK2].SolAnhebTS5) && (th3 > hks[HK2].SolAnhebTH3) )
+		if ( (hkdSoL[HK1].solLadung > 0 || hkdSoL[HK1].th3Max > 0) && (th3 > hks[HK2].SolAnhebTH3) )
 		{
 			hkd[HK2].solAnheb = 1;	// solare Anhebung EIN
 		}
 	}
 	else
 	{
-		if ( (ts5 < hks[HK2].SolAnhebTS5 -50) && (th3 < hks[HK2].SolAnhebTH3 -30) )
+		if (th3 < hks[HK2].SolAnhebTH3 -20) 
 		{
 			hkd[HK2].solAnheb = 0;	// solare Anhebung AUS
 		}
@@ -211,7 +211,7 @@ void Steuer(void)
 			}
 			else
 			{
-				if ( (ts3 > th5 + hksSoL[HK1].DTSoLad) && hkdSoL[HK1].th3Max == 0 && hkdSoL[HK1].solheiz > 0 )		// th3Max-Alarm siehe Alarme.c
+				if ( (ts3 > th5 + hksSoL[HK1].DTSoLad) && hkdSoL[HK1].th3Max == 0)		// th3Max-Alarm siehe Alarme.c
 				{
 					hkdSoL[HK1].solLadung = 1;
 					hkdSoL[HK1].solLadung_war = 1;  // für Pumpennachlauf
@@ -246,7 +246,7 @@ void Steuer(void)
 			}
 			else
 			{
-				if ( (ts3 < th5 + hksSoL[HK1].DTSoLad) || (hkdSoL[HK1].th3Max > 0) || (hkdSoL[HK1].solheiz == 0) )		// th3Max-Alarm siehe Alarme.c
+				if ( (ts3 < th5 + hksSoL[HK1].DTSoLad) || (hkdSoL[HK1].th3Max > 0) )		// th3Max-Alarm siehe Alarme.c
 				{
 					hkdSoL[HK1].solLadung = 0;
 					hkdSoL[HK1].zSoLadSperr = (int)(hksSoL[HK1].SoLadSperr *2);

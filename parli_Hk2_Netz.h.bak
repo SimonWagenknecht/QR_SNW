@@ -155,7 +155,7 @@ const Pgrup hk2[] = {
 	{"*->."," Pumpen-Laufzeit"," h     ", P&hkd[HK2].puLzAnz,			 US_LONG, 0, P&hid2,	V1, 0, 0},
 	{" ->."," Pu-Nachlaufzeit"," min   ", P&hks[HK2].Puna,					US_CHAR, 0, P&hid2,	V0, 0, 0},
 	{" ->."," Pum-Nachl.  Cnt"," *30 s ", P&hkd[HK2].zpu,						 US_INT, 0, P&hid2,	V0, 0, 0},
-	{"*->:"," PUMPENSOLLWERT "," %     ", P&AA_UNI[U3],					AOUT_FORMP, 1, P&vis,		V0, 0, 0},
+//	{"*->:"," PUMPENSOLLWERT "," %     ", P&AA_UNI[U3],					AOUT_FORMP, 1, P&vis,		V0, 0, 0},
 	{"*->:"," BM PU NK1  EIN?","       ", P&hkd[HK2].puBmAnz,  JANEIN_FORM, 0, P&vis,		V1, 0, 0},
 //	{"*->:"," WILO-BUS NETZ-P","       ", P&BusPuPara[PU_BUS_HK2 - 1].Funktion,PU_FUNC_FORM,0, P&vis,	V0, 0, IDX0_FELD},
 //	{"*->;"," BUS-ADRESSE    ","       ", P&BusPuPara[PU_BUS_HK2 - 1].Adresse,		 US_CHAR,  0, P&wilo4,V0, 0, IDX0_FELD},

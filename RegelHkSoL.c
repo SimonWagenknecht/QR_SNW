@@ -78,11 +78,11 @@ void RegelHkSoL(void)
 				
 				// Betriebszustand Solare Verteilung
 				
-				if (pHkd->solheiz > 0 && pHkd->solLadung > 0 && TW4_[0]->messw > pHks->SolVert_Ein)
+				if (pHkd->solLadung > 0 && TW4_[0]->messw > pHks->SolVert_Ein)
 					{
 						pHkd->solvert = 1;
 					}
-					else if (pHkd->solheiz == 0 || pHkd->solLadung > 0 || TW4_[0]->messw <= pHks->SolVert_Ein)
+					else if (pHkd->solLadung > 0 || TW4_[0]->messw <= pHks->SolVert_Ein)
 						{
 							pHkd->solvert = 0;	
 						}

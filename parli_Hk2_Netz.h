@@ -30,7 +30,7 @@ const Pgrup hk2[] = {
 
 	{" 17;"," SOLARE ANHEBUNG"," K     ", P&hks[HK2].SolAnhebung,		US_INT, 1, P&hid1,	V1, 0, 0},
 	{" ->;"," SOL.AN. TSPo-L>"," C    ", P&hks[HK2].SolAnhebTH3,		US_INT, 1, P&hid1,	V0, 0, 0},
-	{" ->;"," SOL.ANH TSPo-P>"," C    ", P&hks[HK2].SolAnhebTS5,		US_INT, 1, P&hid1,	V0, 0, 0},
+	//{" ->;"," SOL.ANH TSPo-P>"," C    ", P&hks[HK2].SolAnhebTS5,		US_INT, 1, P&hid1,	V0, 0, 0},
 
 	#if TRLBEG_HK2==1
 	{" 18;"," RUECKLAUF MAX  "," C    ", P&hks[HK2].Trma,					US_INT, 1, P&hid1,		V1, 0, 0},

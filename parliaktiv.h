@@ -1,4 +1,4 @@
-// Diese Datei wurde automatisch am : 14.06.2018 um 15:13:47 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
+// Diese Datei wurde automatisch am : 19.06.2018 um 09:22:43 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
 // Path: C:\RIEcon36C\Softwarepool\Softwarepool_PES_2018\QR_SNW81\QR_R_3s03_JMX81\User\Komtabparser.exe
 
 const Pgrup hk4[] = { 
@@ -1494,7 +1494,6 @@ const Pgrup hk2[] = {
 	{" 16;"," ANHEB. EXT.ANF."," K     ", P&hks[HK2].TvAnhExt,				US_INT, 1, P&hid1,V0, 0, 0},
 	{" 17;"," SOLARE ANHEBUNG"," K     ", P&hks[HK2].SolAnhebung,		US_INT, 1, P&hid1,	V1, 0, 0},
 	{" ->;"," SOL.AN. TSPo-L>"," C    ", P&hks[HK2].SolAnhebTH3,		US_INT, 1, P&hid1,	V0, 0, 0},
-	{" ->;"," SOL.ANH TSPo-P>"," C    ", P&hks[HK2].SolAnhebTS5,		US_INT, 1, P&hid1,	V0, 0, 0},
 	{" 18;"," RUECKLAUF MAX  "," C    ", P&hks[HK2].Trma,					US_INT, 1, P&hid1,		V1, 0, 0},
 	{" 19;"," Xp-RUECKL.BEGR.","       ", P&hks[HK2].Kpr,						US_INT, 2, P&hid1,		V1, 0, 0},
 	{"*20:"," VORLAUF BERECHN"," C    ", P&hkd[HK2].tvsb,					US_INT, 1, P&vis,		V1, 0, 0},

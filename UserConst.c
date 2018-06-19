@@ -1263,7 +1263,7 @@ const HkStandard  Hk_Standparam[] = {
 	750,	// Twwleg = 75,0			Legionellen Temperatur				[°C] * 10
 // ***AnFre 06.06.2012 solare Anhebung NahwärmeNetz
 	 50,		// int	SolAnhebung;		// Anhebung Netz-Sollwert [ K ] *10
-	800,		// int	SolAnhebTH3;		// solare Anhebung wenn TH3 > [°C ] *10
+	700,		// int	SolAnhebTH3;		// solare Anhebung wenn TH3 > [°C ] *10
 	800,		// int	SolAnhebTS5;		// 						 und wenn TS5 > [°C ] *10
 		0,		// char WwVorrang;			// TS4 statt TS3 im Speicher für Einschalten		
 		0,		// int DTLadEin;				// dT Ladung einschalten
