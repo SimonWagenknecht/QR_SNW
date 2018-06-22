@@ -2239,10 +2239,32 @@ const char SO_PROFILE = sizeof ( So_Standparam ) / sizeof ( SoStandard );
 /*				Liste von Standardwerten für Weichenkreis		*/
 /*----------------------------------------------------------------------------------*/
 const WeStandard  We_Standparam[] = {
+	60,		// int		 ipa_Hoch_QRG_aus;			// Parameter in [K] / 10, der den Betriebszustand Hochtemperaturquellenregeneration deaktiviert
+	120,	// int		 ipa_Hoch_QRG_ein;			// Parameter in [K] / 10, der den Betriebszustand Hochtemperaturquellenregeneration aktiviert
+	50,		// int		 ipa_Nieder_QRG_ein;	// Parameter in [°C] / 10, der den Betriebszustand Niedertemperaturquellenregeneration aktiviert
+	300,	// int		 ipa_eTankgrenze;			// Parameter in [°C] / 10, Grenzwert des Etanks
+	3,		//	int	 	 ipa_eTank_Minlaufzeit;	// Parameter in [min], erst nach Ablauf des Counters, wird die die Grenztemperatur des Etanks kontrolliert
+	1,		// int		 ipa_Funktion_TP;			// Parameter, der die Funktionen des Taupunkts aktiviert oder deaktiviert
+	10,		// int		 ipa_Taupunktgrenze;	// Parameter in [K] / 10, dT-Grenzwert zum Taupunkt
 	0,		// char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
 	0,		// char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
 	0,		// char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
 	0,		// int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	// PID
+ 100,		// int		Ts;								// Tastzeit (>= 1 s)						[s] * 10
+ 400,		// UINT	Tn;								// Nachstellzeit								[s] * 10
+ 125,		// int		Kp;								// P-Verstärkung							[%/K] * 100
+   0,		// int		Kd;								// D-Verstärkung							[%/K] * 100
+ 300,		// int		Kpk;							// P-Verstärkung Kaskade			[%/K] * 100
+ 	0,		// int		Kpr;							// P-Verstärkung TRS-Begrenzg.[%/K] * 100
+ 	
+ 600,		// int		Fzk;							// Filterzk. f. tsol						[s] * 10
+ 	
+ 	0,		// UINT	Y_rel_min;				// Minimale Stellausgabe an 0-10V Ventil	[%] * 10
+	0,		// UINT	Y_rel_beg;				// Öffnungsbeginn des 0-10V Ventils				[%] * 10
+	
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+	0,		// int		Wup;									// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
 }; 
 const char WEI_PROFILE = 1;	
 
@@ -2250,10 +2272,28 @@ const char WEI_PROFILE = 1;
 /*				Liste von Standardwerten für Quellenkreis		*/
 /*----------------------------------------------------------------------------------*/
 const QuStandard  Qu_Standparam[] = {
+	220,	// int		 ipa_Sollwert_WPU_VL;		// Vorlauftemperatur im Wärmepumpenbetrieb
 	0,		// char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
 	0,		// char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
 	0,		// char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
 	0,		// int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	
+		// PID
+ 100,		// int		Ts;								// Tastzeit (>= 1 s)						[s] * 10
+ 400,		// UINT	Tn;								// Nachstellzeit								[s] * 10
+ 125,		// int		Kp;								// P-Verstärkung							[%/K] * 100
+   0,		// int		Kd;								// D-Verstärkung							[%/K] * 100
+ 300,		// int		Kpk;							// P-Verstärkung Kaskade			[%/K] * 100
+ 	0,		// int		Kpr;							// P-Verstärkung TRS-Begrenzg.[%/K] * 100
+ 	
+ 600,		// int		Fzk;							// Filterzk. f. tsol						[s] * 10
+ 	
+ 	0,		// UINT	Y_rel_min;				// Minimale Stellausgabe an 0-10V Ventil	[%] * 10
+	0,		// UINT	Y_rel_beg;				// Öffnungsbeginn des 0-10V Ventils				[%] * 10
+	
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+	0,		// int		Wup;									// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
+	
 }; 
 const char QU_PROFILE = 1;	
 

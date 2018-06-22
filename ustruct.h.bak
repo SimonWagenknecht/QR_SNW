@@ -738,6 +738,11 @@ typedef struct rsSoL{
 	char	SoLadSperr;	// Sperrzeit solare Ladung 			[min]
 	int		TH3Max;			// Solare Ladung abbrechen, wenn TH3 > TH3Max
 	int		TvAnheb;		// Vorl.-Anhebung HKS:	bei solarer Heizunterstützung			  [K] * 10		06.01.2017
+	
+        int		HKS_Sollwert;			// fester Sollwert in [°C] * 10	
+	int		SolVert_Ein;			// Aktiviert die Solare Verteilung		[K] * 10
+	int		SolVert_Aus;			// Deaktiviert die Solare Verteilung	[K] * 10
+	int		Stell_SolVert;		// Ventilstellung von RV H im Betriebszustand Solare Verteilung in [%]*10
 }HkSoLStandard;
 #define HKSSoLLENG sizeof(struct rsSoL)
 
@@ -788,6 +793,8 @@ typedef struct rdSoL{
 	UINT	zSoLadMin;		// Zähler Mindestzeit solare Ladung 		[30s]
 	UINT	zSoLadSperr;	// Zähler Sperrzeit solare Ladung 			[30s]
 	char	th3Max;				// Anzeige TH3 Speicher oben Temp. überschritten	
+	char	solheiz;	// Betriebszustand Solares Heizen: Inverse von heizBed und nur für die Anzeige
+	char	solvert;	// Betriebszstand Solare Verteilung	
 }HkSoLDynam;			// ***AnFre Ende	
  
 	
@@ -1365,32 +1372,82 @@ typedef struct sd {
 
 // Weichenkreis
 typedef struct weis {
-	char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
-	char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
-	char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
-	int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	int		 ipa_Hoch_QRG_aus;			// Parameter in [K] / 10, der den Betriebszustand Hochtemperaturquellenregeneration deaktiviert
+	int		 ipa_Hoch_QRG_ein;			// Parameter in [K] / 10, der den Betriebszustand Hochtemperaturquellenregeneration aktiviert
+	int		 ipa_Nieder_QRG_ein;		// Parameter in [K] / 10, der den Betriebszustand Niedertemperaturquellenregeneration aktiviert
+	int		 ipa_eTankgrenze;				// Parameter in [°C] / 10, Grenzwert des Etanks
+	int	 	 ipa_eTank_Minlaufzeit;	// Parameter in [min], erst nach Ablauf des Counters, wird die die Grenztemperatur des Etanks kontrolliert
+	int		 ipa_Funktion_TP;				// Parameter, der die Funktionen des Taupunkts aktiviert oder deaktiviert
+	int		 ipa_Taupunktgrenze;		// Parameter in [K] / 10, dT-Grenzwert zum Taupunkt
+	char	chpa_pu_Hau;						// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	char	chpa_pu_ein;						// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	char	chpa_rv_Hau;						// Handsteuerung des Weichenventils RV WEI aktivieren
+	int		 ipa_rv_stellung;				// Ventilstellung von RV WEI im Handbetrieb
+	// PID
+	int		Ts;								// Tastzeit (>= 1 s)						[s] * 10
+	UINT	Tn;								// Nachstellzeit								[s] * 10
+	int		Kp;								// P-Verstärkung							[%/K] * 100
+	int		Kd;								// D-Verstärkung							[%/K] * 100
+	int		Kpk;							// P-Verstärkung Kaskade			[%/K] * 100
+	int		Kpr;							// P-Verstärkung TRS-Begrenzg.[%/K] * 100
 	
+	int		Fzk;							// Filterzk. f. tsol						[s] * 10
+	
+	UINT	Y_rel_min;				// Minimale Stellausgabe an 0-10V Ventil	[%] * 10
+	UINT	Y_rel_beg;				// Öffnungsbeginn des 0-10V Ventils				[%] * 10
+	
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+	int		Wup;									// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
 } WeStandard;
 
 #define WESLENG sizeof (struct weis)
 
 typedef struct weid {
-	char	chpa_bmpuwei;					// Betriebsmeldung der Quellenpumpe	
+	char	chpa_bmpuwei;						// Betriebsmeldung der Quellenpumpe
+	char	chbz_eTankschutz;				// Betriebszustand eTankschutz = eTank voll	
+	char	chbz_Taupunktschutz;		// Betriebszustand Taupunktschutz
+	char	chbz_Nieder_QRG;				// Betriebszustand Niedertemperaturquellenregeneration
+	char	chbz_Hoch_QRG;					// Betriebszustand Hochtemperaturquellenregeneration
+	char	chbz_Quellenanhebung;		// Betriebszustand Quellenanhebung
+	 int	 iCo_QRG;								// beginnt von ipa_eTank_Minlaufzeit abwärts zu zählen nach Aktivierung eines Betriebszustands bzgl Quellenregeneration 
+	 int	TQRL_recent;						// im RAM gespeicherter Wert, nach dem die Quellenpumpe ausgeschalten wurde
+	 
+	 // PID
+	 int		zts;					// Zaehler fuer Tastzeit
+	char	regstart;			// Reglerstart nach Reset
+	int		ei;						// Regelabweichung							[K] * 10
+	float	fl_ei1;				// Regelabweichung zum Tastzeitpunkt i-1
+	float	fl_ei2;				// Regelabweichung zum Tastzeitpunkt i-2
+	int		tsol;					// Vorlaufsolltemp. , nach der geregelt wird
+	float fl_tsol;			//		"								(für Filterberechnung)
+	int		tvsb;					// berechnete Vorlaufsolltemp. total
+	int		tvsb_hkl;			// berechnete Vorlaufsolltemp. nach Heizkennlinie (für debug)							
+	int		stellzeit;		// berechnete Zeit für Stellausgabe
+	int		stellsum;			// Summenzähler für Stellausgabe
+	int 	fahren;				// Fahrzeit Stellausgabe in ganzen Sekunden
+	int		y_rel;				// Stellausgabe an 0-10V Ventil	[%] * 10
+	float	fl_y_rel;			// PID-Stellgröße
+	int   si_y_rel;			// PID-Stellgröße für debug [%] * 10		
+	int		dy_rel;				// für debug
 } WeDynam;
 
 // Quellenkreis
 typedef struct qs {
-	char	chpa_pu_Hau;				// Handsteuerung der Weichenpumpe PU WEI aktivieren
-	char	chpa_pu_ein;				// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
-	char	chpa_rv_Hau;				// Handsteuerung des Weichenventils RV WEI aktivieren
-	int		 ipa_rv_stellung;		// Ventilstellung von RV WEI im Handbetrieb
+	int		 ipa_Sollwert_WPU_VL;		// Vorlauftemperatur im Wärmepumpenbetrieb
+	char	chpa_pu_Hau;						// Handsteuerung der Weichenpumpe PU WEI aktivieren
+	char	chpa_pu_ein;						// Weichenpumpe PU WEI im Handbetrieb ein-/ausschalten
+	char	chpa_rv_Hau;						// Handsteuerung des Weichenventils RV WEI aktivieren
+	int		 ipa_rv_stellung;				// Ventilstellung von RV WEI im Handbetrieb
 	
 } QuStandard;
 
 #define QUSLENG sizeof (struct qs)
 
 typedef struct qd {
-	char	chpa_bmpuqu;					// Betriebsmeldung der Quellenpumpe	
+	char	chpa_bmpuqu;						// Betriebsmeldung der Quellenpumpe
+	char	chbz_Freigabe_wpu;			// Freigabe der Wärmepumpe
+	char	chbm_WPU;								// Betriebsmeldung Wärmepumpe
+	char	chbz_WPU_Versorgung;		// Betrtiebszustand Wärmepumpenversorgung		
 } QuDynam;
 
 //---------------------------------------------------------------------

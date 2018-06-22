@@ -292,8 +292,8 @@ const Pgrup hk4[] = {
 	#endif
 
 	{"*80:"," BETRIEBS-REGIE ","       ", P&hkd[HK4].regie_txt, DYN_ASCII_FORM, 0, P&vis,		V1, 0, 0},
-	{"*81:"," ABSENKPHASE ?  ","       ", P&hkd[HK4].absen,		 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
-	{"*->:"," ABSCHALTPHASE ?","       ", P&hkd[HK4].absch,		 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
+	{"*81:"," ABSENKPHASE ?  ","       ", P&hkd[HK4].absen,		 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
+	{"*->:"," ABSCHALTPHASE ?","       ", P&hkd[HK4].absch,		 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
 	#if TRAUMK_HK4==1 || BEDRAUM_HK4==1
 	{"*->:"," STUETZBETRIEB ?","       ", P&hkd[HK4].stuetz,	 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
 	#endif
@@ -310,7 +310,7 @@ const Pgrup hk4[] = {
 	{" ->:"," aufheiz    bed "," s/10  ", P&abs_bed[HK4].zahd,			US_INT, 0, P&hid2,	V0, 0, 0},
 
 	#if WWANZ > 0
-	{"*84:"," WW-VORRANG ?   ","       ", P&hkd[HK4].vorra,	 	 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
+	{"*84:"," WW-VORRANG ?   ","       ", P&hkd[HK4].vorra,	 	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
 	#else
 	{" ->:"," ww-vorrang ?   ","       ", P&hkd[HK4].vorra,	 	 JANEIN_FORM, 0, P&hid2,	V0, 0, 0},
 	#endif

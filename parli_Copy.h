@@ -3,37 +3,37 @@
 
 	#if COPY_RESERV_EMPF > 0
 		#if COPY_EMPF > 0
-		{" ->;"," copyData1      ","       ", P&CopyData[0].copyData.messw,  ANA_FORM, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copyData1      ","       ", P&CopyData[0].copyData.messw,  ANA_FORM, 0, P&hid2,	V0, 0, 0},
 		{" ->;"," copyTimer1     ","       ", P&CopyData[0].copyRxTimer,			 US_INT, 0, P&hid2,	V0, 0, 0},  
 		#else
-		{" ->;"," leerData1      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerData1      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V0, 0, 0},
 		#endif 
 	#endif
 	
 	#if COPY_RESERV_EMPF > 1
 		#if COPY_EMPF > 1
-		{" ->;"," copyData2      ","       ", P&CopyData[1].copyData.messw,  ANA_FORM, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copyData2      ","       ", P&CopyData[1].copyData.messw,  ANA_FORM, 0, P&hid2,	V0, 0, 0},
 		{" ->;"," copyTimer2     ","       ", P&CopyData[1].copyRxTimer,			 US_INT, 0, P&hid2,	V0, 0, 0},  
 		#else
-		{" ->;"," leerData2      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerData2      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V0, 0, 0},
 		#endif  
 	#endif
 	
 	#if COPY_RESERV_EMPF > 2
 		#if COPY_EMPF > 2
-		{" ->;"," copyData3      ","       ", P&CopyData[2].copyData.messw,  ANA_FORM, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copyData3      ","       ", P&CopyData[2].copyData.messw,  ANA_FORM, 0, P&hid2,	V0, 0, 0},
 		{" ->;"," copyTimer3     ","       ", P&CopyData[2].copyRxTimer,			 US_INT, 0, P&hid2,	V0, 0, 0},  
 		#else
-		{" ->;"," leerData3      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerData3      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V0, 0, 0},
 		#endif 
 	#endif
 	
 	#if COPY_RESERV_EMPF > 3
 		#if COPY_EMPF > 3
-		{" ->;"," copyData4      ","       ", P&CopyData[3].copyData.messw,  ANA_FORM, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copyData4      ","       ", P&CopyData[3].copyData.messw,  ANA_FORM, 0, P&hid2,	V0, 0, 0},
 		{" ->;"," copyTimer4     ","       ", P&CopyData[3].copyRxTimer,			 US_INT, 0, P&hid2,	V0, 0, 0},  
 		#else
-		{" ->;"," leerData4      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerData4      ","       ", P&LeerData[0], 									US_CHAR, 0, P&hid2,	V0, 0, 0},
 		#endif
 	#endif
 	
@@ -150,33 +150,33 @@
 
 	#if COPY_RESERV_SEND > 0
 		#if COPY_SEND > 0
-		{" ->;"," copySend1      ","       ", P&CopySend[0], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copySend1      ","       ", P&CopySend[0], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#else
-		{" ->;"," leerSend1      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerSend1      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#endif
 	#endif
 	
 	#if COPY_RESERV_SEND > 1
 		#if COPY_SEND > 1
-		{" ->;"," copySend2      ","       ", P&CopySend[1], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copySend2      ","       ", P&CopySend[1], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#else
-		{" ->;"," leerSend2      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerSend2      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#endif
 	#endif
 	
 	#if COPY_RESERV_SEND > 2
 		#if COPY_SEND > 2
-		{" ->;"," copySend3      ","       ", P&CopySend[2], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copySend3      ","       ", P&CopySend[2], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#else
-		{" ->;"," leerSend3      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerSend3      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#endif
 	#endif
 	
 	#if COPY_RESERV_SEND > 3
 		#if COPY_SEND > 3
-		{" ->;"," copySend4      ","       ", P&CopySend[3], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," copySend4      ","       ", P&CopySend[3], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#else
-		{" ->;"," leerSend4      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V1, 0, 0},
+		{" ->;"," leerSend4      ","       ", P&LeerSend[0], 									S_INT, 0, P&hid2,	V0, 0, 0},
 		#endif
 	#endif
 	
