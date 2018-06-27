@@ -1459,6 +1459,7 @@ typedef struct qs {
 #define QUSLENG sizeof (struct qs)
 
 typedef struct qd {
+	char	 chz_DM_Fehler;					// Datenmanager Fehler 
 	char	chpa_bmpuqu;						// Betriebsmeldung der Quellenpumpe
 	char	chbz_Freigabe_wpu;			// Freigabe der Wärmepumpe
 	char	chbm_WPU;								// Betriebsmeldung Wärmepumpe

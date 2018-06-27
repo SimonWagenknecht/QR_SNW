@@ -121,7 +121,7 @@
 #define DM_MODE				1						// Gerät im DM_Modus (Data Master),	Datenbearbeitung in der Funktion DManager(), Organisation der Datenübertragung im Task DTimer() 
 #define DM_RXBUF_MAX	32					// Puffergröße für Empfangsdaten
 #define DM_TXBUF_MAX	16					// Puffergröße für Sendedaten
-#define DM_SLAVES			3						// Min:1 Max:4  Anzahl der Slave-Geräte, mit denen der Datenmanager arbeiten soll
+#define DM_SLAVES			2						// Min:1 Max:4  Anzahl der Slave-Geräte, mit denen der Datenmanager arbeiten soll
 
 // Implementierung von Anwendungen für serielle Schnittstellen S1 S2 S3
 #define IMPLEMENT_S1			(GBUS_IMPL)

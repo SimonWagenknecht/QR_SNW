@@ -1,4 +1,4 @@
-// Diese Datei wurde automatisch am : 22.06.2018 um 14:40:43 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
+// Diese Datei wurde automatisch am : 26.06.2018 um 10:02:05 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
 // Path: C:\RIEcon36C\Softwarepool\Softwarepool_PES_2018\QR_SNW81\QR_R_3s03_JMX81\User\Komtabparser.exe
 
 const Pgrup hk4[] = { 
@@ -1000,25 +1000,15 @@ const Pgrup anl[] = {
 	{"*40;"," DATENMANAGER   ","       ", P&DMmod1,								 ASCII_FORM, 0, P&hid1,	V0, 0, 0},
 	{" ->;"," SLAVE 1 ADRESSE","       ", P&Slave[0],								  US_CHAR, 0, P&hid1,	V0, 0, 0},
 	{" ->."," Slave.1  rxtout"," min   ", P&DM[0].RxTout,				 			US_CHAR, 0, P&hid2,	V0, 0, 0},
-	{"*41;"," SSM 1  HKV     ","       ", P&DM_SSM_Ext1,						 ANA_FORM, 0, P&hid1,	V0, 0, 0},
-	{"*42;"," ANFORDER.1 HKV "," C    ", P&DM_ANF_Ext1,						 ANA_FORM, 1, P&hid1,	V0, 0, 0},
-	{"*43;"," ANFORDER.2 HKV "," C    ", P&DM_ANF_Ext2,						 ANA_FORM, 1, P&hid1,	V0, 0, 0},
-	{"*45;"," EXT.WW-VORRANG ","       ", P&hkd[HK2].ww_Vorrang,  JANEIN_FORM, 0, P&hid1,	V0, 0, 0},
-	{"*46;"," BEDARFSLADUNG  ","       ", P&hkd[HK1].bedLadung,  	JANEIN_FORM, 0, P&hid1,	V0, 0, 0},
+	{"*41;"," S: SOLLWERT    "," C    ", P&hkd[HK1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},
+	{"*42;"," S: Heizbedarf  ","       ", P&hkdSoL[HK1].heizBed,  JANEIN_FORM, 0, P&hid1,	V0, 0, 0},
+	{"*43;"," E: WPU-FREIGABE","       ", P&DM_WPU_Frei,					   ANA_FORM, 0, P&hid1,	V0, 0, 0},
+	{"*44;"," E: WPU BM      ","       ", P&DM_WPU_Frei,					   ANA_FORM, 0, P&hid1,	V0, 0, 0},
 	{"*50;"," DATENMANAGER   ","       ", P&DMmod2,								 ASCII_FORM, 0, P&hid1,	V0, 0, 0},
 	{" ->;"," SLAVE 2 ADRESSE","       ", P&Slave[1],								  US_CHAR, 0, P&hid1,	V0, 0, 0},
 	{" ->."," Slave.2  rxtout"," min   ", P&DM[1].RxTout,				 			US_CHAR, 0, P&hid2,	V0, 0, 0},
-	{"*51;"," SSM 2  WPU     ","       ", P&DM_SSM_Ext2,						 ANA_FORM, 0, P&hid1,	V0, 0, 0},
-	{"*52;"," WPU-FREIGABE   ","       ", P&DM_WPU_Frei,					   ANA_FORM, 0, P&hid1,	V0, 0, 0},
-	{"*53;"," WPU VENTILSTELL"," %     ", P&DM_WPU_Ventil,  				 ANA_FORM, 1, P&hid1,	V0, 0, 0},
-	{"*55;"," SOLLWERT WPU   "," C    ", P&hkd[HK1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},
-	{"*56;"," VENTILSTELL.HKL"," %     ", P&RVENT[HK1],						 AOUT_FORMP, 1, P&hid1,	V0, 0, 0},
-	{"*60;"," DATENMANAGER   ","       ", P&DMmod3,								 ASCII_FORM, 0, P&hid1,	V0, 0, 0},
-	{" ->;"," SLAVE 3 ADRESSE","       ", P&Slave[2],								  US_CHAR, 0, P&hid1,	V0, 0, 0},
-	{" ->."," Slave.3  rxtout"," min   ", P&DM[2].RxTout,				 			US_CHAR, 0, P&hid2,	V0, 0, 0},
-	{"*61;"," SSM 3  KESSEL  ","       ", P&DM_SSM_Ext3,						 ANA_FORM, 0, P&hid1,	V0, 0, 0},
-	{"*65;"," SOLLWERT KESSEL"," C    ", P&ked[KE1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},
-	{"*66:"," KESSEL FREIGABE","       ", P&PUKEEA[KE1],		 	  JANEIN_FORMOP, 0, P&hid1,	V0,	0, 0},
+	{"*51;"," S: SOLLWERT    "," C    ", P&hkd[HK1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},
+	{"*52;"," S: Heizbedarf  ","       ", P&hkdSoL[HK1].heizBed,  JANEIN_FORM, 0, P&hid1,	V0, 0, 0},
 	{"*70:"," SOMMER ?       ","       ", P&sowi,			 					 			 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
 	{"*71:"," EXT.WW-VORRANG?","       ", P&hkd[HK2].ww_Vorrang, JANEIN_FORM, 0, P&vis,		V1, 0, 0},
 	{" ->;"," dT EXT.WW-VORRA"," K     ", P&hks[HK2].DTVorEin,				 S_INT, 1, P&hid1,	V1, 0, 0},

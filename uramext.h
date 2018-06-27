@@ -916,7 +916,9 @@ extern mwsp DM_SSM_Ext2;					// WPU	: Sammelstörung 				 über S1/S2
 extern mwsp DM_SSM_Ext3;					// KES	: Sammelstörung 				 über S1/S2
 
 extern mwsp DM_WPU_Frei;					// WPU-Freigabe
+extern mwsp DM_WPU_BM;						// WPU BM
 extern mwsp DM_WPU_Ventil;				// WPU Stellung Regelventil HK1
+
 
 // Ausgewählte (gültige) Sollwert-Anforderung	***AnFre 21.01.2009
 extern mwsp ExtAnf1;	// von Unterstation 1

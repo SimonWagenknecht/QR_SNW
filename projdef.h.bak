@@ -86,7 +86,7 @@
 #define VARIPROJ		0							// 1 = variables Projekt
 #define SSTM_PU			0							// Sammelstörmelde-Eingang für Pumpen
 #define SSTM_ANL		0							// Sammelstörmelde-Eingang Anlage
-#define ANFORD      0             // auch in Steuer.c benutzt
+#define ANFORD      1             // auch in Steuer.c benutzt
 #define ANF_EXT			0							// Anzahl Anforderungen externer Regler, gilt für NT und Kessel
 
 // allgemein

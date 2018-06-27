@@ -40,7 +40,7 @@ void DManager(void)
 	}	
 	
 	//*******************************
-	// 1. Slave 	Sendepuffer füllen	***AnFre 02.10.2012 Adresse 11 HKV
+	// 1. Slave 	Sendepuffer füllen	***WPU
 	//*******************************
 	idx  = 0;																					// Slave-Index
 	// Erster Arbeitsschritt: muss sein !
@@ -62,15 +62,18 @@ void DManager(void)
 	// Beispiel: Soll-Temperatur						(Vorlauf Max)
 	//offs = DM_Fill_TxBuf(idx, offs, P&hks[HK1].Tvma, US_INT);
 
-	offs = DM_Fill_TxBuf(idx, offs, P&hkd[HK2].ww_Vorrang,  JANEIN_FORM);	// Anmerkung: Wert und Format sind aus der parli kopiert
-	offs = DM_Fill_TxBuf(idx, offs, P&hkd[HK1].bedLadung,	 	JANEIN_FORM); // Bedarfs-Ladung nach HKV
+	//offs = DM_Fill_TxBuf(idx, offs, P&hkd[HK2].ww_Vorrang,  JANEIN_FORM);	// Anmerkung: Wert und Format sind aus der parli kopiert
+	//offs = DM_Fill_TxBuf(idx, offs, P&hkd[HK1].bedLadung,	 	JANEIN_FORM); // Bedarfs-Ladung nach HKV
+	
+	offs = DM_Fill_TxBuf(idx, offs, P&maxAnford, US_INT);				// Sollwert
+	//offs = DM_Fill_TxBuf(idx, offs, P&hkdSoL[HK1].heizBed,	 	JANEIN_FORM); 	// Heizbedarf
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	// Letzter Arbeitsschritt: muss sein !
 	DM[idx].TxLeng = offs;	
 	 		
 	//*******************************
-	// 2. Slave 	Sendepuffer füllen	***AnFre 02.10.2012 Adresse 12 WPU
+	// 2. Slave 	Sendepuffer füllen	Fernwärme
 	//*******************************
 	#if	DM_SLAVES > 1
 	idx = 1;
@@ -92,8 +95,11 @@ void DManager(void)
 	// Beispiel: Soll-Temperatur						(Vorlauf Min)
 	//offs = DM_Fill_TxBuf(idx, offs, P&hks[HK1].Tvmi, US_INT);
 
-	offs = DM_Fill_TxBuf(idx, offs, P&hkd[HK1].tvsb,		 US_INT);									// Anforderung (Sollwert) an WPU
-	offs = DM_Fill_TxBuf(idx, offs, P&RVENT[HK1],				 AOUT_FORMP);							// VentilStellung HK1
+//	offs = DM_Fill_TxBuf(idx, offs, P&hkd[HK1].tvsb,		 US_INT);									// Anforderung (Sollwert) an WPU
+//	offs = DM_Fill_TxBuf(idx, offs, P&RVENT[HK1],				 AOUT_FORMP);							// VentilStellung HK1
+
+	offs = DM_Fill_TxBuf(idx, offs, P&maxAnford, US_INT);									// Sollwert
+//	offs = DM_Fill_TxBuf(idx, offs, P&hkdSoL[HK1].heizBed,	 	JANEIN_FORM); 	// Heizbedarf
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	 		
@@ -149,9 +155,12 @@ void DManager(void)
 	//offs = DM_Empty_RxBuf(idx, offs, &station1_sollwert, US_INT);			// 2 Byte
 //***AnFre: ADR: 11	HeizKreisVerteiler FW-R-0400-HKV22
 // Soll-Temperatur von UST1 HeizKreisVerteiler	(Anforderung)
-	offs = DM_Empty_RxBuf(idx, offs, &DM_SSM_Ext1, US_CHAR);		// 1 Byte
-	offs = DM_Empty_RxBuf(idx, offs, &DM_ANF_Ext1, US_INT);			// 2 Byte
-	offs = DM_Empty_RxBuf(idx, offs, &DM_ANF_Ext2, US_INT);			// 2 Byte
+//	offs = DM_Empty_RxBuf(idx, offs, &DM_SSM_Ext1, US_CHAR);		// 1 Byte
+//	offs = DM_Empty_RxBuf(idx, offs, &DM_ANF_Ext1, US_INT);			// 2 Byte
+//	offs = DM_Empty_RxBuf(idx, offs, &DM_ANF_Ext2, US_INT);			// 2 Byte
+		
+		offs = DM_Empty_RxBuf(idx, offs, 	&DM_WPU_Frei,		JANEIN_FORM);	//  WPU Freigabe
+		offs = DM_Empty_RxBuf(idx, offs, 	&DM_WPU_BM,		  JANEIN_FORM);		//  WPU BM
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -165,9 +174,9 @@ void DManager(void)
 	// folgende User-Einträge können auch entfallen, wenn der Master keine Daten braucht, sondern nur welche sendet 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	offs = DM_Empty_RxBuf(idx, offs, 	&DM_SSM_Ext2, US_CHAR);		// 1 Byte
-	offs = DM_Empty_RxBuf(idx, offs, 	&DM_WPU_Frei,		JANEIN_FORM);	// 19.04.2012 Meldung Freigabe von WP
-	offs = DM_Empty_RxBuf(idx, offs, 	&DM_WPU_Ventil,		ANA_FORM);	// 19.04.2012 Regel-Ventilstellung von WP
+//	offs = DM_Empty_RxBuf(idx, offs, 	&DM_SSM_Ext2, US_CHAR);		// 1 Byte
+//	offs = DM_Empty_RxBuf(idx, offs, 	&DM_WPU_Frei,		JANEIN_FORM);	// 19.04.2012 Meldung Freigabe von WP
+//	offs = DM_Empty_RxBuf(idx, offs, 	&DM_WPU_Ventil,		ANA_FORM);	// 19.04.2012 Regel-Ventilstellung von WP
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	#endif

@@ -29,8 +29,9 @@ const Pgrup wei[] = {
 	{" ->;"," dT-TS3-TRH EIN "," K     ", P&wes[0].ipa_Hoch_QRG_ein,		 	US_INT, 1, P&vis,		V0, 0, 0},
 	{" ->;"," dT-TS3-TRH AUS "," K     ", P&wes[0].ipa_Hoch_QRG_aus,		 	US_INT, 1, P&vis,		V0, 0, 0},
 	{"*35:"," WPU-Betrieb    ","       ", P&qud[0].chbz_WPU_Versorgung,	 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
-	{"*->;"," WPU-ANFORDERUNG","       ", P&qud[0].chbz_Freigabe_wpu,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
-	{"*->;"," WPU-BM         ","       ", P&qud[0].chbm_WPU,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
+	{"*->;"," WPU ANFORDERUNG","       ", P&qud[0].chbz_Freigabe_wpu,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
+	{"*->;"," WPU BM         ","       ", P&qud[0].chbm_WPU,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
+	{"*->;"," DM Fehler      ","       ", P&qud[0].chz_DM_Fehler,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
 	{"*36:"," Quellenanhebung","       ", P&wed[0].chbz_Quellenanhebung,	 JANEIN_FORM, 0, P&vis,		V1, 0, 0},
 
 	{"*70:"," PU WEI  EIN ?  ","       ", P&DA_UNI[U3], 				 JANEIN_FORMOP, 0, P&vis,		V1, 0, 0},
@@ -84,6 +85,7 @@ const Pgrup que[] = {
 	{" ->;"," WPU-QU-Grenze  "," C    ", P&qus[0].ipa_Sollwert_WPU_VL,		 	US_INT, 1, P&vis,		V0, 0, 0},
 	{"*->;"," WPU-FREIGABE   ","       ", P&qud[0].chbz_Freigabe_wpu,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
 	{"*->;"," WPU BM         ","       ", P&qud[0].chbm_WPU,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
+	{"*->;"," DM Fehler      ","       ", P&qud[0].chz_DM_Fehler,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
 	{"*36:"," Quellenanhebung","       ", P&wed[0].chbz_Quellenanhebung,	 JANEIN_FORM, 0, P&vis,		V0, 0, 0},
 
 

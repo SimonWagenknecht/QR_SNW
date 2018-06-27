@@ -1413,7 +1413,7 @@ typedef struct weid {
 	 int	TQRL_recent;						// im RAM gespeicherter Wert, nach dem die Quellenpumpe ausgeschalten wurde
 	 
 	 // PID
-	 int		zts;					// Zaehler fuer Tastzeit
+	int		zts;					// Zaehler fuer Tastzeit
 	char	regstart;			// Reglerstart nach Reset
 	int		ei;						// Regelabweichung							[K] * 10
 	float	fl_ei1;				// Regelabweichung zum Tastzeitpunkt i-1
@@ -1439,6 +1439,21 @@ typedef struct qs {
 	char	chpa_rv_Hau;						// Handsteuerung des Weichenventils RV WEI aktivieren
 	int		 ipa_rv_stellung;				// Ventilstellung von RV WEI im Handbetrieb
 	
+		// PID
+	int		Ts;								// Tastzeit (>= 1 s)						[s] * 10
+	UINT	Tn;								// Nachstellzeit								[s] * 10
+	int		Kp;								// P-Verstärkung							[%/K] * 100
+	int		Kd;								// D-Verstärkung							[%/K] * 100
+	int		Kpk;							// P-Verstärkung Kaskade			[%/K] * 100
+	int		Kpr;							// P-Verstärkung TRS-Begrenzg.[%/K] * 100
+	
+	int		Fzk;							// Filterzk. f. tsol						[s] * 10
+	
+	UINT	Y_rel_min;				// Minimale Stellausgabe an 0-10V Ventil	[%] * 10
+	UINT	Y_rel_beg;				// Öffnungsbeginn des 0-10V Ventils				[%] * 10
+	
+	// Wind-Up: Begrenzung der Stellgröße des PID-Reglers auf einen gleitenden oder festen Maximalwert (anti windup)
+	int		Wup;									// 0 = gleitend (Produkt aus Kp * ei),  >0 = fester +/- Maximalwert  [%] * 10. ( nur positiven Wert eingeben  )
 } QuStandard;
 
 #define QUSLENG sizeof (struct qs)
@@ -1447,7 +1462,25 @@ typedef struct qd {
 	char	chpa_bmpuqu;						// Betriebsmeldung der Quellenpumpe
 	char	chbz_Freigabe_wpu;			// Freigabe der Wärmepumpe
 	char	chbm_WPU;								// Betriebsmeldung Wärmepumpe
-	char	chbz_WPU_Versorgung;		// Betrtiebszustand Wärmepumpenversorgung		
+	char	chbz_WPU_Versorgung;		// Betrtiebszustand Wärmepumpenversorgung	
+	
+		 // PID
+	int		zts;					// Zaehler fuer Tastzeit
+	char	regstart;			// Reglerstart nach Reset
+	int		ei;						// Regelabweichung							[K] * 10
+	float	fl_ei1;				// Regelabweichung zum Tastzeitpunkt i-1
+	float	fl_ei2;				// Regelabweichung zum Tastzeitpunkt i-2
+	int		tsol;					// Vorlaufsolltemp. , nach der geregelt wird
+	float fl_tsol;			//		"								(für Filterberechnung)
+	int		tvsb;					// berechnete Vorlaufsolltemp. total
+	int		tvsb_hkl;			// berechnete Vorlaufsolltemp. nach Heizkennlinie (für debug)							
+	int		stellzeit;		// berechnete Zeit für Stellausgabe
+	int		stellsum;			// Summenzähler für Stellausgabe
+	int 	fahren;				// Fahrzeit Stellausgabe in ganzen Sekunden
+	int		y_rel;				// Stellausgabe an 0-10V Ventil	[%] * 10
+	float	fl_y_rel;			// PID-Stellgröße
+	int   si_y_rel;			// PID-Stellgröße für debug [%] * 10		
+	int		dy_rel;				// für debug	
 } QuDynam;
 
 //---------------------------------------------------------------------

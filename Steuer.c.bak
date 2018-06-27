@@ -211,7 +211,7 @@ void Steuer(void)
 			}
 			else
 			{
-				if ( (ts3 > th5 + hksSoL[HK1].DTSoLad) && hkdSoL[HK1].th3Max == 0 && hkdSoL[HK1].solheiz > 0 )		// th3Max-Alarm siehe Alarme.c
+				if ( (ts3 > th5 + hksSoL[HK1].DTSoLad) && hkdSoL[HK1].th3Max == 0)		// th3Max-Alarm siehe Alarme.c
 				{
 					hkdSoL[HK1].solLadung = 1;
 					hkdSoL[HK1].solLadung_war = 1;  // für Pumpennachlauf
@@ -246,7 +246,7 @@ void Steuer(void)
 			}
 			else
 			{
-				if ( (ts3 < th5 + hksSoL[HK1].DTSoLad) || (hkdSoL[HK1].th3Max > 0) || (hkdSoL[HK1].solheiz == 0) )		// th3Max-Alarm siehe Alarme.c
+				if ( (ts3 < th5 + hksSoL[HK1].DTSoLad) || (hkdSoL[HK1].th3Max > 0) )		// th3Max-Alarm siehe Alarme.c
 				{
 					hkdSoL[HK1].solLadung = 0;
 					hkdSoL[HK1].zSoLadSperr = (int)(hksSoL[HK1].SoLadSperr *2);

@@ -113,27 +113,29 @@ const Pgrup anl[] = {
 	{"*40;"," DATENMANAGER   ","       ", P&DMmod1,								 ASCII_FORM, 0, P&hid1,	V0, 0, 0},	// ***AnFre 19.04.2012
 	{" ->;"," SLAVE 1 ADRESSE","       ", P&Slave[0],								  US_CHAR, 0, P&hid1,	V0, 0, 0},
 	{" ->."," Slave.1  rxtout"," min   ", P&DM[0].RxTout,				 			US_CHAR, 0, P&hid2,	V0, 0, 0},
-// empfangen von HKV
-	{"*41;"," SSM 1  HKV     ","       ", P&DM_SSM_Ext1,						 ANA_FORM, 0, P&hid1,	V0, 0, 0},	// von HKV
-	{"*42;"," ANFORDER.1 HKV "," C    ", P&DM_ANF_Ext1,						 ANA_FORM, 1, P&hid1,	V0, 0, 0},	// von HKV
-	{"*43;"," ANFORDER.2 HKV "," C    ", P&DM_ANF_Ext2,						 ANA_FORM, 1, P&hid1,	V0, 0, 0},	// von HKV
+	{"*41;"," S: SOLLWERT    "," C    ", P&hkd[HK1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},	// nach WP
+//	{"*42;"," S: Heizbedarf  ","       ", P&hkdSoL[HK1].heizBed,  JANEIN_FORM, 0, P&hid1,	V0, 0, 0},	// nach WP
+	{"*42;"," E: WPU-FREIGABE","       ", P&DM_WPU_Frei,					   JANEIN_FORM, 0, P&hid1,	V0, 0, 0},	// von WP
+	{"*43;"," E: WPU BM      ","       ", P&DM_WPU_BM,					   JANEIN_FORM, 0, P&hid1,	V0, 0, 0},	// von WP
 
-	{"*45;"," EXT.WW-VORRANG ","       ", P&hkd[HK2].ww_Vorrang,  JANEIN_FORM, 0, P&hid1,	V0, 0, 0},	// nach HKV
-	{"*46;"," BEDARFSLADUNG  ","       ", P&hkd[HK1].bedLadung,  	JANEIN_FORM, 0, P&hid1,	V0, 0, 0},	// nach HKV
+
 		#endif
 
 		#if DM_SLAVES > 1 				// Slave 2: WPU ***AnFre 06.06.2012
 	{"*50;"," DATENMANAGER   ","       ", P&DMmod2,								 ASCII_FORM, 0, P&hid1,	V0, 0, 0},	// ***AnFre 19.04.2012
 	{" ->;"," SLAVE 2 ADRESSE","       ", P&Slave[1],								  US_CHAR, 0, P&hid1,	V0, 0, 0},
 	{" ->."," Slave.2  rxtout"," min   ", P&DM[1].RxTout,				 			US_CHAR, 0, P&hid2,	V0, 0, 0},
-// empfangen von WPU
-	{"*51;"," SSM 2  WPU     ","       ", P&DM_SSM_Ext2,						 ANA_FORM, 0, P&hid1,	V0, 0, 0},	// von WP
-	{"*52;"," WPU-FREIGABE   ","       ", P&DM_WPU_Frei,					   ANA_FORM, 0, P&hid1,	V0, 0, 0},	// von WP
-	{"*53;"," WPU VENTILSTELL"," %     ", P&DM_WPU_Ventil,  				 ANA_FORM, 1, P&hid1,	V0, 0, 0},	// von WP
+	{"*51;"," S: SOLLWERT    "," C    ", P&hkd[HK1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},	// nach WP
+	//{"*52;"," S: Heizbedarf  ","       ", P&hkdSoL[HK1].heizBed,  JANEIN_FORM, 0, P&hid1,	V0, 0, 0},	// nach WP
 
-// senden an WPU
-	{"*55;"," SOLLWERT WPU   "," C    ", P&hkd[HK1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},	// nach WP
-	{"*56;"," VENTILSTELL.HKL"," %     ", P&RVENT[HK1],						 AOUT_FORMP, 1, P&hid1,	V0, 0, 0},	// nach WP
+// empfangen von WPU
+//	{"*51;"," SSM 2  WPU     ","       ", P&DM_SSM_Ext2,						 ANA_FORM, 0, P&hid1,	V0, 0, 0},	// von WP
+//	{"*52;"," WPU-FREIGABE   ","       ", P&DM_WPU_Frei,					   ANA_FORM, 0, P&hid1,	V0, 0, 0},	// von WP
+//	{"*53;"," WPU VENTILSTELL"," %     ", P&DM_WPU_Ventil,  				 ANA_FORM, 1, P&hid1,	V0, 0, 0},	// von WP
+//
+//// senden an WPU
+//	{"*55;"," SOLLWERT WPU   "," C    ", P&hkd[HK1].tvsb,					 	 US_INT, 1, P&hid1,	V0, 0, 0},	// nach WP
+//	{"*56;"," VENTILSTELL.HKL"," %     ", P&RVENT[HK1],						 AOUT_FORMP, 1, P&hid1,	V0, 0, 0},	// nach WP
 		#endif
 
 		#if DM_SLAVES > 2 				// Slave 3: KES ***AnFre 06.06.2012
@@ -1341,9 +1343,9 @@ const Parli Pgruppe[] = {
 #endif
 
 // Modbus
-#if MODBUS_UNI > 0
-	{"MOD;", modbusParli, sizeof(modbusParli) / PGLENG, P&sys_vis},
-#endif 
+//#if MODBUS_UNI > 0
+//	{"MOD;", modbusParli, sizeof(modbusParli) / PGLENG, P&sys_vis},
+//#endif 
 
 //-----------------------------------------------------
 	{"ALK;", alk, sizeof(alk) / PGLENG, P&syc_vis},

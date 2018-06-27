@@ -90,6 +90,22 @@ if (wes[0].chpa_rv_Hau > 0)
 				 		{
 				 			wed[0].tvsb = 0;
 				 		}
+					
+				//	Datenmanager Datenübergabe und Auswertung
+					// 1. Fall Datenmanager fällt Auswertung
+					if (DM_WPU_BM.stat != 0 || DM_WPU_Frei.stat != 0)
+						 {
+						 	qud[0].chbz_Freigabe_wpu = 1;
+						 	qud[0].chbm_WPU = 1;
+						 	qud[0].chz_DM_Fehler = 1;
+						 }
+						 else	// 2. Fall DM funktioniert
+						 	{
+						 		qud[0].chbz_Freigabe_wpu = DM_WPU_Frei.messw;
+						 		qud[0].chbm_WPU = DM_WPU_BM.messw;
+						 		qud[0].chz_DM_Fehler = 0;
+						 	}
+		
 			
 // Betriebszustände
 

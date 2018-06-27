@@ -915,6 +915,7 @@ mwsp DM_SSM_Ext2;					// WPU 	: Sammelstörung 				von WPU über S1/S2
 mwsp DM_SSM_Ext3;					// KESSEL: Sammelstörung 				von KES über S1/S2
 
 mwsp DM_WPU_Frei;					// WPU-Freigabe
+mwsp DM_WPU_BM;						// WPU BM
 mwsp DM_WPU_Ventil;				// WPU Stellung Regelventil HK1
 
 // Ausgewählte (gültige) Sollwert-Anforderung	***AnFre 21.01.2009

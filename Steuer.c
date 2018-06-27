@@ -53,9 +53,19 @@ void Steuer(void)
 	} 
 
 	/*+++++++++++++++ maximale Anforderung +++++++++++++++++++++++*/
-
-	// Übergabe von HKL
-		maxAnf = hkd[HK1].tvsb;
+		
+		// Wenn keine Heizanforderung, dann Sollwert von HKL gleich Null setzen
+		if (hkdSoL[HK1].heizBed == 0)
+			{
+				maxAnf = 0;
+			}
+			else
+				{
+					// Übergabe von HKL
+					maxAnf = hkd[HK1].tvsb;
+				}
+				
+		
 
 //	#if HKANZ > 0		
 //	for ( i = HK1; i < HKANZ; i++ )
