@@ -1287,6 +1287,10 @@ typedef struct ss {
 	int		PumEnde;		// L-Pumpen-Drehzahl für Pufferbeladung beenden, wenn Solare Ladung Ein   [ % ] *10
 // ***AnFre 14.08.2013
 	int		BusPufPuSoll;		// Sollwert Pufferpumpe, wenn WILO-Modbus
+// SiWa - Betriebszustand Kollektor-Quellenbetrieb
+	char Funktion_Koll_Quell;	// Betriebszustand Kollektor-Quellenbetrieb ein- und ausschaltbar
+	int  dT_Koll_Quell_ein;	// [°C], aktiviert den Kollektorbetrieb
+	int	 dT_Koll_Quell_aus; // [°C], deaktiviert den Kollektorbetrieb	
 
 } SoStandard;								// Struktur  Byte
 
@@ -1364,6 +1368,9 @@ typedef struct sd {
 	ULONG	pufPuLzAnz;		// Anzeige in parli Pumpe Laufzeit							(von Wilo oder 'normal')
 	char	pufPuBmAnz;		// Anzeige in Parli.h PufferPumpe Rückmeldung
 	char	pufPuSmAnz;		// Anzeige in Parli.h PufferPumpe Störung	
+	// SiWa - Betriebszustand Kollektor-Quellenbetrieb
+	char	Koll_Quell; 	// Betriebszustand Kollektor-Quellenbetrieb = Kollektorbetrieb
+	int dT_T2_T5;				// Temperaturdifferenz zwischen T2 und T5 für Pumpenregelung
 	
 } SoDynam;	
  

@@ -16,6 +16,7 @@ void PuPufLaufz ( void );
 // void PuAus ( void );
 void SolarAus (void);
 void SolarKollEin (void);
+void SolarUmweltEin (void); // Betriebszustand Umweltwärme
 // void SolarKollLad (void);
 void SolarPuffEin (void);
 void SolarPuffLad (void);
@@ -249,6 +250,8 @@ void SteuerSol(void)
 		goto SolarEnde;
 	}
 
+
+
 /* --------------------------------------------------------------- */
 // ***AnFre	03.08.2011
 //  Prüfen, ob Solar möglich ( "Schnupperschaltung ist in Betrieb" )
@@ -297,7 +300,7 @@ void SteuerSol(void)
 			goto SolarEnde;
 		}
 	//'MindestLaufZeit' ist abgelaufen
-		if ( ts1 < sos[SO1].TSolEnd && ts3 < sos[SO1].TSolEnd )
+		if ( ts1 < sos[SO1].TSolEnd && ts3 < sos[SO1].TSolEnd || pusoFrostAl > 0  )
 		{ // KollektorBetrieb abschalten
 			sod[SO1].kollEin = 0;
 			goto SolarEnde;
@@ -322,9 +325,9 @@ void SteuerSol(void)
 		
 // ------- Abfrage PufferBeladung möglich ? ----------------------------
 
-		if ( hkdSoL[HK1].hkSolJa == 0 && hkdSoL[HK1].solLadung == 0 )
+		if ( hkdSoL[HK1].hkSolJa == 0 && hkdSoL[HK1].solLadung == 0  )
 		{ // Kein solares Heizen und Keine Solare Ladung
-			if ( ts4 > (ts7kalt + sos[SO1].DTPufLad) )
+			if ( ts4 > (ts7kalt + sos[SO1].DTPufLad)  && pusoFrostAl == 0 )
 			{//PufferBeladung ist möglich
 				sod[SO1].pufLad = 1;
 				if( MVPUFEA[SO1]->wert == 0 || sod[SO1].solarPu == 0 )	// noch nicht AB->B Beladen ?
@@ -341,7 +344,7 @@ void SteuerSol(void)
 			}
 			else
 			{//PufferBeladung nicht möglich
-				if ( ts4 < (ts7kalt+10)	)
+				if ( ts4 < (ts7kalt+10)	 || pusoFrostAl > 0)
 				{//PufferLadung abschalten
 					sod[SO1].pufLad = 0;
 				if ( BusPuPara[PU_BUS_PUF-1].Funktion == 1 )		// ***AnFre Wilo-PumpenBus
@@ -361,7 +364,7 @@ void SteuerSol(void)
 							(ts4 > sos[SO1].TS5Max - 100)) )
 				{//PufferBeladung ist möglich
 					sod[SO1].pufLad = 1;
-					if( MVPUFEA[SO1]->wert == 0 || sod[SO1].solarPu == 0 )	// noch nicht AB->B Beladen ?
+					if( MVPUFEA[SO1]->wert == 0 || sod[SO1].solarPu == 0 ||  pusoFrostAl > 0 )	// noch nicht AB->B Beladen ?
 					{
 						if ( BusPuPara[PU_BUS_PUF-1].Funktion == 0 )		// ***AnFre Wilo-PumpenBus
 							PUPUFEA[SO1]->wert = 0;			// Pufferpumpe AUS während Ventil fährt
@@ -377,7 +380,7 @@ void SteuerSol(void)
 				else
 				{//PufferBeladung nicht möglich
 					if ( (ts4 < ts7kalt+10)	||
-							 (RVENTSO[HK1]->awert > sos[SO1].RvHksEnde) )
+							 (RVENTSO[HK1]->awert > sos[SO1].RvHksEnde) ||  pusoFrostAl > 0)
 					{//PufferLadung abschalten
 						sod[SO1].pufLad = 0;
 						if ( BusPuPara[PU_BUS_PUF-1].Funktion == 0 )		// ***AnFre Wilo-PumpenBus
@@ -388,7 +391,7 @@ void SteuerSol(void)
 			}
 			else
 			{ // Solare Ladung ist Ein
-				if ( (ts4 > ts7kalt + sos[SO1].DTPufLad) &&
+				if (  pusoFrostAl == 0 && (ts4 > ts7kalt + sos[SO1].DTPufLad) &&
 							((AA_UNI[U2]->awert > sos[SO1].PumStart) ||
 							(ts4 > sos[SO1].TS5Max - 100)) )
 				{//PufferBeladung ist möglich
@@ -428,7 +431,7 @@ void SteuerSol(void)
 			{
 				if ( hkd[HK1].extAnfAktiv == 0 && hkd[HK1].bedLadung == 0 )
 				{ // HK1 nicht aktiv: ==> TH5
-					if ( (ts1 > th5 + sos[SO1].DTKoll) || (ts1 > ts7kalt + sos[SO1].DTKoll) )
+					if ( ((ts1 > th5 + sos[SO1].DTKoll) || (ts1 > ts7kalt + sos[SO1].DTKoll)) &&  pusoFrostAl == 0 )
 					{//KollektorBetrieb einschalten
 						sod[SO1].zKollEin = 0;
 						SolarKollEin ();
@@ -437,7 +440,7 @@ void SteuerSol(void)
 				}
 				else
 				{ // HK1 aktiv: ==> TH2
-					if ( (ts1 > th2 + sos[SO1].DTKoll) || (ts1 > ts7kalt + sos[SO1].DTKoll) )
+					if ( ((ts1 > th2 + sos[SO1].DTKoll) || (ts1 > ts7kalt + sos[SO1].DTKoll)) &&  pusoFrostAl == 0 )
 					{//KollektorBetrieb einschalten
 						sod[SO1].zKollEin = 0;
 						SolarKollEin ();
@@ -452,7 +455,7 @@ void SteuerSol(void)
 
 			if ( hkd[HK1].extAnfAktiv == 0 && hkd[HK1].bedLadung == 0 )
 			{ // HK1 nicht aktiv: ==> TH5
-				if ( ts6warm > th5 + sos[SO1].DTPuff )
+				if ( ts6warm > th5 + sos[SO1].DTPuff &&  pusoFrostAl == 0 )
 				{//PufferBetrieb einschalten
 					sod[SO1].zPuffEin = 0;
 					SolarPuffEin ();
@@ -461,7 +464,7 @@ void SteuerSol(void)
 			}
 			else
 			{ // HK1 aktiv: ==> TH2
-				if ( ts6warm > th2 + sos[SO1].DTPuff )
+				if ( ts6warm > th2 + sos[SO1].DTPuff &&  pusoFrostAl == 0)
 				{//PufferBetrieb einschalten
 					sod[SO1].zPuffEin = 0;
 					SolarPuffEin ();
@@ -586,6 +589,8 @@ void SteuerSol(void)
 			}
 		}
 	}	//Ende Kein KollektorBetrieb
+	
+	
 /* ------------------------------------------------------------------------------------------ */
 
 SolarEnde:
@@ -662,6 +667,35 @@ SolarEnde:
 //			sod[SO1].zts23Al = 0;
 //		}
 //	}
+		//	Betriebszustand Umweltwärme
+		// Einschaltbedingung
+		if ( sod[SO1].Koll_Quell == 0 )
+			{
+				if (sos[SO1].Funktion_Koll_Quell == 1 && pusoFrostAl == 0 && sod[SO1].puffEin == 0 && sod[SO1].pufLad == 0 && wed[0].chbz_Taupunktschutz == 0 &&
+					  (ts1 >= TP_UNI[U3]->messw + sos[SO1].dT_Koll_Quell_ein || ts1 > wed[SO1].TQRL_recent + sos[SO1].dT_Koll_Quell_ein )
+					   && sod[SO1].kollEin == 0)
+							{
+								SolarUmweltEin();
+								//goto SolarEnde; 
+							}
+			}
+			
+		if ( sod[SO1].Koll_Quell == 1 )	
+			{				
+				// Ausschaltbedingung prüfen
+			 	if ((ts4 <= TP_UNI[U3]->messw + sos[SO1].dT_Koll_Quell_aus && 
+			 			ts1 < TP_UNI[U3]->messw + sos[SO1].dT_Koll_Quell_aus && 
+			 			ts1 < wed[SO1].TQRL_recent + sos[SO1].dT_Koll_Quell_aus)
+			 			|| sod[SO1].kollEin > 0  || pusoFrostAl > 0 || 
+			 			sos[SO1].Funktion_Koll_Quell == 0 || sod[SO1].puffEin > 0 ||sod[SO1].pufLad > 0 ||
+			 			wed[0].chbz_Taupunktschutz > 0)
+			 					{
+			 						SolarAus();
+									//	sod[SO1].Koll_Quell = 0;
+									//	goto SolarEnde;	
+								}				
+					//SolarUmweltEin();		
+			}
 
 
 // ------------ Drehzahl-Ausgabe der Pumpe Solarkreis -------------------------------------
@@ -764,11 +798,11 @@ SolarEnde:
 /*****************************************************/
 /***** Funktion : Solarbetrieb ausschalten			 *****/
 /*****************************************************/
-
 void SolarAus (void)
 {
 	sod[SO1].pufLad = 0;
 	sod[SO1].kollEin = 0;
+		sod[SO1].Koll_Quell		= 0;
 //	sod[SO1].zKollEin = 0;
 	sod[SO1].puffEin = 0;
 //	sod[SO1].zPuffEin = 0;
@@ -804,6 +838,22 @@ void SolarAus (void)
 /************************************************************/
 /***** Funktion : Solar-Kollektorbetrieb einschalten		*****/
 /************************************************************/
+
+void SolarUmweltEin (void)
+{
+	// Betriebszustand setzen
+	sod[SO1].Koll_Quell		= 1;
+	sod[SO1].kollEin = 0;
+	sod[SO1].puffEin = 0;
+	
+	// Steuerung von PU SOL und UV SOL
+
+	PUSOLEA[SO1]->wert = 1;		// Solarpumpe EIN
+
+	MVKOLEA[SO1]->wert = 0;			// AB->A Kollektorweg
+	
+}	//FunktionsEnde
+
 
 void SolarKollEin (void)
 {
@@ -872,6 +922,7 @@ void SolarPuffEin (void)
 {
 		sod[SO1].kollEin = 0;
 		sod[SO1].puffEin = 1;
+			sod[SO1].Koll_Quell		= 0;
 		if( MVKOLEA[SO1]->wert == 0 )	//noch nicht AB->B PufferWeg ?
 		{
 			if ( BusPuPara[PU_BUS_SOL-1].Funktion == 0 )		// ***AnFre Wilo-PumpenBus
@@ -917,6 +968,7 @@ void SolarPuffLad (void)
 	wwd[WW1].solWwLad = 1;
 	sod[SO1].kollEin = 0;
 	sod[SO1].puffEin = 1;
+		sod[SO1].Koll_Quell		= 0;
 	if( MVKOLEA[SO1]->wert == 0 )	//noch nicht AB->B PufferWeg ?
 	{
 		if ( BusPuPara[PU_BUS_SOL-1].Funktion == 0 )		// ***AnFre Wilo-PumpenBus

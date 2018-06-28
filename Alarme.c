@@ -181,13 +181,13 @@ void Alarme(void)
 // ***AnFre 10.10.2007 Solar-Pumpe AUS, wenn Frostgefahr)
 // ***AnFre 14.02.2012 geändert von TS5 auf TS2 (Jurisch)
 // ***AnFre 06.06.2012 geändert von TS2 auf TS3 bei Nahwärmenetz
-	if ( TS3_[0]->messw < sos[SO1].TS3Frost )
+	if ( TS3_[0]->messw < sos[SO1].TS3Frost && TS1_[0]->messw < sos[SO1].TS3Frost )
 	{
 		pusoFrostAl = 1;
 	}
 	else
 	{
-		if ( TS3_[0]->messw > sos[SO1].TS3Frost + 20)
+		if ( TS3_[0]->messw > sos[SO1].TS3Frost + 20 || TS1_[0]->messw > sos[SO1].TS3Frost + 20)
 		{
 			pusoFrostAl = 0;
 		}

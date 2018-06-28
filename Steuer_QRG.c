@@ -160,7 +160,7 @@ if (wes[0].chpa_rv_Hau > 0)
 		  if (wed[0].chbz_Nieder_QRG == 0)
 		  	{
 				if ( wed[0].chbz_Taupunktschutz == 0 &&  wed[0].chbz_eTankschutz == 0
-					 &&  (sod[SO1].kollEin > 0 || sod[SO1].puffEin > 0) && 
+					 &&  (sod[SO1].kollEin > 0 || sod[SO1].puffEin > 0 || sod[SO1].Koll_Quell > 0) && 
 					 ((TP_UNI[U1]->messw > TP_UNI[U3]->messw + wes[0].ipa_Nieder_QRG_ein || TP_UNI[U1]->messw > wed[0].TQRL_recent + wes[0].ipa_Nieder_QRG_ein) 
 					 && TS3_[0]->messw < TRS[HK1]->messw - 40)  )
 					{
@@ -171,7 +171,7 @@ if (wes[0].chpa_rv_Hau > 0)
 			if (wed[0].chbz_Nieder_QRG == 1)
 		  	{
 				if ( wed[0].chbz_Taupunktschutz > 0 ||  wed[0].chbz_eTankschutz > 0 || 
-					(sod[SO1].kollEin == 0 && sod[SO1].puffEin == 0) 
+					(sod[SO1].kollEin == 0 && sod[SO1].puffEin == 0 && sod[SO1].Koll_Quell == 0) 
 					|| (TP_UNI[U1]->messw < TP_UNI[U3]->messw + 10 && TP_UNI[U1]->messw < wed[0].TQRL_recent + 10) 
 					|| TS3_[0]->messw > TRS[HK1]->messw )
 					{
@@ -184,7 +184,7 @@ if (wes[0].chpa_rv_Hau > 0)
 		  if (wed[0].chbz_Hoch_QRG == 0)
 		  	{
 				if ( wed[0].chbz_Taupunktschutz == 0 &&  wed[0].chbz_eTankschutz == 0 &&  
-					 (sod[SO1].kollEin > 0 || sod[SO1].puffEin > 0) && 
+					 (sod[SO1].kollEin > 0 || sod[SO1].puffEin > 0 || sod[SO1].Koll_Quell > 0) && 
 					 ((TP_UNI[U1]->messw > TP_UNI[U3]->messw + wes[0].ipa_Nieder_QRG_ein || TP_UNI[U1]->messw > wed[0].TQRL_recent + wes[0].ipa_Nieder_QRG_ein) 
 					 && TS3_[0]->messw > TRS[HK1]->messw + wes[0].ipa_Hoch_QRG_ein)  )
 					{
@@ -195,7 +195,7 @@ if (wes[0].chpa_rv_Hau > 0)
 			if (wed[0].chbz_Hoch_QRG == 1)
 		  	{
 				if ( wed[0].chbz_Taupunktschutz > 0 ||  wed[0].chbz_eTankschutz > 0 || 
-					(sod[SO1].kollEin == 0 && sod[SO1].puffEin == 0) || 
+					(sod[SO1].kollEin == 0 && sod[SO1].puffEin == 0 && sod[SO1].Koll_Quell == 0) || 
 					TP_UNI[U1]->messw < TP_UNI[U3]->messw + 10  || TS3_[0]->messw < TRS[HK1]->messw + wes[0].ipa_Hoch_QRG_aus)
 					{
 						wed[0].chbz_Hoch_QRG = 0;

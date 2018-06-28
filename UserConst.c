@@ -2169,6 +2169,11 @@ const SoStandard  So_Standparam[] = {
 		0,	// int		PumEnde;		// L-Pumpen-Drehzahl für Pufferbeladung beenden, wenn Solare Ladung Ein   [ % ] *10
 // ***AnFre 14.08.2013
 		0,	// int		BusPufPuSoll;	// Sollwert Pufferpumpe, wenn WILO-Modbus
+		
+		// SiWa - Betriebszustand Kollektor-Quellenbetrieb
+		0,	//	char Funktion_Koll_Quell;	// Betriebszustand Kollektor-Quellenbetrieb ein- und ausschaltbar
+	  0,	//	int  dT_Koll_Quell_ein;	// [K], aktiviert den Kollektorbetrieb
+	  0,	//	int	 dT_Koll_Quell_aus; // [K], deaktiviert den Kollektorbetrieb	
 	},
 	// Profil 1	
 	{
@@ -2231,6 +2236,11 @@ const SoStandard  So_Standparam[] = {
 	500,	// int		PumEnde;		// L-Pumpen-Drehzahl für Pufferbeladung beenden, wenn Solare Ladung Ein   [ % ] *10
 // ***AnFre 14.08.2013
 	400,	// int		BusPufPuSoll;	// Sollwert Pufferpumpe, wenn WILO-Modbus
+	
+			// SiWa - Betriebszustand Kollektor-Quellenbetrieb
+		0,	//	char Funktion_Koll_Quell;	// Betriebszustand Kollektor-Quellenbetrieb ein- und ausschaltbar
+	 60,	//	int  dT_Koll_Quell_ein;	// [K], aktiviert den Kollektorbetrieb
+	 30,	//	int	 dT_Koll_Quell_aus; // [K], deaktiviert den Kollektorbetrieb	
 	},
 };
 const char SO_PROFILE = sizeof ( So_Standparam ) / sizeof ( SoStandard );		 	
