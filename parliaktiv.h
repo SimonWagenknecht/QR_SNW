@@ -1,4 +1,4 @@
-// Diese Datei wurde automatisch am : 28.06.2018 um 09:56:13 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
+// Diese Datei wurde automatisch am : 29.06.2018 um 12:07:39 generiert und entspricht der Systemversion nach 19.07.2017 10:21:03!!!
 // Path: C:\RIEcon36C\Softwarepool\Softwarepool_PES_2018\QR_SNW81\QR_R_3s03_JMX81\User\Komtabparser.exe
 
 const Pgrup hk4[] = { 
@@ -178,10 +178,10 @@ const Pgrup so1[] = {
 	{"*->;"," TRQ_saved      "," C    ", P&wed[0].TQRL_recent,					 S_INT, 1, P&hid1,	V0, 0, 0},
 	{" ->;"," dT_Umwelt_ein  "," K     ", P&sos[SO1].dT_Koll_Quell_ein,		 S_INT, 1, P&hid1,	V0, 0, 0},
 	{" ->;"," dT_Umwelt_aus  "," K     ", P&sos[SO1].dT_Koll_Quell_aus,		 S_INT, 1, P&hid1,	V0, 0, 0},
-	{"*73:"," PU SOL    EIN? ","       ", P&sod[SO1].solPuEinAnz, JANEIN_FORM, 0, P&vis,	V0, 0, 0},
+	{"*73:"," PU SOL    EIN? ","       ", P&PUSOLEA[SO1], JANEIN_FORMOP, 0, P&vis,	V1, 0, 0},
 	{"*->."," PU SOL Laufzeit"," h     ", P&sod[SO1].solPuLzAnz,			US_LONG, 0, P&hid2,	V1, 0, 0},
 	{"*->:"," BM PU SOL EIN ?","       ", P&sod[SO1].solPuBmAnz,	JANEIN_FORM, 0, P&vis,	V1, 0, 0},
-	{"*74:"," PU PK     EIN? ","       ", P&sod[SO1].pufPuEinAnz, JANEIN_FORM, 0, P&vis,	V1, 0, 0},
+	{"*74:"," PU PK     EIN? ","       ", P&PUPUFEA[SO1], JANEIN_FORMOP, 0, P&vis,	V1, 0, 0},
 	{"*->."," PU PK  Laufzeit"," h     ", P&sod[SO1].pufPuLzAnz,			US_LONG, 0, P&hid2,	V1, 0, 0},
 	{"*->:"," BM PU PK  EIN ?","       ", P&sod[SO1].pufPuBmAnz, 	JANEIN_FORM, 0, P&vis,	V1, 0, 0},
 	{"*75:"," UV SOL PUF.WEG?","       ", P&MVKOLEA[SO1], 	 JANEIN_FORMOP, 0, P&vis,		V1, 0, 0},

@@ -786,7 +786,7 @@ void pu_Bm(char hk)
 			}
 			else
 			{
-				if ( hkd[hk].puBmVerz < 0xFFFF )
+				if ( hkd[hk].puBmVerz < 3 )				//0xFFFF )
 					++hkd[hk].puBmVerz;
 				if ( hkd[hk].puBmVerz >= hks[hk].PuBmVerz * 2 )
 					hkd[hk].puBm = 1;					// Soft-Alarm: 'kein Betriebsmeldungs-Signal'
